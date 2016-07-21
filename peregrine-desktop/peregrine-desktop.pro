@@ -1,0 +1,20 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2016-07-21T13:25:22
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = peregrine-desktop
+TEMPLATE = app
+
+
+SOURCES += main.cpp\
+        launcherwindow.cpp
+
+HEADERS  += launcherwindow.h
+
+FORMS    += launcherwindow.ui
