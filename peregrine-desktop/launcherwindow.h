@@ -2,6 +2,7 @@
 #define LAUNCHERWINDOW_H
 
 #include <QMainWindow>
+#include "actionselectdialog.h"
 
 namespace Ui {
 class LauncherWindow;
@@ -16,7 +17,10 @@ public:
     ~LauncherWindow();
 
 private:
+    virtual void keyPressEvent(QKeyEvent *event) override;
+
     Ui::LauncherWindow *ui;
+    ActionSelectDialog actionSelectDlg_;
 };
 
 #endif // LAUNCHERWINDOW_H

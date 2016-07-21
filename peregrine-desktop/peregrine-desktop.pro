@@ -13,8 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        launcherwindow.cpp
+        launcherwindow.cpp \
+    actionselectdialog.cpp
 
-HEADERS  += launcherwindow.h
+HEADERS  += launcherwindow.h \
+    actionselectdialog.h
 
-FORMS    += launcherwindow.ui
+FORMS    += launcherwindow.ui \
+    actionselectdialog.ui
