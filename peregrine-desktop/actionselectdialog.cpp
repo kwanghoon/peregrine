@@ -46,7 +46,8 @@ void ActionSelectDialog::keyPressEvent(QKeyEvent *event)
 
 void ActionSelectDialog::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key::Key_Shift)
+    if (event->key() == Qt::Key::Key_Shift ||
+        event->key() == Qt::Key::Key_Escape)
     {
         this->hide();
     }
