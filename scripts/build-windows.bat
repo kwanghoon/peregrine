@@ -16,6 +16,18 @@ if "%qt_dir%" == "" (
 )
 set path=%path%;%qt_dir%
 
+set config=%1
+if "%config%" == "" (
+	set config=debug
+)
+if "%1" neq "release" if "%1" neq "debug" (
+	echo "Invalid config specified(%1). it must be debug or release."
+	exit /b 3
+)
+if "%config%" == "debug" (
+	set d_suffix=d
+)
+
 pushd ..
 	set project_root=%cd%
 	
@@ -24,7 +36,11 @@ pushd ..
 	rmdir /s/q build-peregrine-desktop
 	mkdir build-peregrine-desktop
 	pushd build-peregrine-desktop
-		qmake -spec win32-msvc2015 ..\peregrine-desktop\peregrine-desktop.pro
+		if "%1" == "debug" (
+			qmake -spec win32-msvc2015 "CONFIG+=debug" "CONFIG+=qml_debug" ..\peregrine-desktop\peregrine-desktop.pro
+		) else (
+			qmake -spec win32-msvc2015 ..\peregrine-desktop\peregrine-desktop.pro
+		)
 		nmake
 	popd
 	
@@ -33,10 +49,10 @@ pushd ..
 	rmdir /s/q output
 	mkdir output
 	pushd output
-		copy %project_root%\build-peregrine-desktop\release\peregrine-desktop.exe .
-		copy "%qt_dir%\Qt5Core.dll" .
-		copy "%qt_dir%\Qt5Widgets.dll" .
-		copy "%qt_dir%\Qt5Gui.dll" .
+		copy %project_root%\build-peregrine-desktop\%config%\peregrine-desktop.exe .
+		copy "%qt_dir%\Qt5Core%d_suffix%.dll" .
+		copy "%qt_dir%\Qt5Widgets%d_suffix%.dll" .
+		copy "%qt_dir%\Qt5Gui%d_suffix%.dll" .
 	popd
 
 popd
