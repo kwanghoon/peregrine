@@ -18,6 +18,7 @@ public:
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
+    virtual void paintEvent(QPaintEvent *event) override;
 
     Ui::ActionSelectDialog *ui;
 };
