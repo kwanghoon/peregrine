@@ -21,6 +21,7 @@ private:
     virtual void paintEvent(QPaintEvent *event) override;
 
     Ui::ActionSelectDialog *ui;
+    void loadActionImages();
 };
 
 #endif // ACTIONSELECTDIALOG_H
