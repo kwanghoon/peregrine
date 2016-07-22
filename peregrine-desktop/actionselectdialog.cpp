@@ -8,7 +8,7 @@
 
 namespace
 {
-    void createImage(QWidget* parent, int x, int y, const char *path)
+    QLabel* createImage(QWidget* parent, int x, int y, const char *path)
     {
         QImageReader reader(path);
         reader.setAutoTransform(true);
@@ -18,8 +18,9 @@ namespace
         QLabel* image = new QLabel(parent);
         image->move(x, y);
         image->resize(kActionImageSize);
-        image->setPixmap(pixmap.scaled(kActionImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
         image->setAlignment(Qt::AlignCenter);
+        image->setPixmap(pixmap.scaled(kActionImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        return image;
     }
 }
 
@@ -28,9 +29,13 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     ui(new Ui::ActionSelectDialog),
     kOrigin{this->size().width() / 2 - kActionImageSize.width() / 2, this->size().height() / 2 - kActionImageSize.height() / 2 }
 {
-    ui->setupUi(this);
     selectionPosUpperLimit_ = { 1, 1 };
     selectionPosLowerLimit_ = { -1, -1 };
+    for (auto& a : actionImageMap_)
+    {
+        std::fill(a.begin(), a.end(), nullptr);
+    }
+    ui->setupUi(this);
     loadActionImages();
 }
 
@@ -46,41 +51,12 @@ void ActionSelectDialog::showEvent(QShowEvent *event)
 
 void ActionSelectDialog::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key::Key_Right) 
-    { 
-        selectedPos_.rx() += 1; 
-        if (selectedPos_.x() > selectionPosUpperLimit_.x())
-        {
-            selectedPos_.rx() = selectionPosLowerLimit_.x();
-        }
-        this->update();
-    }
-    else if (event->key() == Qt::Key::Key_Left) 
+    if (event->key() == Qt::Key::Key_Right || 
+        event->key() == Qt::Key::Key_Left ||
+        event->key() == Qt::Key::Key_Down ||
+        event->key() == Qt::Key::Key_Up)
     {
-        selectedPos_.rx() -= 1;
-        if (selectedPos_.x() < selectionPosLowerLimit_.x())
-        {
-            selectedPos_.rx() = selectionPosUpperLimit_.x();
-        }
-        this->update();
-    }
-    else if (event->key() == Qt::Key::Key_Down) 
-    {
-        selectedPos_.ry() += 1;
-        if (selectedPos_.y() > selectionPosUpperLimit_.y())
-        {
-            selectedPos_.ry() = selectionPosLowerLimit_.y();
-        }
-        this->update();
-    }
-    else if (event->key() == Qt::Key::Key_Up) 
-    {
-        selectedPos_.ry() -= 1;
-        if (selectedPos_.y() < selectionPosLowerLimit_.y())
-        {
-            selectedPos_.ry() = selectionPosUpperLimit_.y();
-        }
-        this->update();
+        handleArrowKeyPressed(event->key());
     }
 }
 
@@ -117,9 +93,60 @@ void ActionSelectDialog::loadActionImages()
 
     for (auto& p : placementData)
     {
-        createImage(this,
+        auto* label = createImage(this,
             kOrigin.x() + kActionImageSize.width() * p.pos.x() + kGapHori * p.pos.x(),
             kOrigin.y() + kActionImageSize.height() * p.pos.y() + kGapVert * p.pos.y(),
             p.name);
+        actionImageMap_[5 + p.pos.y()][5 + p.pos.x()] = label;
     }
+
+    auto label = new QLabel(this);
+    {
+        label->move(kOrigin.x(), kOrigin.y());
+        label->resize(kActionImageSize);
+        label->setAlignment(Qt::AlignCenter);
+    }
+    actionImageMap_[5][5] = label;
+}
+
+void ActionSelectDialog::handleArrowKeyPressed(int key)
+{
+    if (key == Qt::Key::Key_Right)
+    {
+        selectedPos_.rx() += 1;
+        if (selectedPos_.x() > selectionPosUpperLimit_.x())
+        {
+            selectedPos_.rx() = selectionPosLowerLimit_.x();
+        }
+    }
+    else if (key == Qt::Key::Key_Left)
+    {
+        selectedPos_.rx() -= 1;
+        if (selectedPos_.x() < selectionPosLowerLimit_.x())
+        {
+            selectedPos_.rx() = selectionPosUpperLimit_.x();
+        }
+    }
+    else if (key == Qt::Key::Key_Down)
+    {
+        selectedPos_.ry() += 1;
+        if (selectedPos_.y() > selectionPosUpperLimit_.y())
+        {
+            selectedPos_.ry() = selectionPosLowerLimit_.y();
+        }
+    }
+    else if (key == Qt::Key::Key_Up)
+    {
+        selectedPos_.ry() -= 1;
+        if (selectedPos_.y() < selectionPosLowerLimit_.y())
+        {
+            selectedPos_.ry() = selectionPosUpperLimit_.y();
+        }
+    }
+    if (selectedPos_ != QPoint(0, 0) &&
+        actionImageMap_[5 + selectedPos_.y()][5 + selectedPos_.x()] != nullptr)
+    {
+        actionImageMap_[5][5]->setPixmap(*actionImageMap_[5 + selectedPos_.y()][5 + selectedPos_.x()]->pixmap());
+    }
+    this->update();
 }

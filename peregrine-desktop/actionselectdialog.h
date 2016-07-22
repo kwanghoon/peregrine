@@ -2,10 +2,12 @@
 #define ACTIONSELECTDIALOG_H
 
 #include <QDialog>
+#include <array>
 
 namespace Ui {
 class ActionSelectDialog;
 }
+class QLabel;
 
 class ActionSelectDialog : public QDialog
 {
@@ -21,6 +23,7 @@ private:
     virtual void keyReleaseEvent(QKeyEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
     void loadActionImages();
+    void handleArrowKeyPressed(int key);
 
     const QSize kActionImageSize{ 120, 60 };
     const QPoint kOrigin;
@@ -30,6 +33,7 @@ private:
     QPoint selectedPos_;
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;
+    std::array<std::array<QLabel*, 10>, 10> actionImageMap_; // in row-major order
 };
 
 #endif // ACTIONSELECTDIALOG_H
