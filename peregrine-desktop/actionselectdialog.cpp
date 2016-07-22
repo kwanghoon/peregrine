@@ -25,9 +25,12 @@ namespace
 
 ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ActionSelectDialog)
+    ui(new Ui::ActionSelectDialog),
+    kOrigin{this->size().width() / 2 - kActionImageSize.width() / 2, this->size().height() / 2 - kActionImageSize.height() / 2 }
 {
     ui->setupUi(this);
+    selectionPosUpperLimit_ = { 1, 1 };
+    selectionPosLowerLimit_ = { -1, -1 };
     loadActionImages();
 }
 
@@ -36,11 +39,48 @@ ActionSelectDialog::~ActionSelectDialog()
     delete ui;
 }
 
+void ActionSelectDialog::showEvent(QShowEvent *event)
+{
+    selectedPos_ = { 0, 0 };
+}
+
 void ActionSelectDialog::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key::Key_Right)
+    if (event->key() == Qt::Key::Key_Right) 
+    { 
+        selectedPos_.rx() += 1; 
+        if (selectedPos_.x() > selectionPosUpperLimit_.x())
+        {
+            selectedPos_.rx() = selectionPosLowerLimit_.x();
+        }
+        this->update();
+    }
+    else if (event->key() == Qt::Key::Key_Left) 
     {
-        qDebug() << "right key pressed on select dlg";
+        selectedPos_.rx() -= 1;
+        if (selectedPos_.x() < selectionPosLowerLimit_.x())
+        {
+            selectedPos_.rx() = selectionPosUpperLimit_.x();
+        }
+        this->update();
+    }
+    else if (event->key() == Qt::Key::Key_Down) 
+    {
+        selectedPos_.ry() += 1;
+        if (selectedPos_.y() > selectionPosUpperLimit_.y())
+        {
+            selectedPos_.ry() = selectionPosLowerLimit_.y();
+        }
+        this->update();
+    }
+    else if (event->key() == Qt::Key::Key_Up) 
+    {
+        selectedPos_.ry() -= 1;
+        if (selectedPos_.y() < selectionPosLowerLimit_.y())
+        {
+            selectedPos_.ry() = selectionPosUpperLimit_.y();
+        }
+        this->update();
     }
 }
 
@@ -56,11 +96,10 @@ void ActionSelectDialog::keyReleaseEvent(QKeyEvent *event)
 void ActionSelectDialog::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    const QSize kActionImageSize{ 120, 60 };
-    const QPoint kOrigin{
-        this->size().width() / 2 - kActionImageSize.width() / 2,
-        this->size().height() / 2 - kActionImageSize.height() / 2 };
-    painter.drawRect(kOrigin.x(), kOrigin.y(), kActionImageSize.width(), kActionImageSize.height());
+    painter.drawRect(
+        kOrigin.x() + kActionImageSize.width() * selectedPos_.x() + kGapHori * selectedPos_.x(),
+        kOrigin.y() + kActionImageSize.height() * selectedPos_.y() + kGapVert * selectedPos_.y(),
+        kActionImageSize.width(), kActionImageSize.height());
 }
 
 void ActionSelectDialog::loadActionImages()
@@ -75,12 +114,6 @@ void ActionSelectDialog::loadActionImages()
         { "man.jpg", {1, -1} },
         { "google.png",{-1, 0} },
     };
-    const QSize kActionImageSize{ 120, 60 };
-    const QPoint kOrigin{ 
-        this->size().width() / 2 - kActionImageSize.width() / 2, 
-        this->size().height() / 2 - kActionImageSize.height() / 2};
-    const int kGapHori = 10;
-    const int kGapVert = 10;
 
     for (auto& p : placementData)
     {
