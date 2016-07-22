@@ -36,12 +36,18 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
         std::fill(a.begin(), a.end(), nullptr);
     }
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);
     loadActionImages();
 }
 
 ActionSelectDialog::~ActionSelectDialog()
 {
     delete ui;
+}
+
+void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
+{
+    this->move(pos - kOrigin);
 }
 
 void ActionSelectDialog::showEvent(QShowEvent *event)

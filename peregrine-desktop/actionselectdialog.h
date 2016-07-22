@@ -16,6 +16,7 @@ class ActionSelectDialog : public QDialog
 public:
     explicit ActionSelectDialog(QWidget *parent = 0);
     ~ActionSelectDialog();
+    void moveForSelectionDisplay(QPoint pos);
 
 private:
     virtual void showEvent(QShowEvent *event) override;
