@@ -51,6 +51,15 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->setupUi(this);
     loadSetting();
     loadPlugins();
+    
+    vector<ActionSelectDialog::ActionAssignInfo> v;
+    for (auto& a : settings.actionSlotAssignData)
+    {
+        v.emplace_back();
+        v.back().imagePath = getActionById(a.actionId)->imagePath;
+        v.back().pos = a.pos;
+    }
+    actionSelectDlg_.setActionAssignInfo(v);
 }
 
 LauncherWindow::~LauncherWindow()

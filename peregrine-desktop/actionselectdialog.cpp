@@ -8,7 +8,7 @@
 
 namespace
 {
-    QLabel* createImage(QWidget* parent, int x, int y, const char *path)
+    QLabel* createImage(QWidget* parent, int x, int y, const QString& path)
     {
         QImageReader reader(path);
         reader.setAutoTransform(true);
@@ -31,15 +31,14 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
 {
     selectionPosUpperLimit_ = { 1, 1 };
     selectionPosLowerLimit_ = { -1, -1 };
-    for (auto& a : actionImageMap_)
-    {
-        std::fill(a.begin(), a.end(), nullptr);
-    }
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);
-
-    loadSetting();
-    loadActionImages();
+    selectedActionImage_ = new QLabel(this);
+    {
+        selectedActionImage_->move(kOrigin.x(), kOrigin.y());
+        selectedActionImage_->resize(kActionImageSize);
+        selectedActionImage_->setAlignment(Qt::AlignCenter);
+    }
 }
 
 ActionSelectDialog::~ActionSelectDialog()
@@ -52,12 +51,27 @@ void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
     this->move(pos - kOrigin);
 }
 
-void ActionSelectDialog::showEvent(QShowEvent *event)
+void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo)
+{
+    for (auto& e : assignInfo)
+    {
+        slotMap_[5 + e.pos.y()][5 + e.pos.x()] = e.id;
+        data_[e.id].actionId = e.id;
+        qDebug() << e.imagePath;
+        auto* label = createImage(this,
+            kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
+            kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y(),
+            e.imagePath);
+        data_[e.id].imageLabel = label;
+    }
+}
+
+void ActionSelectDialog::showEvent(QShowEvent*)
 {
     selectedPos_ = { 0, 0 };
 }
 
-void ActionSelectDialog::keyPressEvent(QKeyEvent *event)
+void ActionSelectDialog::keyPressEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key::Key_Right || 
         event->key() == Qt::Key::Key_Left ||
@@ -68,7 +82,7 @@ void ActionSelectDialog::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ActionSelectDialog::keyReleaseEvent(QKeyEvent *event)
+void ActionSelectDialog::keyReleaseEvent(QKeyEvent* event)
 {
     if (event->key() == Qt::Key::Key_Shift ||
         event->key() == Qt::Key::Key_Escape)
@@ -77,44 +91,13 @@ void ActionSelectDialog::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-void ActionSelectDialog::paintEvent(QPaintEvent *event)
+void ActionSelectDialog::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.drawRect(
         kOrigin.x() + kActionImageSize.width() * selectedPos_.x() + kGapHori * selectedPos_.x(),
         kOrigin.y() + kActionImageSize.height() * selectedPos_.y() + kGapVert * selectedPos_.y(),
         kActionImageSize.width(), kActionImageSize.height());
-}
-
-void ActionSelectDialog::loadActionImages()
-{
-    struct ImagePlacement
-    {
-        const char* name;
-        QPoint pos;
-    };
-    std::vector<ImagePlacement> placementData{
-        { "google.png", {1, 0} },
-        { "man.jpg", {1, -1} },
-        { "google.png",{-1, 0} },
-    };
-
-    for (auto& p : placementData)
-    {
-        auto* label = createImage(this,
-            kOrigin.x() + kActionImageSize.width() * p.pos.x() + kGapHori * p.pos.x(),
-            kOrigin.y() + kActionImageSize.height() * p.pos.y() + kGapVert * p.pos.y(),
-            p.name);
-        actionImageMap_[5 + p.pos.y()][5 + p.pos.x()] = label;
-    }
-
-    auto label = new QLabel(this);
-    {
-        label->move(kOrigin.x(), kOrigin.y());
-        label->resize(kActionImageSize);
-        label->setAlignment(Qt::AlignCenter);
-    }
-    actionImageMap_[5][5] = label;
 }
 
 void ActionSelectDialog::handleArrowKeyPressed(int key)
@@ -151,15 +134,15 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
             selectedPos_.ry() = selectionPosUpperLimit_.y();
         }
     }
-    if (selectedPos_ != QPoint(0, 0) &&
-        actionImageMap_[5 + selectedPos_.y()][5 + selectedPos_.x()] != nullptr)
+    QString selectedId;
+    if (selectedPos_ != QPoint(0, 0))
     {
-        actionImageMap_[5][5]->setPixmap(*actionImageMap_[5 + selectedPos_.y()][5 + selectedPos_.x()]->pixmap());
+        selectedId = slotMap_[5 + selectedPos_.y()][5 + selectedPos_.x()];
+        if (!selectedId.isEmpty())
+        {
+            auto pixmap = *data_[selectedId].imageLabel->pixmap();
+            selectedActionImage_->setPixmap(std::move(pixmap));
+        }
     }
     this->update();
-}
-
-void ActionSelectDialog::loadSetting()
-{
-
 }
