@@ -37,6 +37,8 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     }
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);
+
+    loadSetting();
     loadActionImages();
 }
 
@@ -155,4 +157,9 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
         actionImageMap_[5][5]->setPixmap(*actionImageMap_[5 + selectedPos_.y()][5 + selectedPos_.x()]->pixmap());
     }
     this->update();
+}
+
+void ActionSelectDialog::loadSetting()
+{
+
 }

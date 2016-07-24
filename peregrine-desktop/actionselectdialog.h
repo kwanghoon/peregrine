@@ -35,6 +35,7 @@ private:
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;
     std::array<std::array<QLabel*, 10>, 10> actionImageMap_; // in row-major order
+    void loadSetting();
 };
 
 #endif // ACTIONSELECTDIALOG_H

@@ -18,6 +18,9 @@ public:
 
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
+    void loadSetting();
+    void loadPlugins();
+    void loadPlugin(QString path);
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
