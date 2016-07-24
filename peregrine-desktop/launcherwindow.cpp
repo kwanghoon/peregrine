@@ -12,9 +12,35 @@ using namespace std;
 
 namespace
 {
+    struct ActionInfo
+    {
+        QString id;
+        QString imagePath;
+    };
+    vector<ActionInfo> actionList;
+
+    ActionInfo* getActionById(const QString& id)
+    {
+        for (auto& a : actionList)
+        {
+            if (a.id == id)
+            {
+                return &a;
+            }
+        }
+        return nullptr;
+    }
+
+    struct ActionSlotAssignInfo
+    {
+        QPoint pos;
+        QString actionId;
+    };
+
     struct PeregrineSettings
     {
         QString pluginDir;
+        vector<ActionSlotAssignInfo> actionSlotAssignData;
     } settings;
 }
 
@@ -49,12 +75,23 @@ void LauncherWindow::loadSetting()
     {
         SettingXMLContentHandler() : QXmlDefaultHandler() {}
 
-        bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) override
+        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
         {
             if (localName == "plugin")
             {
                 settings.pluginDir = atts.value("plugindir");
                 qDebug() << settings.pluginDir;
+            }
+            else if (localName == "actionslot")
+            {
+                ActionSlotAssignInfo slot;
+                {
+                    slot.actionId = atts.value("actionid");
+                    slot.pos = QPoint(atts.value("x").toInt(),
+                        atts.value("y").toInt());
+                }
+                settings.actionSlotAssignData.push_back(slot);
+
             }
             return true;
         }
@@ -95,16 +132,26 @@ void LauncherWindow::loadPlugin(QString path)
     unique_ptr<QXmlInputSource> source(new QXmlInputSource(&pluginSettingFile));
     struct ActionListContentHandler : QXmlDefaultHandler
     {
-        ActionListContentHandler() : QXmlDefaultHandler() {}
+        ActionListContentHandler(QDir dir) 
+            : QXmlDefaultHandler()
+            , dir_(dir)
+        {}
 
-        bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) override
+        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
         {
             if (localName == "action")
             {
-                qDebug() << atts.value("id") << ", " << atts.value("image");
+                ActionInfo info;
+                {
+                    info.id = atts.value("id");
+                    info.imagePath = dir_.absoluteFilePath(atts.value("image"));
+                }
+                actionList.push_back(info);
             }
             return true;
         }
+
+        QDir dir_;
     };
     struct PluginSettingContentHandler : QXmlDefaultHandler
     {
@@ -113,7 +160,7 @@ void LauncherWindow::loadPlugin(QString path)
             , pluginDir_(pluginDir)
         {}
 
-        bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) override
+        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
         {
             if (localName == "actionfile")
             {
@@ -129,7 +176,9 @@ void LauncherWindow::loadPlugin(QString path)
             QXmlSimpleReader xmlReader;
             QFile actionListFile(path);
             unique_ptr<QXmlInputSource> source(new QXmlInputSource(&actionListFile));
-            unique_ptr<ActionListContentHandler> contentHandler(new ActionListContentHandler);
+            QDir dir(path);
+            dir.cdUp();
+            unique_ptr<ActionListContentHandler> contentHandler(new ActionListContentHandler(dir));
             xmlReader.setContentHandler(contentHandler.get());
             if (!xmlReader.parse(source.get()))
             {
