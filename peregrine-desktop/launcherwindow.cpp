@@ -93,21 +93,54 @@ void LauncherWindow::loadPlugin(QString path)
     QFile pluginSettingFile(pluginDir.absoluteFilePath("plugin.xml"));
     QXmlSimpleReader xmlReader;
     unique_ptr<QXmlInputSource> source(new QXmlInputSource(&pluginSettingFile));
+    struct ActionListContentHandler : QXmlDefaultHandler
+    {
+        ActionListContentHandler() : QXmlDefaultHandler() {}
+
+        bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) override
+        {
+            if (localName == "action")
+            {
+                qDebug() << atts.value("id") << ", " << atts.value("image");
+            }
+            return true;
+        }
+    };
     struct PluginSettingContentHandler : QXmlDefaultHandler
     {
-        PluginSettingContentHandler() : QXmlDefaultHandler() {}
+        PluginSettingContentHandler(QDir pluginDir) 
+            : QXmlDefaultHandler()
+            , pluginDir_(pluginDir)
+        {}
 
         bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) override
         {
             if (localName == "actionfile")
             {
-                qDebug() << "new action file: " << atts.value("path");
+                loadActionList(pluginDir_.filePath(atts.value("path")));
             }
             return true;
         }
+
+        void loadActionList(QString path)
+        {
+            qDebug() << "new action list file: " << path;
+
+            QXmlSimpleReader xmlReader;
+            QFile actionListFile(path);
+            unique_ptr<QXmlInputSource> source(new QXmlInputSource(&actionListFile));
+            unique_ptr<ActionListContentHandler> contentHandler(new ActionListContentHandler);
+            xmlReader.setContentHandler(contentHandler.get());
+            if (!xmlReader.parse(source.get()))
+            {
+                throw std::runtime_error((string)"Parsing failed. " + path.toLocal8Bit().toStdString());
+            }
+        }
+
+        QDir pluginDir_;
     };
 
-    unique_ptr<PluginSettingContentHandler> contentHandler(new PluginSettingContentHandler);
+    unique_ptr<PluginSettingContentHandler> contentHandler(new PluginSettingContentHandler(pluginDir));
     xmlReader.setContentHandler(contentHandler.get());
     if (!xmlReader.parse(source.get()))
     {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-	<action id='website-google' image='images/google.png'/>
-	<action id='website-bing' image='images/bing.png'/>
-	<action id='website-reddit' image='images/reddit.png'/>
-	<action id='website-facebook' image='images/facebook.png'/>
+	<action id="website-google" image="images/google.png"/>
+	<action id="website-bing" image="images/bing.png"/>
+	<action id="website-reddit" image="images/reddit.png"/>
+	<action id="website-facebook" image="images/facebook.png"/>
 </actions>
