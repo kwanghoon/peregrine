@@ -49,6 +49,8 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui(new Ui::LauncherWindow)
 {
     ui->setupUi(this);
+    ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
+
     loadSetting();
     loadPlugins();
     

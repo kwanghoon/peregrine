@@ -39,11 +39,6 @@
     <property name="resizeMode">
      <enum>QQuickWidget::SizeRootObjectToView</enum>
     </property>
-    <property name="source">
-     <url>
-      <string>file:///D:/myprojects/peregrine/peregrine-desktop/inputcontainer.qml</string>
-     </url>
-    </property>
    </widget>
   </widget>
  </widget>
