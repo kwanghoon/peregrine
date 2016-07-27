@@ -1,11 +1,16 @@
+#include "inputhandlerdelegate.h"
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
+#include "inputhandlerdelegate.h"
 #include <QKeyEvent>
 #include <QDebug>
 #include <QPushButton>
 #include <QWidget>
 #include <QXmlSimpleReader>
 #include <QDir>
+#include <QQuickItem>
+#include <QQmlContext>
+#include <QVariant>
 #include <memory>
 
 using namespace std;
@@ -50,6 +55,10 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
+
+    auto* context = ui->inputContainer->rootContext();
+    InputHandlerDelegate* inputHandlerDelegate = new InputHandlerDelegate(context);
+    context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate);
 
     loadSetting();
     loadPlugins();

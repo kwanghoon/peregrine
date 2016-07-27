@@ -11,5 +11,6 @@ Item {
         height: 20
         text: qsTr("Text Input")
         font.pixelSize: 12
+        onAccepted: inputHandlerDelegate.onInputTextAccepted(text);
     }
 }
