@@ -9,14 +9,17 @@ CONFIG += c++11
 TARGET = peregrine-desktop
 TEMPLATE = app
 
+INCLUDEPATH += ../plugin-sdk
+
 SOURCES += main.cpp\
-        launcherwindow.cpp \
+    launcherwindow.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp
 
 HEADERS += launcherwindow.h \
     actionselectdialog.h \
-    inputhandlerdelegate.h
+    inputhandlerdelegate.h \
+    ../plugin-sdk/peregrine-plugin-sdk.h
 
 FORMS += launcherwindow.ui \
     actionselectdialog.ui
