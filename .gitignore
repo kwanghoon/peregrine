@@ -15,3 +15,7 @@
 *.user
 *.VC.db
 *.VC.opendb
+
+# plugins
+/plugins/*/debug
+/plugins/*/release
