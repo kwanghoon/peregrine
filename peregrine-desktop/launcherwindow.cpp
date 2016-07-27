@@ -2,15 +2,14 @@
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
 #include "inputhandlerdelegate.h"
+#include <peregrine-plugin-sdk.h>
 #include <QKeyEvent>
-#include <QDebug>
-#include <QPushButton>
-#include <QWidget>
 #include <QXmlSimpleReader>
 #include <QDir>
 #include <QQuickItem>
 #include <QQmlContext>
-#include <QVariant>
+#include <QLibrary>
+#include <QDebug>
 #include <memory>
 
 using namespace std;
@@ -47,7 +46,30 @@ namespace
         QString pluginDir;
         vector<ActionSlotAssignInfo> actionSlotAssignData;
     } settings;
+
+    struct PluginInfo
+    {
+        QString name;
+        vector<QString> supplyingActions;
+        unique_ptr<QLibrary> lib;
+    };
+    list<PluginInfo> plugins;
+    map<QString, PluginInfo*> actionToPlugin;
+
+    struct PluginContext
+    {
+        PluginInfo* currPlugin = nullptr;
+    };
+    PluginContext g_pluginContext;
+    int __stdcall Plugin_RegisterAction(const char* id)
+    {
+        qDebug() << "action (" << id << ") registered!";
+        g_pluginContext.currPlugin->supplyingActions.push_back(id);
+        actionToPlugin[id] = g_pluginContext.currPlugin;
+        return 0;
+    }
 }
+
 
 LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -182,7 +204,34 @@ void LauncherWindow::loadPlugin(QString path)
 
         bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
         {
-            if (localName == "actionfile")
+            if (localName == "plugin")
+            {
+                QString pluginName = atts.value("name");
+                unique_ptr<QLibrary> lib(new QLibrary);
+                lib->setFileName(pluginDir_.absoluteFilePath(pluginName));
+                if (lib->load() && lib->isLoaded())
+                {
+                    PluginInfo pi;
+                    pi.name = pluginName;
+                    plugins.emplace_back();
+                    plugins.back().lib = std::move(lib);
+                    g_pluginContext.currPlugin = &plugins.back();
+
+                    PG_FUNC_TABLE table;
+                    table.fpRegisterAction = Plugin_RegisterAction;
+
+                    typedef int(__stdcall *fpInitializePlugin)(const PG_FUNC_TABLE*);
+                    auto initPluginFunc = (fpInitializePlugin)lib->resolve("InitializePlugin");
+                    initPluginFunc(&table);
+
+                    g_pluginContext.currPlugin = nullptr;
+                }
+                else
+                {
+                    qDebug() << lib->errorString();
+                }
+            }
+            else if (localName == "actionfile")
             {
                 loadActionList(pluginDir_.filePath(atts.value("path")));
             }
