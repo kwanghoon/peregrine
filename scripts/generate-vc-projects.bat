@@ -18,6 +18,12 @@ pushd ..
 	qmake -tp vc echo.pro
 	cd ..
 	
+	cd website
+	del website.vcxproj
+	del website.vcxproj.filters
+	qmake -tp vc website.pro
+	cd ..
+	
 	cd ..
 popd
 
