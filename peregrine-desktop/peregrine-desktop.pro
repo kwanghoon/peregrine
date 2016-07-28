@@ -11,12 +11,16 @@ TEMPLATE = app
 
 INCLUDEPATH += ../plugin-sdk
 
-SOURCES += main.cpp\
+SOURCES += main.cpp \
+    action.cpp \
+    plugin.cpp \
     launcherwindow.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp
 
-HEADERS += launcherwindow.h \
+HEADERS += action.h \
+    plugin.h \
+    launcherwindow.h \
     actionselectdialog.h \
     inputhandlerdelegate.h \
     ../plugin-sdk/peregrine-plugin-sdk.h
