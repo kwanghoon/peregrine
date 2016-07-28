@@ -6,6 +6,8 @@
 #include <QImageReader>
 #include <QPainter>
 
+using namespace std;
+
 namespace
 {
     QLabel* createImage(QWidget* parent, int x, int y, const QString& path)
@@ -57,11 +59,29 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
     {
         slotMap_[5 + e.pos.y()][5 + e.pos.x()] = e.id;
         data_[e.id].actionId = e.id;
+
+        selectionPosLowerLimit_.rx() = min(selectionPosLowerLimit_.x(), e.pos.x());
+        selectionPosLowerLimit_.ry() = min(selectionPosLowerLimit_.y(), e.pos.y());
+        selectionPosUpperLimit_.rx() = max(selectionPosUpperLimit_.x(), e.pos.x());
+        selectionPosUpperLimit_.ry() = max(selectionPosUpperLimit_.y(), e.pos.y());
+
         qDebug() << e.imagePath;
-        auto* label = createImage(this,
-            kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
-            kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y(),
-            e.imagePath);
+        QLabel* label = nullptr;
+        if (e.imagePath.isEmpty())
+        {
+            label = new QLabel(e.id, this);
+            label->move(kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
+                kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
+            label->resize(kActionImageSize);
+            label->setAlignment(Qt::AlignCenter);
+        }
+        else
+        {
+            label = createImage(this,
+                kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
+                kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y(),
+                e.imagePath);
+        }
         data_[e.id].imageLabel = label;
     }
 }
@@ -140,8 +160,16 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
         selectedId = slotMap_[5 + selectedPos_.y()][5 + selectedPos_.x()];
         if (!selectedId.isEmpty())
         {
-            auto pixmap = *data_[selectedId].imageLabel->pixmap();
-            selectedActionImage_->setPixmap(std::move(pixmap));
+            auto* label = data_[selectedId].imageLabel;
+            if (label->pixmap())
+            {
+                auto pixmap = *data_[selectedId].imageLabel->pixmap();
+                selectedActionImage_->setPixmap(std::move(pixmap));
+            }
+            else
+            {
+                selectedActionImage_->setText(label->text());
+            }
         }
     }
     this->update();

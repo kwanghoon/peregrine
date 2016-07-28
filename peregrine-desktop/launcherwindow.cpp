@@ -66,6 +66,8 @@ namespace
         qDebug() << "action (" << id << ") registered!";
         g_pluginContext.currPlugin->supplyingActions.push_back(id);
         actionToPlugin[id] = g_pluginContext.currPlugin;
+        actionList.emplace_back();
+        actionList.back().id = id;
         return 0;
     }
 }
@@ -89,6 +91,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     for (auto& a : settings.actionSlotAssignData)
     {
         v.emplace_back();
+        v.back().id = a.actionId;
         v.back().imagePath = getActionById(a.actionId)->imagePath;
         v.back().pos = a.pos;
     }
