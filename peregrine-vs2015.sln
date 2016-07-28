@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "peregrine-desktop", "peregrine-desktop\peregrine-desktop.vcxproj", "{2F2440A8-C99A-3CEF-92BE-3DBD2EB450C0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "echo", "plugins\echo\echo.vcxproj", "{C6892C4C-39D8-3F54-ABB1-86D037E00C75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plugins", "plugins", "{A75DA6E6-61BA-4FC8-ADDC-76E3574A67D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,8 +19,15 @@ Global
 		{2F2440A8-C99A-3CEF-92BE-3DBD2EB450C0}.Debug|x86.Build.0 = Debug|Win32
 		{2F2440A8-C99A-3CEF-92BE-3DBD2EB450C0}.Release|x86.ActiveCfg = Release|Win32
 		{2F2440A8-C99A-3CEF-92BE-3DBD2EB450C0}.Release|x86.Build.0 = Release|Win32
+		{C6892C4C-39D8-3F54-ABB1-86D037E00C75}.Debug|x86.ActiveCfg = Debug|Win32
+		{C6892C4C-39D8-3F54-ABB1-86D037E00C75}.Debug|x86.Build.0 = Debug|Win32
+		{C6892C4C-39D8-3F54-ABB1-86D037E00C75}.Release|x86.ActiveCfg = Release|Win32
+		{C6892C4C-39D8-3F54-ABB1-86D037E00C75}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6892C4C-39D8-3F54-ABB1-86D037E00C75} = {A75DA6E6-61BA-4FC8-ADDC-76E3574A67D2}
 	EndGlobalSection
 EndGlobal
