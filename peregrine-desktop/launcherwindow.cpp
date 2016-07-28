@@ -214,16 +214,16 @@ void LauncherWindow::loadPlugin(QString path)
                     PluginInfo pi;
                     pi.name = pluginName;
                     plugins.emplace_back();
-                    plugins.back().lib = std::move(lib);
                     g_pluginContext.currPlugin = &plugins.back();
 
                     PG_FUNC_TABLE table;
                     table.fpRegisterAction = Plugin_RegisterAction;
 
-                    typedef int(__stdcall *fpInitializePlugin)(const PG_FUNC_TABLE*);
+                    typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*);
                     auto initPluginFunc = (fpInitializePlugin)lib->resolve("InitializePlugin");
                     initPluginFunc(&table);
 
+                    plugins.back().lib = std::move(lib);
                     g_pluginContext.currPlugin = nullptr;
                 }
                 else
