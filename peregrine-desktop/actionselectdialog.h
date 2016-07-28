@@ -25,6 +25,7 @@ public:
     ~ActionSelectDialog();
     void moveForSelectionDisplay(QPoint pos);
     void setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo);
+    QString getSelectedAction() const;
 
 private:
     struct Slot

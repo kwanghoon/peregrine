@@ -1,12 +1,13 @@
 #ifndef LAUNCHERWINDOW_H
 #define LAUNCHERWINDOW_H
 
-#include <QMainWindow>
 #include "actionselectdialog.h"
+#include <QMainWindow>
 
 namespace Ui {
-class LauncherWindow;
+    class LauncherWindow;
 }
+class InputHandlerDelegate;
 
 class LauncherWindow : public QMainWindow
 {
@@ -20,10 +21,11 @@ private:
     virtual void keyPressEvent(QKeyEvent *event) override;
     void loadSetting();
     void loadPlugins();
-    void loadPlugin(QString path);
+    void tryLoadPlugin(QString path);
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
+    InputHandlerDelegate* inputHandlerDelegate_;
 };
 
 #endif // LAUNCHERWINDOW_H

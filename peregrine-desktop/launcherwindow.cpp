@@ -1,40 +1,23 @@
 #include "inputhandlerdelegate.h"
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
+#include "action.h"
+#include "plugin.h"
 #include "inputhandlerdelegate.h"
 #include <peregrine-plugin-sdk.h>
-#include <QKeyEvent>
 #include <QXmlSimpleReader>
-#include <QDir>
-#include <QQuickItem>
 #include <QQmlContext>
+#include <QQuickItem>
+#include <QKeyEvent>
 #include <QLibrary>
 #include <QDebug>
+#include <QDir>
 #include <memory>
 
 using namespace std;
 
 namespace
 {
-    struct ActionInfo
-    {
-        QString id;
-        QString imagePath;
-    };
-    vector<ActionInfo> actionList;
-
-    ActionInfo* getActionById(const QString& id)
-    {
-        for (auto& a : actionList)
-        {
-            if (a.id == id)
-            {
-                return &a;
-            }
-        }
-        return nullptr;
-    }
-
     struct ActionSlotAssignInfo
     {
         QPoint pos;
@@ -46,32 +29,7 @@ namespace
         QString pluginDir;
         vector<ActionSlotAssignInfo> actionSlotAssignData;
     } settings;
-
-    struct PluginInfo
-    {
-        QString name;
-        vector<QString> supplyingActions;
-        unique_ptr<QLibrary> lib;
-    };
-    list<PluginInfo> plugins;
-    map<QString, PluginInfo*> actionToPlugin;
-
-    struct PluginContext
-    {
-        PluginInfo* currPlugin = nullptr;
-    };
-    PluginContext g_pluginContext;
-    int __stdcall Plugin_RegisterAction(const char* id)
-    {
-        qDebug() << "action (" << id << ") registered!";
-        g_pluginContext.currPlugin->supplyingActions.push_back(id);
-        actionToPlugin[id] = g_pluginContext.currPlugin;
-        actionList.emplace_back();
-        actionList.back().id = id;
-        return 0;
-    }
 }
-
 
 LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -81,8 +39,8 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
 
     auto* context = ui->inputContainer->rootContext();
-    InputHandlerDelegate* inputHandlerDelegate = new InputHandlerDelegate(context);
-    context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate);
+    inputHandlerDelegate_ = new InputHandlerDelegate(this);
+    context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
     loadSetting();
     loadPlugins();
@@ -92,7 +50,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     {
         v.emplace_back();
         v.back().id = a.actionId;
-        v.back().imagePath = getActionById(a.actionId)->imagePath;
+        v.back().imagePath = ActionManager::getInstance().getActionById(a.actionId)->imagePath;
         v.back().pos = a.pos;
     }
     actionSelectDlg_.setActionAssignInfo(v);
@@ -110,7 +68,10 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
         auto* btn = ui->centralWidget->findChild<QPushButton*>("pushButton");
         
         actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(btn->pos()));
-        actionSelectDlg_.show();
+        actionSelectDlg_.exec();
+
+        QString actionId = actionSelectDlg_.getSelectedAction();
+        inputHandlerDelegate_->currentAction = actionId;
     }
 }
 
@@ -163,108 +124,12 @@ void LauncherWindow::loadPlugins()
         {
             continue;
         }
-        loadPlugin(pluginDir.absoluteFilePath(subdir.path()));
+        PluginManager::getInstance().loadPlugin(pluginDir.absoluteFilePath(subdir.path()));
     }
 }
 
-void LauncherWindow::loadPlugin(QString path)
+void LauncherWindow::tryLoadPlugin(QString path)
 {
     qDebug() << "load plugin at " << path;
-
-    QDir pluginDir(path);
-    QFile pluginSettingFile(pluginDir.absoluteFilePath("plugin.xml"));
-    QXmlSimpleReader xmlReader;
-    unique_ptr<QXmlInputSource> source(new QXmlInputSource(&pluginSettingFile));
-    struct ActionListContentHandler : QXmlDefaultHandler
-    {
-        ActionListContentHandler(QDir dir) 
-            : QXmlDefaultHandler()
-            , dir_(dir)
-        {}
-
-        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
-        {
-            if (localName == "action")
-            {
-                ActionInfo info;
-                {
-                    info.id = atts.value("id");
-                    info.imagePath = dir_.absoluteFilePath(atts.value("image"));
-                }
-                actionList.push_back(info);
-            }
-            return true;
-        }
-
-        QDir dir_;
-    };
-    struct PluginSettingContentHandler : QXmlDefaultHandler
-    {
-        PluginSettingContentHandler(QDir pluginDir) 
-            : QXmlDefaultHandler()
-            , pluginDir_(pluginDir)
-        {}
-
-        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
-        {
-            if (localName == "plugin")
-            {
-                QString pluginName = atts.value("name");
-                unique_ptr<QLibrary> lib(new QLibrary);
-                lib->setFileName(pluginDir_.absoluteFilePath(pluginName));
-                if (lib->load() && lib->isLoaded())
-                {
-                    PluginInfo pi;
-                    pi.name = pluginName;
-                    plugins.emplace_back();
-                    g_pluginContext.currPlugin = &plugins.back();
-
-                    PG_FUNC_TABLE table;
-                    table.fpRegisterAction = Plugin_RegisterAction;
-
-                    typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*);
-                    auto initPluginFunc = (fpInitializePlugin)lib->resolve("InitializePlugin");
-                    initPluginFunc(&table);
-
-                    plugins.back().lib = std::move(lib);
-                    g_pluginContext.currPlugin = nullptr;
-                }
-                else
-                {
-                    qDebug() << lib->errorString();
-                }
-            }
-            else if (localName == "actionfile")
-            {
-                loadActionList(pluginDir_.filePath(atts.value("path")));
-            }
-            return true;
-        }
-
-        void loadActionList(QString path)
-        {
-            qDebug() << "new action list file: " << path;
-
-            QXmlSimpleReader xmlReader;
-            QFile actionListFile(path);
-            unique_ptr<QXmlInputSource> source(new QXmlInputSource(&actionListFile));
-            QDir dir(path);
-            dir.cdUp();
-            unique_ptr<ActionListContentHandler> contentHandler(new ActionListContentHandler(dir));
-            xmlReader.setContentHandler(contentHandler.get());
-            if (!xmlReader.parse(source.get()))
-            {
-                throw std::runtime_error((string)"Parsing failed. " + path.toLocal8Bit().toStdString());
-            }
-        }
-
-        QDir pluginDir_;
-    };
-
-    unique_ptr<PluginSettingContentHandler> contentHandler(new PluginSettingContentHandler(pluginDir));
-    xmlReader.setContentHandler(contentHandler.get());
-    if (!xmlReader.parse(source.get()))
-    {
-        throw std::runtime_error("Parsing failed. (plugin.xml)");
-    }
+    PluginManager::getInstance().loadPlugin(path);
 }

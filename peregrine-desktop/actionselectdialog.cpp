@@ -86,6 +86,11 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
     }
 }
 
+QString ActionSelectDialog::getSelectedAction() const
+{
+    return slotMap_[5 + selectedPos_.y()][5 + selectedPos_.x()];
+}
+
 void ActionSelectDialog::showEvent(QShowEvent*)
 {
     selectedPos_ = { 0, 0 };
