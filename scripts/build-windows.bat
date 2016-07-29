@@ -32,14 +32,14 @@ pushd ..
 	set project_root=%cd%
 	
 	::
-	echo build peregrine-desktop
-	rmdir /s/q build-peregrine-desktop
-	mkdir build-peregrine-desktop
-	pushd build-peregrine-desktop
+	echo build peregrine
+	rmdir /s/q build-peregrine
+	mkdir build-peregrine
+	pushd build-peregrine
 		if "%1" == "debug" (
-			qmake -spec win32-msvc2015 "CONFIG+=debug" "CONFIG+=qml_debug" ..\peregrine-desktop\peregrine-desktop.pro
+			qmake -spec win32-msvc2015 "CONFIG+=debug" "CONFIG+=qml_debug" ../peregrine.pro
 		) else (
-			qmake -spec win32-msvc2015 ..\peregrine-desktop\peregrine-desktop.pro
+			qmake -spec win32-msvc2015 ../peregrine.pro
 		)
 		nmake
 	popd
@@ -49,10 +49,18 @@ pushd ..
 	rmdir /s/q output
 	mkdir output
 	pushd output
-		copy %project_root%\build-peregrine-desktop\%config%\peregrine-desktop.exe .
-		copy "%qt_dir%\Qt5Core%d_suffix%.dll" .
-		copy "%qt_dir%\Qt5Widgets%d_suffix%.dll" .
-		copy "%qt_dir%\Qt5Gui%d_suffix%.dll" .
+		copy %project_root%\build-peregrine\peregrine-desktop\%config%\peregrine-desktop.exe .
+		set qtmodules=(Core Widgets Gui QuickWidgets Xml)
+		for %%m in %qtmodules% do (
+			copy "%qt_dir%\Qt5%%m%d_suffix%.dll" .
+		)
+		
+		robocopy %project_root%\plugins .\plugins *.xml *.png /S
+		
+		cd ..\build-peregrine\plugins
+		for /d %%a in (*) do (
+			copy %%a\%config%\%%a.dll %project_root%\output\plugins\%%a\
+		)
 	popd
 
 popd

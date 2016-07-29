@@ -4,5 +4,5 @@
 ::
 setlocal
 	set qt_dir=G:\QT\Qt5.7.0\5.7\msvc2015\bin
-	build-windows.bat
+	build-windows.bat %1 %2 %3 %4
 endlocal
