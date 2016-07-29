@@ -72,6 +72,13 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
 
         QString actionId = actionSelectDlg_.getSelectedAction();
         inputHandlerDelegate_->currentAction = actionId;
+
+        // focus on 'inputText' element.
+        ui->inputContainer->setFocus();
+
+        auto* item = ui->inputContainer->rootObject();
+        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+        textInput->forceActiveFocus();
     }
 }
 
