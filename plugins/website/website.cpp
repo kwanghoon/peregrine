@@ -4,6 +4,7 @@
 #ifdef Q_OS_WIN
 #   include <windows.h>
 #   include <shellapi.h>
+#	pragma comment(lib, "shell32.lib")
 #endif
 
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
