@@ -3,6 +3,7 @@
 ::
 :: arguments
 ::   %1 - compile optimization mode. debug or release.
+::   %2 - build result dir. it's optional.
 ::
 @echo off
 setlocal
@@ -15,7 +16,11 @@ if not exist "%~dp0..\build-peregrine" (
 set optim_mode=%1
 if "%optim_mode%" == "" set optim_mode=debug
 set project_root_dir=%~dp0..
-set build_result_dir=%project_root_dir%\build-peregrine
+if "%2" == "" (
+	set build_result_dir=%project_root_dir%\build-peregrine
+) else (
+	set build_result_dir=%2
+)
 set output_dir=%project_root_dir%\output
 
 rmdir /s/q %output_dir%

@@ -30,3 +30,11 @@ FORMS += launcherwindow.ui \
 
 DISTFILES += \
     inputcontainer.qml
+
+equals(TEMPLATE, "vcapp") {
+    CONFIG(release, debug|release):OPTIM_MODE=release
+    CONFIG(debug, debug|release):OPTIM_MODE=debug
+
+    QMAKE_POST_LINK += \
+        call $$quote($$shell_path($$_PRO_FILE_PWD_/../scripts/copy-outputs.bat)) $$OPTIM_MODE $$quote($$shell_path($$_PRO_FILE_PWD_/..)) $$escape_expand(\\n)
+}
