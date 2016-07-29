@@ -24,7 +24,10 @@ mkdir %output_dir%
 :: app binaries
 echo copy app binaries..
 copy %build_result_dir%\peregrine-desktop\%optim_mode%\peregrine-desktop.exe %output_dir%
-copy %project_root_dir%\peregrine-desktop\*.xml %output_dir%
+
+:: app resources
+echo copy app resources..
+robocopy %project_root_dir%\peregrine-desktop %output_dir% *.xml *.qml
 
 :: plugin binaries & resources
 echo copy plugin binaries..
