@@ -59,7 +59,7 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
         actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(btn->pos()));
         actionSelectDlg_.exec();
 
-        QString actionId = actionSelectDlg_.getSelectedAction();
+        QString actionId = actionSelectDlg_.getSelectedActionId();
         inputHandlerDelegate_->currentAction = actionId;
 
         // focus on 'inputText' element.

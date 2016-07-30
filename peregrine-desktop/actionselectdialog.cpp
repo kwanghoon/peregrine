@@ -57,7 +57,7 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
 {
     for (auto& e : assignInfo)
     {
-        slotMap_[5 + e.pos.y()][5 + e.pos.x()] = e.id;
+        getActionIdByPos(e.pos) = e.id;
         data_[e.id].actionId = e.id;
 
         selectionPosLowerLimit_.rx() = min(selectionPosLowerLimit_.x(), e.pos.x());
@@ -86,9 +86,9 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
     }
 }
 
-QString ActionSelectDialog::getSelectedAction() const
+QString ActionSelectDialog::getSelectedActionId() const
 {
-    return slotMap_[5 + selectedPos_.y()][5 + selectedPos_.x()];
+    return getActionIdByPos(selectedPos_);
 }
 
 void ActionSelectDialog::showEvent(QShowEvent*)
@@ -162,7 +162,7 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
     QString selectedId;
     if (selectedPos_ != QPoint(0, 0))
     {
-        selectedId = slotMap_[5 + selectedPos_.y()][5 + selectedPos_.x()];
+        selectedId = getSelectedActionId();
         if (!selectedId.isEmpty())
         {
             auto* label = data_[selectedId].imageLabel;
@@ -178,4 +178,14 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
         }
     }
     this->update();
+}
+
+QString& ActionSelectDialog::getActionIdByPos(const QPoint& pos)
+{
+    return slotMap_[5 + pos.y()][5 + pos.x()];
+}
+
+const QString& ActionSelectDialog::getActionIdByPos(const QPoint& pos) const
+{
+    return slotMap_[5 + pos.y()][5 + pos.x()];
 }

@@ -25,7 +25,7 @@ public:
     ~ActionSelectDialog();
     void moveForSelectionDisplay(QPoint pos);
     void setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo);
-    QString getSelectedAction() const;
+    QString getSelectedActionId() const;
 
 private:
     struct Slot
@@ -38,6 +38,8 @@ private:
     virtual void keyReleaseEvent(QKeyEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
     void handleArrowKeyPressed(int key);
+    QString& getActionIdByPos(const QPoint& pos);
+    const QString& getActionIdByPos(const QPoint& pos) const;
 
     const QSize kActionImageSize{ 120, 60 };
     const QPoint kOrigin;
