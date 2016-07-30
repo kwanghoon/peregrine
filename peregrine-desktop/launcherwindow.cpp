@@ -13,6 +13,7 @@
 #include <QDebug>
 #include <QDir>
 #include <memory>
+#include <cassert>
 
 using namespace std;
 
@@ -48,9 +49,11 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     vector<ActionSelectDialog::ActionAssignInfo> v;
     for (auto& a : settings.actionSlotAssignData)
     {
+        auto* action = ActionManager::getInstance().getActionById(a.actionId);
+        assert(action);
         v.emplace_back();
         v.back().id = a.actionId;
-        v.back().imagePath = ActionManager::getInstance().getActionById(a.actionId)->imagePath;
+        v.back().imagePath = action->imagePath;
         v.back().pos = a.pos;
     }
     actionSelectDlg_.setActionAssignInfo(v);
