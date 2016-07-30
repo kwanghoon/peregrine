@@ -3,6 +3,7 @@
 #include "ui_launcherwindow.h"
 #include "action.h"
 #include "plugin.h"
+#include "global.h"
 #include "inputhandlerdelegate.h"
 #include <peregrine-plugin-sdk.h>
 #include <QXmlSimpleReader>
@@ -16,21 +17,6 @@
 #include <cassert>
 
 using namespace std;
-
-namespace
-{
-    struct ActionSlotAssignInfo
-    {
-        QPoint pos;
-        QString actionId;
-    };
-
-    struct PeregrineSettings
-    {
-        QString pluginDir;
-        vector<ActionSlotAssignInfo> actionSlotAssignData;
-    } settings;
-}
 
 LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,7 +33,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     loadPlugins();
     
     vector<ActionSelectDialog::ActionAssignInfo> v;
-    for (auto& a : settings.actionSlotAssignData)
+    for (auto& a : global::userConfig.actionSlotAssignData)
     {
         auto* action = ActionManager::getInstance().getActionById(a.actionId);
         assert(action);
@@ -95,18 +81,18 @@ void LauncherWindow::loadSetting()
         {
             if (localName == "plugin")
             {
-                settings.pluginDir = atts.value("plugindir");
-                qDebug() << settings.pluginDir;
+                global::userConfig.pluginDir = atts.value("plugindir");
+                qDebug() << global::userConfig.pluginDir;
             }
             else if (localName == "actionslot")
             {
-                ActionSlotAssignInfo slot;
+                UserConfig::ActionSlotAssignInfo slot;
                 {
                     slot.actionId = atts.value("actionid");
                     slot.pos = QPoint(atts.value("x").toInt(),
                         atts.value("y").toInt());
                 }
-                settings.actionSlotAssignData.push_back(slot);
+                global::userConfig.actionSlotAssignData.push_back(slot);
 
             }
             return true;
@@ -125,7 +111,7 @@ void LauncherWindow::loadSetting()
 
 void LauncherWindow::loadPlugins()
 {
-    QDir pluginDir(settings.pluginDir);
+    QDir pluginDir(global::userConfig.pluginDir);
     auto subdirs = pluginDir.entryList(QDir::Filter::Dirs | QDir::Filter::NoDotAndDotDot);
     for (QDir subdir : subdirs)
     {

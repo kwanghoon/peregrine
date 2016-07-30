@@ -14,12 +14,15 @@ INCLUDEPATH += ../plugin-sdk
 SOURCES += main.cpp \
     action.cpp \
     plugin.cpp \
+	global.cpp \
     launcherwindow.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp
 
 HEADERS += action.h \
     plugin.h \
+	global.h \
+	userconfig.h \
     launcherwindow.h \
     actionselectdialog.h \
     inputhandlerdelegate.h \
