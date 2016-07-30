@@ -24,9 +24,6 @@ if "%config%" neq "release" if "%config%" neq "debug" (
 	echo "Invalid config specified(%1). it must be debug or release."
 	goto EXIT_FAILED
 )
-if "%config%" == "debug" (
-	set d_suffix=d
-)
 
 pushd ..
 	set project_root=%cd%

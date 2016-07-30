@@ -8,15 +8,14 @@
 @echo off
 setlocal
 
-if not exist "%~dp0..\build-peregrine" (
-	echo "Not build results found! (root/build-peregrine)"
-	goto EXIT_FAILED
-)
-
 set optim_mode=%1
 if "%optim_mode%" == "" set optim_mode=debug
 set project_root_dir=%~dp0..
 if "%2" == "" (
+	if not exist "%~dp0..\build-peregrine" (
+		echo "Not build results found! (root/build-peregrine)"
+		goto EXIT_FAILED
+	)
 	set build_result_dir=%project_root_dir%\build-peregrine
 ) else (
 	set build_result_dir=%2
@@ -26,9 +25,21 @@ set output_dir=%project_root_dir%\output
 rmdir /s/q %output_dir%
 mkdir %output_dir%
 
-:: app binaries
+:: app binaries & QT dlls
 echo copy app binaries..
 copy %build_result_dir%\peregrine-desktop\%optim_mode%\peregrine-desktop.exe %output_dir%
+
+if "%qt_dir%" == "" (
+	echo not found 'qt_dir' environment variable.
+	goto EXIT_FAILED
+)
+set qt_modules=(Core Widgets Gui Qml Quick QuickWidgets Xml Network)
+if "%optim_mode%" == "debug" (
+	set d_suffix=d
+)
+for %%m in %qt_modules% do (	
+	copy "%qt_dir%\Qt5%%m%d_suffix%.dll" %output_dir%
+)
 
 :: app resources
 echo copy app resources..
