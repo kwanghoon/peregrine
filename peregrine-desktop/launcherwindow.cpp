@@ -60,7 +60,7 @@ void LauncherWindow::initSuggestionListController()
     QObject* suggestionModel = ui->inputContainer->rootObject()->findChild<QObject*>("suggestionModel");
     assert(!!suggestionModel);
 
-    suggestionListController_.reset(new SuggestionListController(suggestionListView, suggestionModel));
+    global::suggestionListController = new SuggestionListController(suggestionListView, suggestionModel);
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)

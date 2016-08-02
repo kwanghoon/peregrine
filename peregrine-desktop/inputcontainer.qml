@@ -12,6 +12,7 @@ Item {
         text: qsTr("Text Input")
         font.pixelSize: 12
         onAccepted: inputHandlerDelegate.onInputTextAccepted(text);
+        onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
     }
 
     ListModel {

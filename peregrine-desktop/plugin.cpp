@@ -23,6 +23,7 @@ namespace
             {
                 currentAction_.reset(new Action);
                 currentAction_->id = atts.value("id");
+                currentAction_->name = atts.value("name");
                 currentAction_->imagePath = dir_.absoluteFilePath(atts.value("image"));
             }
             else if (localName == "link")

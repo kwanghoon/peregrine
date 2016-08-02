@@ -29,7 +29,6 @@ private:
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
     InputHandlerDelegate* inputHandlerDelegate_;
-    std::unique_ptr<SuggestionListController> suggestionListController_;
 };
 
 #endif // LAUNCHERWINDOW_H

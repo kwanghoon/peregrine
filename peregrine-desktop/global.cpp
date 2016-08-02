@@ -3,4 +3,5 @@
 namespace global
 {
     UserConfig userConfig;
+    SuggestionListController* suggestionListController = nullptr;
 }

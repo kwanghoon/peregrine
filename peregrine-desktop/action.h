@@ -13,6 +13,7 @@ public:
     bool run(const QString& input);
 
     QString id;
+    QString name;
     QString imagePath;
     Plugin* plugin = nullptr;
 
