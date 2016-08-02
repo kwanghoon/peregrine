@@ -47,8 +47,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     }
     actionSelectDlg_.setActionAssignInfo(v);
 
-    // #HACK: without this, keyPressEvent() isn't called. is it right way?
-    grabKeyboard();
+    setFocus();
 }
 
 LauncherWindow::~LauncherWindow()
@@ -74,9 +73,7 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
         QWidget* actionDisplay = ui->centralWidget->findChild<QWidget*>("actionDisplay");
         
         actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(actionDisplay->pos()));
-        releaseKeyboard();
         actionSelectDlg_.exec();
-        grabKeyboard();
 
         QString actionId = actionSelectDlg_.getSelectedActionId();
         changeAction(actionId);
