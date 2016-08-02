@@ -1,11 +1,12 @@
 #include "inputhandlerdelegate.h"
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
+#include "inputhandlerdelegate.h"
+#include "suggestionlistcontroller.h"
+#include "actionuihelper.h"
 #include "action.h"
 #include "plugin.h"
 #include "global.h"
-#include "inputhandlerdelegate.h"
-#include "suggestionlistcontroller.h"
 #include <peregrine-plugin-sdk.h>
 #include <QXmlSimpleReader>
 #include <QQmlContext>
@@ -45,6 +46,9 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         v.back().pos = a.pos;
     }
     actionSelectDlg_.setActionAssignInfo(v);
+
+    // #HACK: without this, keyPressEvent() isn't called. is it right way?
+    grabKeyboard();
 }
 
 LauncherWindow::~LauncherWindow()
@@ -67,13 +71,15 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key::Key_Shift)
     {
-        auto* btn = ui->centralWidget->findChild<QPushButton*>("pushButton");
+        QWidget* actionDisplay = ui->centralWidget->findChild<QWidget*>("actionDisplay");
         
-        actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(btn->pos()));
+        actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(actionDisplay->pos()));
+        releaseKeyboard();
         actionSelectDlg_.exec();
+        grabKeyboard();
 
         QString actionId = actionSelectDlg_.getSelectedActionId();
-        inputHandlerDelegate_->currentAction = actionId;
+        changeAction(actionId);
 
         // focus on 'inputText' element.
         ui->inputContainer->setFocus();
@@ -141,4 +147,14 @@ void LauncherWindow::tryLoadPlugin(QString path)
 {
     qDebug() << "load plugin at " << path;
     PluginManager::getInstance().loadPlugin(path);
+}
+
+void LauncherWindow::changeAction(QString actionId)
+{
+    inputHandlerDelegate_->currentAction = actionId;
+
+    // #TODO: replace the selected action image
+    QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
+    auto action = ActionManager::getInstance().getActionById(actionId);
+    ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
 }

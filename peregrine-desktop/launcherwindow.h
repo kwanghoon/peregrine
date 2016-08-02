@@ -25,6 +25,7 @@ private:
     void loadSetting();
     void loadPlugins();
     void tryLoadPlugin(QString path);
+    void changeAction(QString actionId);
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;

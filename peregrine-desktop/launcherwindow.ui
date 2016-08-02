@@ -14,7 +14,7 @@
    <string>LauncherWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QLabel" name="actionDisplay">
     <property name="geometry">
      <rect>
       <x>20</x>

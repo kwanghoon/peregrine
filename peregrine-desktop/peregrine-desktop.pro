@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     launcherwindow.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp \
-    suggestionlistcontroller.cpp
+    suggestionlistcontroller.cpp \
+    actionuihelper.cpp
 
 HEADERS += action.h \
     plugin.h \
@@ -28,7 +29,8 @@ HEADERS += action.h \
     actionselectdialog.h \
     inputhandlerdelegate.h \
     ../plugin-sdk/peregrine-plugin-sdk.h \
-    suggestionlistcontroller.h
+    suggestionlistcontroller.h \
+    actionuihelper.h
 
 FORMS += launcherwindow.ui \
     actionselectdialog.ui

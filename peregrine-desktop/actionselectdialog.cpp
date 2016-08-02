@@ -1,30 +1,12 @@
 #include "actionselectdialog.h"
 #include "ui_actionselectdialog.h"
+#include "actionuihelper.h"
 #include <QKeyEvent>
 #include <QDebug>
 #include <QLabel>
-#include <QImageReader>
 #include <QPainter>
 
 using namespace std;
-
-namespace
-{
-    QLabel* createImage(QWidget* parent, int x, int y, const QString& path)
-    {
-        QImageReader reader(path);
-        reader.setAutoTransform(true);
-        auto pixmap = QPixmap::fromImage(reader.read());
-
-        const QSize kActionImageSize{120, 60};
-        QLabel* image = new QLabel(parent);
-        image->move(x, y);
-        image->resize(kActionImageSize);
-        image->setAlignment(Qt::AlignCenter);
-        image->setPixmap(pixmap.scaled(kActionImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        return image;
-    }
-}
 
 ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     QDialog(parent),
@@ -65,23 +47,10 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
         selectionPosUpperLimit_.rx() = max(selectionPosUpperLimit_.x(), e.pos.x());
         selectionPosUpperLimit_.ry() = max(selectionPosUpperLimit_.y(), e.pos.y());
 
-        qDebug() << e.imagePath;
-        QLabel* label = nullptr;
-        if (e.imagePath.isEmpty())
-        {
-            label = new QLabel(e.id, this);
-            label->move(kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
-                kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
-            label->resize(kActionImageSize);
-            label->setAlignment(Qt::AlignCenter);
-        }
-        else
-        {
-            label = createImage(this,
-                kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
-                kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y(),
-                e.imagePath);
-        }
+        QLabel* label = new QLabel(this);
+        label->move(kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
+            kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
+        ActionUIHelper::loadActionImage(label, e.imagePath, e.id);
         data_[e.id].imageLabel = label;
     }
 }
