@@ -23,6 +23,8 @@ if "%2" == "" (
 set output_dir=%project_root_dir%\output
 
 rmdir /s/q %output_dir%
+:: get some delay to work around rmdir's latency problem.
+timeout 1
 mkdir %output_dir%
 
 :: app binaries & QT dlls
