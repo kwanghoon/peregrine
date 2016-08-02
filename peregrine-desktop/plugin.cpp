@@ -36,6 +36,15 @@ namespace
                 }
                 currentAction_->links.push_back(e);
             }
+            else if (localName == "runaction")
+            {
+                Action::DoEntry e;
+                {
+                    e.actionId = atts.value("id");
+                    e.inputTemplate = atts.value("input");
+                }
+                currentAction_->doList.push_back(e);
+            }
             return true;
         }
 

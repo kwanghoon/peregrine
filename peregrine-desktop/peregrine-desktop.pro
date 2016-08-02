@@ -37,6 +37,12 @@ FORMS += launcherwindow.ui \
 
 DISTFILES += \
     inputcontainer.qml
+	
+# Jinja2CppLight
+INCLUDEPATH += ../thirdparty/Jinja2CppLight/src
+SOURCES += $$files(../thirdparty/Jinja2CppLight/src/*.cpp)
+HEADERS += $$files(../thirdparty/Jinja2CppLight/src/*.h)
+
 
 equals(TEMPLATE, "vcapp") {
     CONFIG(release, debug|release):OPTIM_MODE=release

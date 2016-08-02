@@ -1,0 +1,3 @@
+[submodule "thirdparty/Jinja2CppLight"]
+	path = thirdparty/Jinja2CppLight
+	url = https://github.com/hughperkins/Jinja2CppLight.git

@@ -14,15 +14,7 @@ void InputHandlerDelegate::onInputTextAccepted(const QString& inputText)
 {
     qDebug() << inputText;
     auto action = ActionManager::getInstance().getActionById(currentAction);
-    auto plugin = action->plugin;
-    if (plugin)
-    {
-        plugin->runAction(currentAction, inputText);
-    }
-    else
-    {
-        // #TODO
-    }
+    action->run(inputText);
 }
 
 Q_INVOKABLE void InputHandlerDelegate::onInputTextChanged(const QString& inputText)

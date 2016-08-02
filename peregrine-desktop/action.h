@@ -17,6 +17,13 @@ public:
     QString imagePath;
     Plugin* plugin = nullptr;
 
+    struct DoEntry
+    {
+        QString actionId;
+        QString inputTemplate;
+    };
+    std::vector<DoEntry> doList;
+
     struct ActionLinkEntry
     {
         QString linkedActionId;

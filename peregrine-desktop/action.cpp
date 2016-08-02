@@ -1,5 +1,7 @@
 #include "action.h"
 #include "plugin.h"
+#include <stringhelper.h>
+#include <Jinja2CppLight.h>
 
 using namespace std;
 
@@ -12,9 +14,18 @@ bool Action::run(const QString& input)
         {
             return false;
         }
+        return true;
     }
-    // #TODO
-    return false;
+
+    for (auto& todo : doList)
+    {
+        auto action = ActionManager::getInstance().getActionById(todo.actionId);
+
+        Jinja2CppLight::Template inputTemplate(todo.inputTemplate.toStdString());
+        inputTemplate.setValue("input_text", input.toStdString());
+        action->run(QString::fromStdString(inputTemplate.render()));
+    }
+    return true;
 }
 
 bool ActionManager::addAction(std::unique_ptr<Action> action)
