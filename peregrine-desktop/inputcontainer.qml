@@ -20,6 +20,10 @@ Item {
         ListElement { value: "apple" }
         ListElement { value: "broccoli" }
         ListElement { value: "cone" }
+
+        function add(val) {
+            append({ value: val });
+        }
     }
 
     ListView {

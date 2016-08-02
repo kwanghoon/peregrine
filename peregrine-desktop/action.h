@@ -3,6 +3,7 @@
 #include <QString>
 #include <memory>
 #include <list>
+#include <vector>
 
 class Plugin;
 
@@ -14,6 +15,13 @@ public:
     QString id;
     QString imagePath;
     Plugin* plugin = nullptr;
+
+    struct ActionLinkEntry
+    {
+        QString linkedActionId;
+        QString keyword;
+    };
+    std::vector<ActionLinkEntry> links;
 };
 
 class ActionManager

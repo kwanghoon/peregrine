@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-	<action id="website-google" image="images/google.png"/>
-	<action id="website-bing" image="images/bing.png"/>
-	<action id="website-reddit" image="images/reddit.png"/>
-	<action id="website-facebook" image="images/facebook.png"/>
+	<!-- google -->
+	<action name="google" id="website-google" image="images/google.png">
+		<link actionid="website-google-youtube" keyword="youtube"/>
+		<link actionid="website-google-image" keyword="image"/>
+		<link actionid="website-google-video" keyword="video"/>
+		<link actionid="website-google-gmail" keyword="gmail"/>
+	</action>	
+	<action name="youtube" id="website-google-youtube"/>
+	<action name="google image sarch" id="website-google-image"/>
+	<action name="google video search" id="website-google-video"/>
+	<action name="gmail" id="website-google-gmail"/>
+	
+	<!-- reddit -->
+	<action name="reddit" id="website-reddit" image="images/reddit.png">
+		<link actionid="website-reddit-funny" keyword="funny"/>	
+		<link actionid="website-reddit-gaming" keyword="gaming"/>	
+		<link actionid="website-reddit-videos" keyword="videos"/>	
+		<link actionid="website-reddit-movies" keyword="movies"/>	
+		<link actionid="website-reddit-music" keyword="music"/>	
+	</action>
+	<action name="reddit/funny" id="website-reddit-funny"/>
+	<action name="reddit/gaming" id="website-reddit-gaming"/>
+	<action name="reddit/videos" id="website-reddit-videos"/>
+	<action name="reddit/movies" id="website-reddit-movies"/>
+	<action name="reddit/music" id="website-reddit-music"/>
+
+	<action name="bing" id="website-bing" image="images/bing.png"/>
+	<action name="facebook" id="website-facebook" image="images/facebook.png"/>
 </actions>

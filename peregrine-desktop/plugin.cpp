@@ -4,6 +4,7 @@
 #include <QXmlSimpleReader>
 #include <QLibrary>
 #include <QDebug>
+#include <cassert>
 
 using namespace std;
 
@@ -20,14 +21,34 @@ namespace
         {
             if (localName == "action")
             {
-                std::unique_ptr<Action> action(new Action);
-                action->id = atts.value("id");
-                action->imagePath = dir_.absoluteFilePath(atts.value("image"));
-                ActionManager::getInstance().addAction(move(action));
+                currentAction_.reset(new Action);
+                currentAction_->id = atts.value("id");
+                currentAction_->imagePath = dir_.absoluteFilePath(atts.value("image"));
+            }
+            else if (localName == "link")
+            {
+                assert(!!currentAction_);
+                Action::ActionLinkEntry e;
+                {
+                    e.linkedActionId = atts.value("actionid");
+                    e.keyword = atts.value("keyword");
+                }
+                currentAction_->links.push_back(e);
             }
             return true;
         }
 
+        virtual bool endElement(const QString& namespaceURI, const QString& localName, const QString& qName) override
+        {
+            if (localName == "action")
+            {
+                assert(!!currentAction_);
+                ActionManager::getInstance().addAction(move(currentAction_));
+            }
+            return true;
+        }
+
+        std::unique_ptr<Action> currentAction_;
         QDir dir_;
     };
     struct PluginSettingContentHandler : QXmlDefaultHandler
