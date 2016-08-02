@@ -3,11 +3,13 @@
 
 #include "actionselectdialog.h"
 #include <QMainWindow>
+#include <memory>
 
 namespace Ui {
     class LauncherWindow;
 }
 class InputHandlerDelegate;
+class SuggestionListController;
 
 class LauncherWindow : public QMainWindow
 {
@@ -19,6 +21,7 @@ public:
 
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
+    void initSuggestionListController();
     void loadSetting();
     void loadPlugins();
     void tryLoadPlugin(QString path);
@@ -26,6 +29,7 @@ private:
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
     InputHandlerDelegate* inputHandlerDelegate_;
+    std::unique_ptr<SuggestionListController> suggestionListController_;
 };
 
 #endif // LAUNCHERWINDOW_H

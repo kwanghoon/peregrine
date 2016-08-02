@@ -5,6 +5,7 @@
 #include "plugin.h"
 #include "global.h"
 #include "inputhandlerdelegate.h"
+#include "suggestionlistcontroller.h"
 #include <peregrine-plugin-sdk.h>
 #include <QXmlSimpleReader>
 #include <QQmlContext>
@@ -29,6 +30,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
+    initSuggestionListController();
     loadSetting();
     loadPlugins();
     
@@ -48,6 +50,17 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 LauncherWindow::~LauncherWindow()
 {
     delete ui;
+}
+
+void LauncherWindow::initSuggestionListController()
+{
+    QQuickItem* suggestionListView = ui->inputContainer->rootObject()->findChild<QQuickItem*>("suggestionListView");
+    assert(!!suggestionListView);
+
+    QObject* suggestionModel = ui->inputContainer->rootObject()->findChild<QObject*>("suggestionModel");
+    assert(!!suggestionModel);
+
+    suggestionListController_.reset(new SuggestionListController(suggestionListView, suggestionModel));
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)

@@ -16,6 +16,7 @@ Item {
 
     ListModel {
         id: suggestionModel
+        objectName: "suggestionModel"
         ListElement { value: "apple" }
         ListElement { value: "broccoli" }
         ListElement { value: "cone" }
@@ -23,6 +24,7 @@ Item {
 
     ListView {
         id: suggestionListView
+        objectName: "suggestionListView"
         x: 20; y: 100
         width: 320; height: 240
         model: suggestionModel
