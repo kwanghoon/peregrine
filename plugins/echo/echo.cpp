@@ -4,7 +4,7 @@
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
 {
     qDebug() << "Initialize echo plugin";
-    funcTable->fpRegisterAction("echo");
+    funcTable->fpRegisterAction("echo", "echo");
     return 0;
 }
 

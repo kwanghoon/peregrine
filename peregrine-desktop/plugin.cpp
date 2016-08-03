@@ -24,7 +24,12 @@ namespace
                 currentAction_.reset(new Action);
                 currentAction_->id = atts.value("id");
                 currentAction_->name = atts.value("name");
-                currentAction_->imagePath = dir_.absoluteFilePath(atts.value("image"));
+
+                QString v = atts.value("image");
+                if (!v.isEmpty())
+                {
+                    currentAction_->imagePath = dir_.absoluteFilePath(v);
+                }
             }
             else if (localName == "link")
             {
@@ -113,11 +118,12 @@ namespace
         Plugin* currPlugin = nullptr;
     };
     PluginContext g_pluginContext;
-    int __stdcall Plugin_RegisterAction(const char* id)
+    int __stdcall Plugin_RegisterAction(const char* id, const char* name)
     {
         qDebug() << "action (" << id << ") registered!";
         std::unique_ptr<Action> action(new Action);
         action->id = id;
+        action->name = name;
         action->plugin = g_pluginContext.currPlugin;
         ActionManager::getInstance().addAction(move(action));
         return 0;
