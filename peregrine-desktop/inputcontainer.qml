@@ -18,9 +18,6 @@ Item {
     ListModel {
         id: suggestionModel
         objectName: "suggestionModel"
-        ListElement { value: "apple" }
-        ListElement { value: "broccoli" }
-        ListElement { value: "cone" }
 
         function add(val) {
             append({ value: val });
@@ -32,9 +29,27 @@ Item {
         objectName: "suggestionListView"
         x: 20; y: 100
         width: 320; height: 240
+
+        currentIndex: -1
+
         model: suggestionModel
-        delegate: Text {
-            text: value
+        delegate: Item {
+            width: parent.width
+            height: 20
+            Text {
+                text: value
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    suggestionListView.currentIndex = index;
+                    inputHandlerDelegate.onSuggestionItemClicked(index);
+                }
+            }
+        }
+
+        highlight: Rectangle {
+            color: "lightsteelblue"
         }
     }
 }

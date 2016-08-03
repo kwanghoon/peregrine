@@ -14,7 +14,8 @@ public:
 
     Q_INVOKABLE void onInputTextAccepted(const QString& inputText);
     Q_INVOKABLE void onInputTextChanged(const QString& inputText);
-    
+    Q_INVOKABLE void onSuggestionItemClicked(int index);
+
     QString currentAction;
 
 signals:

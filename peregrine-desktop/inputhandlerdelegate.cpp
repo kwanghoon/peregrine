@@ -17,7 +17,7 @@ void InputHandlerDelegate::onInputTextAccepted(const QString& inputText)
     action->run(inputText);
 }
 
-Q_INVOKABLE void InputHandlerDelegate::onInputTextChanged(const QString& inputText)
+void InputHandlerDelegate::onInputTextChanged(const QString& inputText)
 {
     // #TODO: 단순히, 현재 액션의 링크와 inputText가 매치하는 것을
     // 서제스천 박스에 세팅하게 해보자.
@@ -41,4 +41,9 @@ Q_INVOKABLE void InputHandlerDelegate::onInputTextChanged(const QString& inputTe
             global::suggestionListController->add(s);
         }
     }
+}
+
+void InputHandlerDelegate::onSuggestionItemClicked(int index)
+{
+    qDebug() << "suggestion item (" << index << ") clicked";
 }
