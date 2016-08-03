@@ -39,6 +39,9 @@ FORMS += launcherwindow.ui \
 DISTFILES += \
     inputcontainer.qml
 
+# boost
+INCLUDEPATH	+= $$(BOOST_ROOT)
+
 # Jinja2CppLight
 INCLUDEPATH += ../thirdparty/Jinja2CppLight/src
 SOURCES += $$files(../thirdparty/Jinja2CppLight/src/*.cpp)
