@@ -8,10 +8,10 @@ extern "C"
 {
 #endif
 
-fileSHARED_EXPORT
+FILESHARED_EXPORT
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable);
 
-fileSHARED_EXPORT
+FILESHARED_EXPORT
 int RunAction(const char* actionId, const char* data);
 
 #ifdef __cplusplus

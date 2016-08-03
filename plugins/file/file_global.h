@@ -4,9 +4,9 @@
 #include <QtCore/qglobal.h>
 
 #if defined(FILE_LIBRARY)
-#  define fileSHARED_EXPORT Q_DECL_EXPORT
+#  define FILESHARED_EXPORT Q_DECL_EXPORT
 #else
-#  define fileSHARED_EXPORT Q_DECL_IMPORT
+#  define FILESHARED_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // FILE_GLOBAL_H
