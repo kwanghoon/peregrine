@@ -2,6 +2,15 @@
 <actions>
 	<!-- google -->
 	<action name="google" id="website-google" image="images/google.png">
+		<runaction 
+			condition="'input_text' != ''"
+			id="website" 
+			input="http://www.google.com/search?q={{input_text}}"/>
+		<runaction 
+			condition="'input_text' == ''"
+			id="website" 
+			input="http://www.google.com/"/>
+
 		<link actionid="website-google-youtube" keyword="youtube"/>
 		<link actionid="website-google-image" keyword="image"/>
 		<link actionid="website-google-video" keyword="video"/>

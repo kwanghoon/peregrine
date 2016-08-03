@@ -42,6 +42,10 @@ namespace
                 {
                     e.actionId = atts.value("id");
                     e.inputTemplate = atts.value("input");
+                    if (atts.index("condition") != -1)
+                    {
+                        e.condition = atts.value("condition");
+                    }
                 }
                 currentAction_->doList.push_back(e);
             }

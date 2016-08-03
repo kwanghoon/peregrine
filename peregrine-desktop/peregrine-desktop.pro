@@ -9,12 +9,13 @@ CONFIG += c++11
 TARGET = peregrine-desktop
 TEMPLATE = app
 
-INCLUDEPATH += ../plugin-sdk
+INCLUDEPATH += ../plugin-sdk \
+    ../thirdparty
 
 SOURCES += main.cpp \
     action.cpp \
     plugin.cpp \
-	global.cpp \
+    global.cpp \
     launcherwindow.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp \
@@ -23,8 +24,8 @@ SOURCES += main.cpp \
 
 HEADERS += action.h \
     plugin.h \
-	global.h \
-	userconfig.h \
+    global.h \
+    userconfig.h \
     launcherwindow.h \
     actionselectdialog.h \
     inputhandlerdelegate.h \
@@ -37,7 +38,7 @@ FORMS += launcherwindow.ui \
 
 DISTFILES += \
     inputcontainer.qml
-	
+
 # Jinja2CppLight
 INCLUDEPATH += ../thirdparty/Jinja2CppLight/src
 SOURCES += $$files(../thirdparty/Jinja2CppLight/src/*.cpp)

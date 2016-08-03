@@ -20,6 +20,7 @@ public:
     struct DoEntry
     {
         QString actionId;
+        QString condition;
         QString inputTemplate;
     };
     std::vector<DoEntry> doList;

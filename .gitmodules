@@ -1,3 +1,6 @@
 [submodule "thirdparty/Jinja2CppLight"]
 	path = thirdparty/Jinja2CppLight
 	url = https://github.com/hughperkins/Jinja2CppLight.git
+[submodule "thirdparty/exprtk"]
+	path = thirdparty/exprtk
+	url = https://github.com/ArashPartow/exprtk.git
