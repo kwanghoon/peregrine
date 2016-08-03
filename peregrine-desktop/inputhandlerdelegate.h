@@ -12,13 +12,10 @@ class InputHandlerDelegate : public QObject
 public:
     explicit InputHandlerDelegate(QObject *parent = 0);
 
+signals:
     Q_INVOKABLE void onInputTextAccepted(const QString& inputText);
     Q_INVOKABLE void onInputTextChanged(const QString& inputText);
     Q_INVOKABLE void onSuggestionItemClicked(int index);
-
-    QString currentAction;
-
-signals:
 
 public slots:
 };

@@ -27,9 +27,15 @@ private:
     void tryLoadPlugin(QString path);
     void changeAction(QString actionId);
 
+    // QML widget input listeners
+    void onInputTextAccepted(const QString& inputText);
+    void onInputTextChanged(const QString& inputText);
+    void onSuggestionItemClicked(int index);
+
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
     InputHandlerDelegate* inputHandlerDelegate_;
+    QString currentAction_;
 };
 
 #endif // LAUNCHERWINDOW_H

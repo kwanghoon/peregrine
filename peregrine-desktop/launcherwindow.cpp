@@ -29,6 +29,11 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 
     auto* context = ui->inputContainer->rootContext();
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
+    {
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextAccepted, this, &LauncherWindow::onInputTextAccepted);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextChanged, this, &LauncherWindow::onInputTextChanged);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onSuggestionItemClicked, this, &LauncherWindow::onSuggestionItemClicked);
+    }
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
     initSuggestionListController();
@@ -148,10 +153,46 @@ void LauncherWindow::tryLoadPlugin(QString path)
 
 void LauncherWindow::changeAction(QString actionId)
 {
-    inputHandlerDelegate_->currentAction = actionId;
+    currentAction_ = actionId;
 
     // #TODO: replace the selected action image
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
     auto action = ActionManager::getInstance().getActionById(actionId);
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
+}
+
+void LauncherWindow::onInputTextAccepted(const QString& inputText)
+{
+    qDebug() << inputText;
+    auto action = ActionManager::getInstance().getActionById(currentAction_);
+    action->run(inputText);
+}
+
+void LauncherWindow::onInputTextChanged(const QString& inputText)
+{
+    Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
+    global::suggestionListController->clear();
+    if (inputText.isEmpty())
+    {
+        return;
+    }
+    for (auto& l : currAction->links)
+    {
+        if (l.keyword.startsWith(inputText))
+        {
+            Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
+            if (!linkedAction)
+            {
+                continue;
+            }
+
+            QString s = "Move to '" + linkedAction->name + "' Action";
+            global::suggestionListController->add(s);
+        }
+    }
+}
+
+void LauncherWindow::onSuggestionItemClicked(int index)
+{
+    qDebug() << "suggestion item (" << index << ") clicked";
 }
