@@ -68,7 +68,7 @@ void LauncherWindow::initSuggestionListController()
     QObject* suggestionModel = ui->inputContainer->rootObject()->findChild<QObject*>("suggestionModel");
     assert(!!suggestionModel);
 
-    global::suggestionListController = new SuggestionListController(suggestionListView, suggestionModel);
+    global::suggestionListController = new SuggestionListController(suggestionListView, suggestionModel, inputHandlerDelegate_);
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
@@ -171,7 +171,7 @@ void LauncherWindow::onInputTextAccepted(const QString& inputText)
 void LauncherWindow::onInputTextChanged(const QString& inputText)
 {
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
-    global::suggestionListController->clear();
+    global::suggestionListController->clearList();
     if (inputText.isEmpty())
     {
         return;
@@ -187,7 +187,11 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
             }
 
             QString s = "Move to '" + linkedAction->name + "' Action";
-            global::suggestionListController->add(s);
+            auto handler = [this](boost::any data) {
+                QString linkedActionId = boost::any_cast<QString>(data);
+                changeAction(linkedActionId);
+            };
+            global::suggestionListController->addItem(s, handler, linkedAction->id);
         }
     }
 }
