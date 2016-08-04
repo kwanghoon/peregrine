@@ -9,6 +9,6 @@ struct PG_FUNC_TABLE
 
 struct PG_SUGGESTION_ITEM
 {
-    const char* displayText;
+    char* displayText;
     size_t token;
 };

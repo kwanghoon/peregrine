@@ -8,5 +8,6 @@
 		<actionslot x='0' y='-1' actionid='website-facebook'/>
 		<actionslot x='2' y='0' actionid='echo'/>
 		<actionslot x='0' y='-2' actionid='website'/>
+		<actionslot x='1' y='1' actionid='file'/>
 	</actionslots>
 </settings>

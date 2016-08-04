@@ -194,15 +194,15 @@ std::vector<std::pair<QString, size_t>> Plugin::getSuggestionItems(const QString
         return{};
     }
 
-    std::vector<std::pair<QString, size_t>> ret;
-
-    int n;
+    int n = 0;
     PG_SUGGESTION_ITEM* items = nullptr;
     getSuggestionItemsFunc_(actionId.toStdString().c_str(), input.toStdString().c_str(), &n, &items);
 
+    std::vector<std::pair<QString, size_t>> ret;
     for (int i = 0; i < n; i++)
     {
         ret.push_back({ items[i].displayText, items[i].token });
+        ::free(items[i].displayText);
     }
     ::free(items);
 

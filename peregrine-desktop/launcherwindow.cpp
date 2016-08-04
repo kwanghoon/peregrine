@@ -194,6 +194,16 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
             global::suggestionListController->addItem(s, handler, linkedAction->id);
         }
     }
+
+    // plugin provided suggestions
+    if (currAction->plugin)
+    {
+        auto suggestions = currAction->plugin->getSuggestionItems(currentAction_, inputText);
+        for (auto& sugg : suggestions)
+        {
+            global::suggestionListController->addItem(sugg.first, [](boost::any) {},  sugg.second);
+        }
+    }
 }
 
 void LauncherWindow::onSuggestionItemClicked(int index)
