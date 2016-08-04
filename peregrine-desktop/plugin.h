@@ -17,6 +17,9 @@ public:
 private:
     QString name_;
     std::unique_ptr<QLibrary> lib_;
+
+    typedef int(*fpRunAction)(const char* actionId, const char* data);
+    fpRunAction runActionFunc_;
 };
 
 class PluginManager

@@ -173,15 +173,16 @@ Plugin::Plugin(const QString& path)
         throw std::runtime_error(messae.toStdString());
     }
 
+    // resolve library functions
+    runActionFunc_ = (fpRunAction)lib->resolve("RunAction");
+
     name_ = pluginName;
     lib_ = std::move(lib);
 }
 
 bool Plugin::runAction(const QString& actionId, const QString& input)
 {
-    typedef int(*fpRunAction)(const char* actionId, const char* data);
-    auto runActionFunc = (fpRunAction)lib_->resolve("RunAction");
-    runActionFunc(actionId.toStdString().c_str(), input.toStdString().c_str());
+    runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
     return true;
 }
 
