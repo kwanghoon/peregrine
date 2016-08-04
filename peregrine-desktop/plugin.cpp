@@ -175,6 +175,7 @@ Plugin::Plugin(const QString& path)
 
     // resolve library functions
     runActionFunc_ = (fpRunAction)lib->resolve("RunAction");
+    getSuggestionItemsFunc_ = (fpGetSuggestionItems)lib->resolve("GetSuggestionItems");
 
     name_ = pluginName;
     lib_ = std::move(lib);
@@ -184,6 +185,28 @@ bool Plugin::runAction(const QString& actionId, const QString& input)
 {
     runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
     return true;
+}
+
+std::vector<std::pair<QString, size_t>> Plugin::getSuggestionItems(const QString& actionId, const QString& input)
+{
+    if (!getSuggestionItemsFunc_)
+    {
+        return{};
+    }
+
+    std::vector<std::pair<QString, size_t>> ret;
+
+    int n;
+    PG_SUGGESTION_ITEM* items = nullptr;
+    getSuggestionItemsFunc_(actionId.toStdString().c_str(), input.toStdString().c_str(), &n, &items);
+
+    for (int i = 0; i < n; i++)
+    {
+        ret.push_back({ items[i].displayText, items[i].token });
+    }
+    ::free(items);
+
+    return ret;
 }
 
 // PluginManager

@@ -29,3 +29,15 @@ int RunAction(const char* actionId, const char* data)
     }
     return -1;
 }
+
+int GetSuggestionItems(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items)
+{
+    // #TODO: not implemented
+    return -1;
+}
+
+int RunSuggestion(size_t token)
+{
+    // #TODO: not implemented
+    return -1;
+}

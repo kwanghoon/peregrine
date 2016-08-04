@@ -6,3 +6,9 @@ struct PG_FUNC_TABLE
 {
     RegisterActionFunc fpRegisterAction;
 };
+
+struct PG_SUGGESTION_ITEM
+{
+    const char* displayText;
+    size_t token;
+};

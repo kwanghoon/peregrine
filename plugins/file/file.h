@@ -14,6 +14,12 @@ int InitializePlugin(const struct PG_FUNC_TABLE* funcTable);
 FILESHARED_EXPORT
 int RunAction(const char* actionId, const char* data);
 
+FILESHARED_EXPORT
+int GetSuggestionItems(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items);
+
+FILESHARED_EXPORT
+int RunSuggestion(size_t token);
+
 #ifdef __cplusplus
 }
 #endif

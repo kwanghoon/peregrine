@@ -12,14 +12,19 @@ class Plugin
 public:
     Plugin(const QString& path);
     bool runAction(const QString& actionId, const QString& input);
+    std::vector<std::pair<QString, size_t>> getSuggestionItems(const QString& actionId, const QString& input);
     const QString& name() const { return name_; };
 
 private:
     QString name_;
     std::unique_ptr<QLibrary> lib_;
 
+    // resolved functions
     typedef int(*fpRunAction)(const char* actionId, const char* data);
+    typedef int (*fpGetSuggestionItems)(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items);
+    
     fpRunAction runActionFunc_;
+    fpGetSuggestionItems getSuggestionItemsFunc_;
 };
 
 class PluginManager
