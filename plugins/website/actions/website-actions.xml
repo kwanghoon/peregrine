@@ -12,11 +12,12 @@
 				id="website" 
 				input="http://www.google.com/"/>
 		</do>
-
-		<link actionid="website-google-youtube" keyword="youtube"/>
-		<link actionid="website-google-image" keyword="image"/>
-		<link actionid="website-google-video" keyword="video"/>
-		<link actionid="website-google-gmail" keyword="gmail"/>
+		<links>
+			<link actionid="website-google-youtube" keyword="youtube"/>
+			<link actionid="website-google-image" keyword="image"/>
+			<link actionid="website-google-video" keyword="video"/>
+			<link actionid="website-google-gmail" keyword="gmail"/>
+		</links>
 	</action>	
 	<action name="youtube" id="website-google-youtube"/>
 	<action name="google image sarch" id="website-google-image">
@@ -40,11 +41,13 @@
 		<do>
 			<runaction id="website" input="https://www.reddit.com/"/>
 		</do>
-		<link actionid="website-reddit-funny" keyword="funny"/>
-		<link actionid="website-reddit-gaming" keyword="gaming"/>
-		<link actionid="website-reddit-videos" keyword="videos"/>
-		<link actionid="website-reddit-movies" keyword="movies"/>
-		<link actionid="website-reddit-music" keyword="music"/>
+		<links>
+			<link actionid="website-reddit-funny" keyword="funny"/>
+			<link actionid="website-reddit-gaming" keyword="gaming"/>
+			<link actionid="website-reddit-videos" keyword="videos"/>
+			<link actionid="website-reddit-movies" keyword="movies"/>
+			<link actionid="website-reddit-music" keyword="music"/>
+		</links>
 	</action>
 	<action name="reddit/funny" id="website-reddit-funny">
 		<do>

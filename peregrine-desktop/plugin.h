@@ -7,10 +7,11 @@
 #include <vector>
 #include <memory>
 
-class Plugin
+class PluginModule
 {
 public:
-    Plugin(const QString& path);
+    PluginModule(QDir dir, const QString& name);
+
     bool runAction(const QString& actionId, const QString& input);
     std::vector<std::pair<QString, size_t>> getSuggestionItems(const QString& actionId, const QString& input);
     const QString& name() const { return name_; };
@@ -31,10 +32,12 @@ class PluginManager
 {
 public:
     bool loadPlugin(const QString& dir);
-    Plugin* getPluginForAction(const QString& actionId);
+    PluginModule* loadPluginModule(const QDir& dir, const QString& name);
     static PluginManager& getInstance() { return instance_; }
 
 private:
+    PluginModule* tryGetModule(const QString& actionId);
+
     static PluginManager instance_;
-    std::list<Plugin> pluginList_;
+    std::list<PluginModule> moduleList_;
 };

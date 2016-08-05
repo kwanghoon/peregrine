@@ -17,7 +17,6 @@ using namespace boost;
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
 {
     qDebug() << "Initialize file plugin";
-    funcTable->fpRegisterAction("file", "file");
     return 0;
 }
 

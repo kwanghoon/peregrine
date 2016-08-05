@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="website">
+	<actions>
+		<action name="website" id="website" controller="website" />
+	</actions>
+
 	<actionfiles>
 		<actionfile path="actions/website-actions.xml"/>
 	</actionfiles>

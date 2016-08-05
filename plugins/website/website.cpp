@@ -10,7 +10,6 @@
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
 {
     qDebug() << "Initialize website plugin";
-    funcTable->fpRegisterAction("website", "website");
     return 0;
 }
 

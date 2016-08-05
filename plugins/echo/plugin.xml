@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="echo">
+	<actions>
+		<action name="echo" id="echo" controller="echo" />
+	</actions>
 </plugin>

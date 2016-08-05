@@ -196,9 +196,9 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 
     // plugin provided suggestions
-    if (currAction->plugin)
+    if (currAction->controller)
     {
-        auto suggestions = currAction->plugin->getSuggestionItems(currentAction_, inputText);
+        auto suggestions = currAction->controller->getSuggestionItems(currentAction_, inputText);
         for (auto& sugg : suggestions)
         {
             global::suggestionListController->addItem(sugg.first, [](boost::any) {},  sugg.second);

@@ -1,11 +1,13 @@
 #pragma once
 
+#include <QDomDocument>
 #include <QString>
+#include <QDir>
 #include <memory>
 #include <list>
 #include <vector>
 
-class Plugin;
+class PluginModule;
 
 class Action
 {
@@ -15,7 +17,7 @@ public:
     QString id;
     QString name;
     QString imagePath;
-    Plugin* plugin = nullptr;
+    PluginModule* controller = nullptr;
 
     struct DoEntry
     {
@@ -44,3 +46,5 @@ private:
     std::list<std::unique_ptr<Action>> actions_;
     static ActionManager instance_;
 };
+
+void LoadAction(QDomElement actionElem, QDir dir);

@@ -3,14 +3,15 @@
 #include <stringhelper.h>
 #include <Jinja2CppLight.h>
 #include <exprtk/exprtk.hpp>
+#include <cassert>
 
 using namespace std;
 
 bool Action::run(const QString& input)
 {
-    if (plugin)
+    if (controller)
     {
-        int ret = plugin->runAction(id, input);
+        int ret = controller->runAction(id, input);
         if (ret < 0)
         {
             return false;
@@ -67,3 +68,56 @@ Action* ActionManager::getActionById(const QString& id)
 }
 
 ActionManager ActionManager::instance_;
+
+void LoadAction(QDomElement actionElem, QDir dir)
+{
+    actionElem.attribute("name");
+    std::unique_ptr<Action> currentAction(new Action);
+    currentAction->id = actionElem.attribute("id");
+    currentAction->name = actionElem.attribute("name");
+    QString v = actionElem.attribute("image");
+    if (!v.isEmpty())
+    {
+        currentAction->imagePath = dir.absoluteFilePath(v);
+    }
+
+    if (actionElem.hasAttribute("controller"))
+    {
+        currentAction->controller = PluginManager::getInstance()
+            .loadPluginModule(dir, actionElem.attribute("controller"));
+    }
+
+    // do
+    for (auto child = actionElem.firstChildElement("do").firstChildElement();
+        !child.isNull(); child = child.nextSiblingElement())
+    {
+        assert(child.tagName() == "runaction");
+        Action::DoEntry e;
+        {
+            e.actionId = child.attribute("id");
+            assert(!e.actionId.isEmpty());
+            e.inputTemplate = child.attribute("input");
+            if (child.hasAttribute("condition"))
+            {
+                e.condition = child.attribute("condition");
+            }
+        }
+        currentAction->doList.push_back(e);
+    }
+
+    // links
+    for (auto child = actionElem.firstChildElement("links").firstChildElement();
+        !child.isNull(); child = child.nextSiblingElement())
+    {
+        assert(child.tagName() == "link");
+        Action::ActionLinkEntry e;
+        {
+            e.linkedActionId = child.attribute("actionid");
+            assert(!e.linkedActionId.isEmpty());
+            e.keyword = child.attribute("keyword");
+        }
+        currentAction->links.push_back(e);
+    }
+
+    ActionManager::getInstance().addAction(move(currentAction));
+}
