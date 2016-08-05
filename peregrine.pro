@@ -2,12 +2,12 @@ TEMPLATE = subdirs
 
 SUBDIRS = peregrine \
 	echo \
-	website \
-	file
+	file \
+	website
 
 peregrine.subdir = peregrine-desktop
 echo.subdir = plugins/echo
-website.subdir = plugins/website
 file.subdir = plugins/file
+website.subdir = plugins/website
 
-peregrine.depends = echo website file
+peregrine.depends = echo file website
