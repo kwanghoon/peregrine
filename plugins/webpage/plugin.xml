@@ -2,5 +2,13 @@
 <plugin name="webpage">
 	<actions>
 		<action name="webpage" id="webpage" ui="webpageui.qml" />
+		
+		<action name="Mozilla Color Picker" id="mozilla-colorpicker">
+			<adopt id="webpage">
+				<arguments>
+					<arg name="url">https://mdn.mozillademos.org/en-US/docs/Web/CSS/CSS_Colors/Color_picker_tool$samples/ColorPicker_Tool?revision=1001473</arg>
+				</arguments>
+			</adopt>
+		</action>
 	</actions>
 </plugin>

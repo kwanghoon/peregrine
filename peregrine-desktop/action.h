@@ -19,6 +19,8 @@ public:
     QString imagePath;
     PluginModule* controller = nullptr;
     QString customUiPath;
+    QString adopt;
+    QString args;
 
     struct DoEntry
     {

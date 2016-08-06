@@ -54,13 +54,24 @@ Item {
     }
 
     Item {
-        objectName: "customUiItemRoot"
+        id: customUiRoot;
+        objectName: "customUiRoot"
         x: 0; y: 200
         width: 800; height: 600
 
+        function loadCustomUi(qmlObjStr, argsForActivatedEvent) {
+            try {
+                var created = Qt.createQmlObject(qmlObjStr, customUiRoot);
+                created.onActivated(argsForActivatedEvent);
+            } catch(err) {
+                console.log(created.message);
+            }
+        }
+
         function clearChildren() {
             for (var i = 0; i < children.length; i++) {
-                children[i].parent = null;
+                children[i].onDeactivated();
+                children[i].destroy();
             }
         }
     }

@@ -92,6 +92,20 @@ void LoadAction(QDomElement actionElem, QDir dir)
         currentAction->customUiPath = dir.filePath(actionElem.attribute("ui"));
     }
 
+    // adopt
+    auto adopt = actionElem.firstChildElement("adopt");
+    if (!adopt.isNull())
+    {
+        currentAction->adopt = adopt.attribute("id");
+        
+        for (auto arg = adopt.firstChildElement("arguments").firstChildElement("arg");
+            !arg.isNull(); arg = arg.nextSiblingElement("arg"))
+        {
+            arg.attribute("name");
+            currentAction->args = arg.text();
+        }
+    }
+
     // do
     for (auto child = actionElem.firstChildElement("do").firstChildElement();
         !child.isNull(); child = child.nextSiblingElement())

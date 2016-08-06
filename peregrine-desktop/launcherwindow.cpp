@@ -175,20 +175,28 @@ void LauncherWindow::changeAction(QString actionId)
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
 
     // custom ui
-    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiItemRoot");
+    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiRoot");
     QMetaObject::invokeMethod(customUiItem, "clearChildren");
 
+    QString argsForActivatedEvent;
+    if (!action->adopt.isEmpty())
+    {
+        argsForActivatedEvent = action->args;
+        action = ActionManager::getInstance().getActionById(action->adopt);
+        assert(!action->customUiPath.isEmpty());
+    }
     if (!action->customUiPath.isEmpty())
     {
-        QQmlEngine* engine = ui->inputContainer->engine();
-        QQmlComponent customUiComponent(engine, QUrl::fromLocalFile(action->customUiPath));
-        if (customUiComponent.status() != QQmlComponent::Status::Ready)
+        QString qmlString;
         {
-            QString e = customUiComponent.errorString();
-            assert(false);
+            QFile f(action->customUiPath);
+            if (!f.open(QFile::ReadOnly | QFile::Text))
+            {
+                assert(false);
+            }
+            qmlString = QTextStream(&f).readAll();
         }
-        QQuickItem* customUi = qobject_cast<QQuickItem*>(customUiComponent.create());
-        QQmlProperty::write(customUi, "parent", QVariant::fromValue<QObject*>(customUiItem));
+        QMetaObject::invokeMethod(customUiItem, "loadCustomUi", Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
     }
 }
 
