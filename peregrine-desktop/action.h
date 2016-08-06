@@ -18,6 +18,7 @@ public:
     QString name;
     QString imagePath;
     PluginModule* controller = nullptr;
+    QString customUiPath;
 
     struct DoEntry
     {

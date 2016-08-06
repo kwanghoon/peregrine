@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="webpage">
+	<actions>
+		<action name="webpage" id="webpage" ui="webpageui.qml" />
+	</actions>
+</plugin>

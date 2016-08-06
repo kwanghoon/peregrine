@@ -9,5 +9,6 @@
 		<actionslot x='2' y='0' actionid='echo'/>
 		<actionslot x='0' y='-2' actionid='website'/>
 		<actionslot x='1' y='1' actionid='file'/>
+		<actionslot x='1' y='-1' actionid='webpage'/>
 	</actionslots>
 </settings>

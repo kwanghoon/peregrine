@@ -87,6 +87,11 @@ void LoadAction(QDomElement actionElem, QDir dir)
             .loadPluginModule(dir, actionElem.attribute("controller"));
     }
 
+    if (actionElem.hasAttribute("ui"))
+    {
+        currentAction->customUiPath = dir.filePath(actionElem.attribute("ui"));
+    }
+
     // do
     for (auto child = actionElem.firstChildElement("do").firstChildElement();
         !child.isNull(); child = child.nextSiblingElement())

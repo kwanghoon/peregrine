@@ -15,6 +15,8 @@
 #include <QLibrary>
 #include <QDebug>
 #include <QDir>
+#include <QQmlEngine>
+#include <QQmlProperty>
 #include <memory>
 #include <cassert>
 
@@ -75,21 +77,34 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key::Key_Shift)
     {
-        QWidget* actionDisplay = ui->centralWidget->findChild<QWidget*>("actionDisplay");
-        
-        actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(actionDisplay->pos()));
-        actionSelectDlg_.exec();
-
-        QString actionId = actionSelectDlg_.getSelectedActionId();
-        changeAction(actionId);
-
-        // focus on 'inputText' element.
-        ui->inputContainer->setFocus();
-
-        auto* item = ui->inputContainer->rootObject();
-        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
-        textInput->forceActiveFocus();
+        showActionSelectDialog();
     }
+}
+
+void LauncherWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        showActionSelectDialog();
+    }
+}
+
+void LauncherWindow::showActionSelectDialog()
+{
+    QWidget* actionDisplay = ui->centralWidget->findChild<QWidget*>("actionDisplay");
+
+    actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(actionDisplay->pos()));
+    actionSelectDlg_.exec();
+
+    QString actionId = actionSelectDlg_.getSelectedActionId();
+    changeAction(actionId);
+
+    // focus on 'inputText' element.
+    ui->inputContainer->setFocus();
+
+    auto* item = ui->inputContainer->rootObject();
+    auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+    textInput->forceActiveFocus();
 }
 
 void LauncherWindow::loadSetting()
@@ -155,10 +170,26 @@ void LauncherWindow::changeAction(QString actionId)
 {
     currentAction_ = actionId;
 
-    // #TODO: replace the selected action image
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
     auto action = ActionManager::getInstance().getActionById(actionId);
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
+
+    // custom ui
+    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiItemRoot");
+    QMetaObject::invokeMethod(customUiItem, "clearChildren");
+
+    if (!action->customUiPath.isEmpty())
+    {
+        QQmlEngine* engine = ui->inputContainer->engine();
+        QQmlComponent customUiComponent(engine, QUrl::fromLocalFile(action->customUiPath));
+        if (customUiComponent.status() != QQmlComponent::Status::Ready)
+        {
+            QString e = customUiComponent.errorString();
+            assert(false);
+        }
+        QQuickItem* customUi = qobject_cast<QQuickItem*>(customUiComponent.create());
+        QQmlProperty::write(customUi, "parent", QVariant::fromValue<QObject*>(customUiItem));
+    }
 }
 
 void LauncherWindow::onInputTextAccepted(const QString& inputText)

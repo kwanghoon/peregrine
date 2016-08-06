@@ -52,4 +52,16 @@ Item {
             color: "lightsteelblue"
         }
     }
+
+    Item {
+        objectName: "customUiItemRoot"
+        x: 0; y: 200
+        width: 800; height: 600
+
+        function clearChildren() {
+            for (var i = 0; i < children.length; i++) {
+                children[i].parent = null;
+            }
+        }
+    }
 }

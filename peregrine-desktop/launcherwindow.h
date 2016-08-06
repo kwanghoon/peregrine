@@ -21,10 +21,13 @@ public:
 
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+
     void initSuggestionListController();
     void loadSetting();
     void loadPlugins();
     void tryLoadPlugin(QString path);
+    void showActionSelectDialog();
     void changeAction(QString actionId);
 
     // QML widget input listeners
