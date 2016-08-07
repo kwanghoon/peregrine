@@ -35,7 +35,7 @@ if "%qt_dir%" == "" (
 	echo not found 'qt_dir' environment variable.
 	goto EXIT_FAILED
 )
-set qt_modules=(Core Widgets Gui Qml Quick QuickWidgets Xml Network)
+set qt_modules=(Core Widgets Gui Qml Quick QuickWidgets Xml Network WebView WebEngine WebChannel WebEngineCore)
 if "%optim_mode%" == "debug" (
 	set d_suffix=d
 )
