@@ -50,6 +50,9 @@ INCLUDEPATH += ../thirdparty/Jinja2CppLight/src
 SOURCES += $$files(../thirdparty/Jinja2CppLight/src/*.cpp)
 HEADERS += $$files(../thirdparty/Jinja2CppLight/src/*.h)
 
+win32-msvc* {
+    QMAKE_CXXFLAGS += /bigobj
+}
 
 equals(TEMPLATE, "vcapp") {
     CONFIG(release, debug|release):OPTIM_MODE=release
@@ -57,6 +60,4 @@ equals(TEMPLATE, "vcapp") {
 
     QMAKE_POST_LINK += \
         call $$quote($$shell_path($$_PRO_FILE_PWD_/../scripts/copy-outputs.bat)) $$OPTIM_MODE $$quote($$shell_path($$_PRO_FILE_PWD_/..)) $$escape_expand(\\n)
-
-    QMAKE_CXXFLAGS += /bigobj
 }
