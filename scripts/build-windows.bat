@@ -31,6 +31,7 @@ pushd ..
 	::
 	echo build peregrine
 	rmdir /s/q build-peregrine
+	timeout 3
 	mkdir build-peregrine
 	pushd build-peregrine
 		if "%config%" == "debug" (
@@ -39,16 +40,28 @@ pushd ..
 			qmake -spec win32-msvc2015 ../peregrine.pro
 		)
 		nmake
+		
+		set failed=0
+		if not exist peregrine-desktop\%config%\peregrine-desktop.exe (
+			set failed=1
+		)
 	popd
 popd
+
+if "%failed%" == "1" (
+	echo compilation failed
+	goto EXIT_FAILED
+)
 
 echo copy build outputs
 call copy-outputs.bat %config%
 
 :EXIT_SUCCEEDED
+echo build success
 endlocal
 exit /b 0
 
 :EXIT_FAILED
+echo build failed
 endlocal
 exit /b 1
