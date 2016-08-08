@@ -10,11 +10,11 @@ if "%vs140comntools%" neq "" (
 	goto EXIT_FAILED
 )
 
-if "%qt_dir%" == "" (
-	echo 'qt_dir' variable not exists.
+where qmake
+if "%errorlevel%" == "" (
+	echo couldn't run 'qmake'
 	goto EXIT_FAILED
 )
-set path=%path%;%qt_dir%
 
 set config=%1
 if "%config%" == "" (
@@ -44,7 +44,6 @@ popd
 
 echo copy build outputs
 call copy-outputs.bat %config%
-
 
 :EXIT_SUCCEEDED
 endlocal

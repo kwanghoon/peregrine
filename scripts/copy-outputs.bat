@@ -31,17 +31,27 @@ mkdir %output_dir%
 echo copy app binaries..
 copy %build_result_dir%\peregrine-desktop\%optim_mode%\peregrine-desktop.exe %output_dir%
 
-if "%qt_dir%" == "" (
-	echo not found 'qt_dir' environment variable.
+where qmake
+if "%errorlevel%" == "" (
+	echo couldn't run 'qmake'
 	goto EXIT_FAILED
 )
+
+qmake -query QT_INSTALL_BINS>temp.txt
+set /p qt_install_bins=<temp.txt
 set qt_modules=(Core Widgets Gui Qml Quick QuickWidgets Xml Network WebView WebEngine WebChannel WebEngineCore)
 if "%optim_mode%" == "debug" (
 	set d_suffix=d
 )
 for %%m in %qt_modules% do (	
-	copy "%qt_dir%\Qt5%%m%d_suffix%.dll" %output_dir%
+	copy "%qt_install_bins%\Qt5%%m%d_suffix%.dll" %output_dir%
 )
+
+qmake -query QT_INSTALL_PLUGINS>temp.txt
+set /p qt_install_plugins=<temp.txt
+robocopy %qt_install_plugins%\platforms %output_dir%\platforms *%d_suffix%.dll /S
+
+del temp.txt
 
 :: app resources
 echo copy app resources..
