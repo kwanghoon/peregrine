@@ -171,13 +171,18 @@ void LauncherWindow::changeAction(QString actionId)
 {
     currentAction_ = actionId;
 
+    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiRoot");
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
+
+    if (currentAction_.isEmpty())
+    {
+        QMetaObject::invokeMethod(customUiItem, "clearChildren");
+        actionDisplay->clear();
+        return;
+    }
+
     auto action = ActionManager::getInstance().getActionById(actionId);
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
-
-    // custom ui
-    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiRoot");
-    QMetaObject::invokeMethod(customUiItem, "clearChildren");
 
     QString argsForActivatedEvent;
     if (!action->adopt.isEmpty())
@@ -204,12 +209,21 @@ void LauncherWindow::changeAction(QString actionId)
 void LauncherWindow::onInputTextAccepted(const QString& inputText)
 {
     qDebug() << inputText;
+    if (currentAction_.isEmpty())
+    {
+        return;
+    }
     auto action = ActionManager::getInstance().getActionById(currentAction_);
     action->run(inputText);
 }
 
 void LauncherWindow::onInputTextChanged(const QString& inputText)
 {
+    if (currentAction_.isNull())
+    {
+        return;
+    }
+
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
     global::suggestionListController->clearList();
     if (inputText.isEmpty())
