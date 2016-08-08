@@ -13,6 +13,11 @@ Item {
         font.pixelSize: 12
         onAccepted: inputHandlerDelegate.onInputTextAccepted(text);
         onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
+        Keys.onPressed: {
+            if (event.key == Qt.Key_Shift) {
+                inputHandlerDelegate.onShiftKeyPressed();
+            }
+        }
     }
 
     ListModel {

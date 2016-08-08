@@ -34,6 +34,7 @@ private:
     void onInputTextAccepted(const QString& inputText);
     void onInputTextChanged(const QString& inputText);
     void onSuggestionItemClicked(int index);
+    void onShiftKeyPressed();
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;

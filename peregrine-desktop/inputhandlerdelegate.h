@@ -16,6 +16,7 @@ signals:
     Q_INVOKABLE void onInputTextAccepted(const QString& inputText);
     Q_INVOKABLE void onInputTextChanged(const QString& inputText);
     Q_INVOKABLE void onSuggestionItemClicked(int index);
+    Q_INVOKABLE void onShiftKeyPressed();
 
 public slots:
 };

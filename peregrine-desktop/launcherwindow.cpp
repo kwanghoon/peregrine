@@ -35,6 +35,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextAccepted, this, &LauncherWindow::onInputTextAccepted);
         connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextChanged, this, &LauncherWindow::onInputTextChanged);
         connect(inputHandlerDelegate_, &InputHandlerDelegate::onSuggestionItemClicked, this, &LauncherWindow::onSuggestionItemClicked);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onShiftKeyPressed, this, &LauncherWindow::onShiftKeyPressed);
     }
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
@@ -248,4 +249,12 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 void LauncherWindow::onSuggestionItemClicked(int index)
 {
     qDebug() << "suggestion item (" << index << ") clicked";
+}
+
+void LauncherWindow::onShiftKeyPressed()
+{
+    // retrieve focus from the input box
+    setFocus();
+
+    showActionSelectDialog();
 }
