@@ -43,3 +43,4 @@ move %temp7z% "%target_dir%\%filename%"
 del %temptxt%
 
 endlocal
+exit /b 0

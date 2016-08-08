@@ -48,13 +48,14 @@ pushd ..
 	popd
 popd
 
-if "%failed%" == "1" (
+if "%failed%" neq "0" (
 	echo compilation failed
 	goto EXIT_FAILED
 )
 
 echo copy build outputs
 call copy-outputs.bat %config%
+if "%errorlevel%" neq "0" goto EXIT_FAILED
 
 :EXIT_SUCCEEDED
 echo build success
