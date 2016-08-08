@@ -32,7 +32,7 @@ echo copy app binaries..
 copy %build_result_dir%\peregrine-desktop\%optim_mode%\peregrine-desktop.exe %output_dir%
 
 where qmake
-if "%errorlevel%" == "" (
+if %errorlevel% neq 0 (
 	echo couldn't run 'qmake'
 	goto EXIT_FAILED
 )

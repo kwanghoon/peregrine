@@ -11,7 +11,7 @@ if "%vs140comntools%" neq "" (
 )
 
 where qmake
-if "%errorlevel%" == "" (
+if %errorlevel% neq 0 (
 	echo couldn't run 'qmake'
 	goto EXIT_FAILED
 )
