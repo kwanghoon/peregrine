@@ -1,8 +1,6 @@
 import QtQuick 2.0
 
 ListView {
-    id: suggestionListView
-    objectName: "suggestionListView"
     x: 20; y: 100
     width: 320; height: 240
 
@@ -26,13 +24,35 @@ ListView {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                suggestionListView.currentIndex = index;
+                currentIndex = index;
                 inputHandlerDelegate.onSuggestionItemClicked(index);
+                currentIndex = -1;
             }
         }
     }
 
     highlight: Rectangle {
         color: "lightsteelblue"
+    }
+
+    function moveSelectUp() {
+        if (count == 0) { return; }
+        if (currentIndex == -1) {
+            currentIndex = count - 1;
+            return;
+        }
+        currentIndex = currentIndex - 1;
+    }
+
+    function moveSelectDown() {
+        if (count == 0) { return; }
+        if (currentIndex == -1) {
+            currentIndex = 0;
+            return;
+        }
+        currentIndex = currentIndex + 1
+        if (count == currentIndex) {
+            currentIndex = 0;
+        }
     }
 }
