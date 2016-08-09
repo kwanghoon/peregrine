@@ -40,7 +40,8 @@ FORMS += launcherwindow.ui \
     actionselectdialog.ui
 
 DISTFILES += \
-    inputcontainer.qml
+    inputcontainer.qml \
+    SuggestionListView.qml
 
 # boost
 INCLUDEPATH	+= $$(BOOST_ROOT)
