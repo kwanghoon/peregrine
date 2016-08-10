@@ -11,23 +11,9 @@ Item {
         height: 20
         text: qsTr("Text Input")
         font.pixelSize: 12
-        onAccepted: {
-            if (suggestionListView.currentIndex != -1) {
-                inputHandlerDelegate.onSuggestionItemClicked(suggestionListView.currentIndex);
-                suggestionListView.currentIndex = -1;
-                return;
-            }
-            inputHandlerDelegate.onInputTextAccepted(text);
-        }
         onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
         Keys.onPressed: {
-            if (event.key == Qt.Key_Shift) {
-                inputHandlerDelegate.onShiftKeyPressed();
-            } else if (event.key == Qt.Key_Up) {
-                suggestionListView.moveSelectUp();
-            } else if (event.key == Qt.Key_Down) {
-                suggestionListView.moveSelectDown();
-            }
+            inputHandlerDelegate.onKeyPressed(event.key, text);
         }
     }
 

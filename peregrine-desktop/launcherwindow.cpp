@@ -30,14 +30,14 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
 
-    auto* context = ui->inputContainer->rootContext();
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
     {
-        connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextAccepted, this, &LauncherWindow::onInputTextAccepted);
         connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextChanged, this, &LauncherWindow::onInputTextChanged);
-        connect(inputHandlerDelegate_, &InputHandlerDelegate::onSuggestionItemClicked, this, &LauncherWindow::onSuggestionItemClicked);
-        connect(inputHandlerDelegate_, &InputHandlerDelegate::onShiftKeyPressed, this, &LauncherWindow::onShiftKeyPressed);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onKeyPressed, this, &LauncherWindow::onKeyPressed);
     }
+    auto* context = ui->inputContainer->rootContext();
+    context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
+    context = ui->suggestionList->rootContext();
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
     initSuggestionListController();
@@ -208,17 +208,6 @@ void LauncherWindow::changeAction(QString actionId)
     }
 }
 
-void LauncherWindow::onInputTextAccepted(const QString& inputText)
-{
-    qDebug() << inputText;
-    if (currentAction_.isEmpty())
-    {
-        return;
-    }
-    auto action = ActionManager::getInstance().getActionById(currentAction_);
-    action->run(inputText);
-}
-
 void LauncherWindow::onInputTextChanged(const QString& inputText)
 {
     if (currentAction_.isNull())
@@ -262,15 +251,39 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 }
 
-void LauncherWindow::onSuggestionItemClicked(int index)
+void LauncherWindow::onKeyPressed(int key, QString inputText)
 {
-    qDebug() << "suggestion item (" << index << ") clicked";
-}
+    if (key == Qt::Key::Key_Shift)
+    {
+        // retrieve focus from the input box
+        setFocus();
 
-void LauncherWindow::onShiftKeyPressed()
-{
-    // retrieve focus from the input box
-    setFocus();
-
-    showActionSelectDialog();
+        showActionSelectDialog();
+    }
+    else if (key == Qt::Key::Key_Return)
+    {
+        int currentIndex = global::suggestionListController->getCurrentIndex();
+        if (currentIndex == -1)
+        {
+            qDebug() << inputText;
+            if (currentAction_.isEmpty())
+            {
+                return;
+            }
+            auto action = ActionManager::getInstance().getActionById(currentAction_);
+            action->run(inputText);
+        }
+        else
+        {
+            global::suggestionListController->runSelected();
+        }
+    }
+    else if (key == Qt::Key::Key_Up)
+    {
+        global::suggestionListController->selectUp();
+    }
+    else if (key == Qt::Key::Key_Down)
+    {
+        global::suggestionListController->selectDown();
+    }
 }

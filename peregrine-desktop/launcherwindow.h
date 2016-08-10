@@ -31,10 +31,8 @@ private:
     void changeAction(QString actionId);
 
     // QML widget input listeners
-    void onInputTextAccepted(const QString& inputText);
     void onInputTextChanged(const QString& inputText);
-    void onSuggestionItemClicked(int index);
-    void onShiftKeyPressed();
+    void onKeyPressed(int key, QString inputText);
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;

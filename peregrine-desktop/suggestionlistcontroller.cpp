@@ -1,5 +1,6 @@
 #include "suggestionlistcontroller.h"
 #include "inputhandlerdelegate.h"
+#include <QQmlProperty>
 #include <QVariant>
 #include <QObject>
 #include <cassert>
@@ -31,6 +32,27 @@ void SuggestionListController::clearList()
 {
     QMetaObject::invokeMethod(suggestionModel_, "clear");
     suggestingItems_.clear();
+}
+
+void SuggestionListController::selectUp()
+{
+    QMetaObject::invokeMethod(suggestionListView_, "moveSelectUp");
+}
+
+void SuggestionListController::selectDown()
+{
+    QMetaObject::invokeMethod(suggestionListView_, "moveSelectDown");
+}
+
+int SuggestionListController::getCurrentIndex() const
+{
+    int currentIndex = QQmlProperty::read(suggestionListView_, "currentIndex").toInt();
+    return currentIndex;
+}
+
+void SuggestionListController::runSelected()
+{
+    QMetaObject::invokeMethod(suggestionListView_, "runSelected");
 }
 
 void SuggestionListController::onSuggestionItemClicked(int index)

@@ -15,6 +15,10 @@ public:
 
     void addItem(const QString& text, std::function<void(boost::any)> handler, boost::any data);
     void clearList();
+    void selectUp();
+    void selectDown();
+    int getCurrentIndex() const;
+    void runSelected();
     
 private:
     struct SuggestingItem

@@ -3,7 +3,6 @@ import QtQuick 2.0
 ListView {
     id: suggestionListView
     objectName: "suggestionListView"
-    x: 20; y: 100
     width: 320; height: 240
 
     currentIndex: -1
@@ -56,5 +55,13 @@ ListView {
         if (count == currentIndex) {
             currentIndex = 0;
         }
+    }
+
+    function runSelected() {
+        if (currentIndex == -1) {
+            return;
+        }
+        inputHandlerDelegate.onSuggestionItemClicked(currentIndex);
+        currentIndex = -1;
     }
 }
