@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>420</height>
+    <height>832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,19 @@
       <y>10</y>
       <width>480</width>
       <height>400</height>
+     </rect>
+    </property>
+    <property name="resizeMode">
+     <enum>QQuickWidget::SizeRootObjectToView</enum>
+    </property>
+   </widget>
+   <widget class="QQuickWidget" name="suggestionList">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>430</y>
+      <width>300</width>
+      <height>200</height>
      </rect>
     </property>
     <property name="resizeMode">

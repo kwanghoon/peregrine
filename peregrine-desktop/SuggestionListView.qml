@@ -1,6 +1,8 @@
 import QtQuick 2.0
 
 ListView {
+    id: suggestionListView
+    objectName: "suggestionListView"
     x: 20; y: 100
     width: 320; height: 240
 

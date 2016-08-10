@@ -31,11 +31,6 @@ Item {
         }
     }
 
-    SuggestionListView {
-        id: suggestionListView
-        objectName: "suggestionListView"
-    }
-
     Item {
         id: customUiRoot;
         objectName: "customUiRoot"

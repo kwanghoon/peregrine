@@ -28,6 +28,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
+    ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
 
     auto* context = ui->inputContainer->rootContext();
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
@@ -65,10 +66,11 @@ LauncherWindow::~LauncherWindow()
 
 void LauncherWindow::initSuggestionListController()
 {
-    QQuickItem* suggestionListView = ui->inputContainer->rootObject()->findChild<QQuickItem*>("suggestionListView");
+    QQuickItem* suggestionListView = ui->suggestionList->rootObject();
     assert(!!suggestionListView);
-
-    QObject* suggestionModel = ui->inputContainer->rootObject()->findChild<QObject*>("suggestionModel");
+    assert(suggestionListView->objectName() == "suggestionListView");
+    
+    QObject* suggestionModel = suggestionListView->findChild<QObject*>("suggestionModel");
     assert(!!suggestionModel);
 
     global::suggestionListController = new SuggestionListController(suggestionListView, suggestionModel, inputHandlerDelegate_);
