@@ -10,6 +10,7 @@ namespace Ui {
 }
 class InputHandlerDelegate;
 class SuggestionListController;
+class QSystemTrayIcon;
 
 class LauncherWindow : public QMainWindow
 {
@@ -38,6 +39,7 @@ private:
     ActionSelectDialog actionSelectDlg_;
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
+    QSystemTrayIcon* tray_ = nullptr;
 };
 
 #endif // LAUNCHERWINDOW_H

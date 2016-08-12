@@ -17,6 +17,8 @@
 #include <QDir>
 #include <QQmlEngine>
 #include <QQmlProperty>
+#include <QSystemTrayIcon>
+#include <QMenu>
 #include <memory>
 #include <cassert>
 
@@ -29,6 +31,28 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
+
+    QIcon appIcon("heart.png");
+    setWindowIcon(appIcon);
+
+    // set up tray icon
+    tray_ = new QSystemTrayIcon(this);
+    tray_->setIcon(appIcon);
+    tray_->show();
+
+    auto* menu = new QMenu(this);
+    {
+        menu->addAction("Show");
+        menu->addAction("Hide");
+        menu->addMenu("Run Action..");
+        menu->addAction("Enable");
+        menu->addAction("Disable");
+        menu->addSeparator();
+        menu->addAction("Configuration");
+        menu->addSeparator();
+        menu->addAction("Exit");
+    }
+    tray_->setContextMenu(menu);
 
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
     {

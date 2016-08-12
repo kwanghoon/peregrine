@@ -59,7 +59,7 @@ del %TEMPFILE%
 
 :: app resources
 echo copy app resources..
-robocopy %project_root_dir%\peregrine-desktop %output_dir% *.xml *.qml
+robocopy %project_root_dir%\peregrine-desktop %output_dir% *.xml *.qml *.png
 
 :: plugin binaries & resources
 echo copy plugin binaries..
