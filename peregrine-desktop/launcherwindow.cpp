@@ -36,28 +36,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     QIcon appIcon("heart.png");
     setWindowIcon(appIcon);
 
-    // set up tray icon
-    tray_ = new QSystemTrayIcon(this);
-    tray_->setIcon(appIcon);
-    tray_->show();
-
-    auto* menu = new QMenu(this);
-    {
-        menu->addAction("Show");
-        menu->addAction("Hide");
-        menu->addMenu("Run Action..");
-        menu->addAction("Enable");
-        menu->addAction("Disable");
-        menu->addSeparator();
-        QAction* menuAction = menu->addAction("Configuration");
-        connect(menuAction, &QAction::triggered, [this]() {
-            ConfigurationWindow config;
-            config.exec();
-        });
-        menu->addSeparator();
-        menu->addAction("Exit");
-    }
-    tray_->setContextMenu(menu);
+    setupTrayIcon();
 
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
     {
@@ -110,6 +89,10 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key::Key_Shift)
     {
         showActionSelectDialog();
+    }
+    else if (event->key() == Qt::Key::Key_Escape)
+    {
+        pushDown();
     }
 }
 
@@ -237,6 +220,44 @@ void LauncherWindow::changeAction(QString actionId)
     }
 }
 
+void LauncherWindow::setupTrayIcon()
+{
+    QIcon trayIcon("heart.png");
+
+    tray_ = new QSystemTrayIcon(this);
+    tray_->setIcon(trayIcon);
+    tray_->show();
+
+    auto* menu = new QMenu(this);
+    {
+        auto configAction = [this]() {
+            ConfigurationWindow config;
+            config.exec();
+        };
+
+        menu->addAction("Show", [this] { popUp(); });
+        menu->addAction("Hide", [this] { pushDown(); });
+        menu->addMenu("Run Action..");
+        menu->addAction("Enable");
+        menu->addAction("Disable");
+        menu->addSeparator();
+        QAction* menuAction = menu->addAction("Configuration", configAction);
+        menu->addSeparator();
+        menu->addAction("Exit", [this] { this->close(); });
+    }
+    tray_->setContextMenu(menu);
+}
+
+void LauncherWindow::popUp()
+{
+    this->setHidden(false);
+}
+
+void LauncherWindow::pushDown()
+{
+    this->setHidden(true);
+}
+
 void LauncherWindow::onInputTextChanged(const QString& inputText)
 {
     if (currentAction_.isNull())
@@ -314,5 +335,9 @@ void LauncherWindow::onKeyPressed(int key, QString inputText)
     else if (key == Qt::Key::Key_Down)
     {
         global::suggestionListController->selectDown();
+    }
+    else if (key == Qt::Key::Key_Escape)
+    {
+        pushDown();
     }
 }

@@ -30,6 +30,9 @@ private:
     void tryLoadPlugin(QString path);
     void showActionSelectDialog();
     void changeAction(QString actionId);
+    void setupTrayIcon();
+    void popUp();
+    void pushDown();
 
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
