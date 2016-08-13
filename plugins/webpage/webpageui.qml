@@ -2,7 +2,8 @@ import QtQuick 2.7
 import QtWebView 1.1
 
 Rectangle {
-	width: 400; height: 200
+	width: parent.width
+	height: 300
 	
 	WebView {
 		id: "webView"
