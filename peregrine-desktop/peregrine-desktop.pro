@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     actionselectdialog.cpp \
     inputhandlerdelegate.cpp \
     suggestionlistcontroller.cpp \
-    actionuihelper.cpp
+    actionuihelper.cpp \
+    configurationwindow.cpp
 
 HEADERS += action.h \
     plugin.h \
@@ -34,14 +35,17 @@ HEADERS += action.h \
     inputhandlerdelegate.h \
     ../plugin-sdk/peregrine-plugin-sdk.h \
     suggestionlistcontroller.h \
-    actionuihelper.h
+    actionuihelper.h \
+    configurationwindow.h
 
 FORMS += launcherwindow.ui \
-    actionselectdialog.ui
+    actionselectdialog.ui \
+    configurationwindow.ui
 
 DISTFILES += \
     inputcontainer.qml \
-    SuggestionListView.qml
+    SuggestionListView.qml \
+    ConfigurationForm.ui.qml
 
 # boost
 INCLUDEPATH	+= $$(BOOST_ROOT)

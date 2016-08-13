@@ -1,6 +1,7 @@
 #include "inputhandlerdelegate.h"
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
+#include "configurationwindow.h"
 #include "inputhandlerdelegate.h"
 #include "suggestionlistcontroller.h"
 #include "actionuihelper.h"
@@ -48,7 +49,11 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         menu->addAction("Enable");
         menu->addAction("Disable");
         menu->addSeparator();
-        menu->addAction("Configuration");
+        QAction* menuAction = menu->addAction("Configuration");
+        connect(menuAction, &QAction::triggered, [this]() {
+            ConfigurationWindow config;
+            config.exec();
+        });
         menu->addSeparator();
         menu->addAction("Exit");
     }
