@@ -2,15 +2,21 @@
 #include "inputhandlerdelegate.h"
 #include <QQmlProperty>
 #include <QVariant>
+#include <QTimer>
+#include <QWidget>
 #include <QObject>
 #include <cassert>
 
-SuggestionListController::SuggestionListController(QQuickItem* suggestionListView, 
+SuggestionListController::SuggestionListController(QWidget* suggestionListWidget, 
+    QQuickItem* suggestionListView,
     QObject* suggestionModel, InputHandlerDelegate* inputDelegate)
-    : suggestionListView_(suggestionListView)
+    : suggestionListWidget_(suggestionListWidget)
+    , suggestionListView_(suggestionListView)
     , suggestionModel_(suggestionModel)
     , inputDelegate_(inputDelegate)
 {
+    suggestionListWidget_->setVisible(false);
+
     QObject::connect(inputDelegate_, &InputHandlerDelegate::onSuggestionItemClicked,
         [this](int index) { onSuggestionItemClicked(index); });
 }
@@ -18,19 +24,31 @@ SuggestionListController::SuggestionListController(QQuickItem* suggestionListVie
 void SuggestionListController::addItem(const QString& text, std::function<void(boost::any)> handler, boost::any data)
 {
     QVariant arg(text);
-    QMetaObject::invokeMethod(suggestionModel_, "add",
-        Q_ARG(QVariant, arg));
+    QMetaObject::invokeMethod(suggestionListView_, "addItem", Q_ARG(QVariant, arg));
+
+    // #HACK: size of the ListView's children isn't updated immediately after adding.
+    //        to get the size reflecting new items added, have a small bit of delays.
+    const int kUIUpdateWaitDelay = 20;
+    QTimer::singleShot(kUIUpdateWaitDelay, [this]() {
+        QMetaObject::invokeMethod(suggestionListView_, "fitHeightToChildren");
+    });
+
     SuggestingItem item;
     {
         item.handler = handler;
         item.data = data;
     }
     suggestingItems_.push_back(item);
+
+    suggestionListWidget_->setVisible(true);
 }
 
 void SuggestionListController::clearList()
 {
-    QMetaObject::invokeMethod(suggestionModel_, "clear");
+    suggestionListWidget_->setVisible(false);
+
+    QMetaObject::invokeMethod(suggestionListView_, "clearItems");
+
     suggestingItems_.clear();
 }
 

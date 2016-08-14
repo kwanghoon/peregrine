@@ -3,7 +3,8 @@ import QtQuick 2.0
 ListView {
     id: suggestionListView
     objectName: "suggestionListView"
-    width: 320; height: 240
+    width: 320;
+    height: 200;
 
     currentIndex: -1
 
@@ -63,5 +64,17 @@ ListView {
         }
         inputHandlerDelegate.onSuggestionItemClicked(currentIndex);
         currentIndex = -1;
+    }
+
+    function addItem(val) {
+        model.append({ value: val });
+    }
+
+    function clearItems() {
+        model.clear();
+    }
+
+    function fitHeightToChildren() {
+        height = childrenRect.height;
     }
 }

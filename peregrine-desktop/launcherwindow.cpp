@@ -65,6 +65,12 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     actionSelectDlg_.setActionAssignInfo(v);
 
     setFocus();
+
+    // debug
+    connect(ui->pushButton, &QPushButton::clicked, [this]() {
+        QQuickItem* suggestionListView = ui->suggestionList->rootObject();
+        QMetaObject::invokeMethod(suggestionListView, "fitHeightToChildren");
+    });
 }
 
 LauncherWindow::~LauncherWindow()
@@ -81,7 +87,8 @@ void LauncherWindow::initSuggestionListController()
     QObject* suggestionModel = suggestionListView->findChild<QObject*>("suggestionModel");
     assert(!!suggestionModel);
 
-    global::suggestionListController = new SuggestionListController(suggestionListView, suggestionModel, inputHandlerDelegate_);
+    global::suggestionListController = new SuggestionListController(
+        ui->suggestionList, suggestionListView, suggestionModel, inputHandlerDelegate_);
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
@@ -93,6 +100,9 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key::Key_Escape)
     {
         pushDown();
+    }
+    else if (event->key() == Qt::Key::Key_F11)
+    {
     }
 }
 
