@@ -2,7 +2,8 @@
 QT += core gui \
     xml \
     quickwidgets \
-    webview
+    webview \
+    network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,7 +25,8 @@ SOURCES += main.cpp \
     inputhandlerdelegate.cpp \
     suggestionlistcontroller.cpp \
     actionuihelper.cpp \
-    configurationwindow.cpp
+    configurationwindow.cpp \
+    syncmanager.cpp
 
 HEADERS += action.h \
     plugin.h \
@@ -36,7 +38,8 @@ HEADERS += action.h \
     ../plugin-sdk/peregrine-plugin-sdk.h \
     suggestionlistcontroller.h \
     actionuihelper.h \
-    configurationwindow.h
+    configurationwindow.h \
+    syncmanager.h
 
 FORMS += launcherwindow.ui \
     actionselectdialog.ui \

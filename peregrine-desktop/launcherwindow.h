@@ -11,6 +11,7 @@ namespace Ui {
 class InputHandlerDelegate;
 class SuggestionListController;
 class QSystemTrayIcon;
+class SyncManager;
 
 class LauncherWindow : public QMainWindow
 {
@@ -43,6 +44,7 @@ private:
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
     QSystemTrayIcon* tray_ = nullptr;
+    std::unique_ptr<SyncManager> syncManager_;
 };
 
 #endif // LAUNCHERWINDOW_H

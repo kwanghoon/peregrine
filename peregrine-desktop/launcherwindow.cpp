@@ -4,6 +4,7 @@
 #include "configurationwindow.h"
 #include "inputhandlerdelegate.h"
 #include "suggestionlistcontroller.h"
+#include "syncmanager.h"
 #include "actionuihelper.h"
 #include "action.h"
 #include "plugin.h"
@@ -65,6 +66,9 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     actionSelectDlg_.setActionAssignInfo(v);
 
     setFocus();
+
+    syncManager_.reset(new SyncManager);
+    syncManager_->login("user", "12345");
 
     // debug
     connect(ui->pushButton, &QPushButton::clicked, [this]() {
