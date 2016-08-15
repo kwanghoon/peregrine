@@ -75,6 +75,8 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         QQuickItem* suggestionListView = ui->suggestionList->rootObject();
         QMetaObject::invokeMethod(suggestionListView, "fitHeightToChildren");
     });
+
+    initHistory();
 }
 
 LauncherWindow::~LauncherWindow()
@@ -126,7 +128,11 @@ void LauncherWindow::showActionSelectDialog()
     actionSelectDlg_.exec();
 
     QString actionId = actionSelectDlg_.getSelectedActionId();
-    changeAction(actionId);
+    if (currentAction_ != actionId)
+    {
+        changeAction(actionId);
+        saveHistory();
+    }
 
     // focus on 'inputText' element.
     ui->inputContainer->setFocus();
@@ -315,7 +321,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 }
 
-void LauncherWindow::onKeyPressed(int key, QString inputText)
+void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
 {
     if (key == Qt::Key::Key_Shift)
     {
@@ -353,5 +359,59 @@ void LauncherWindow::onKeyPressed(int key, QString inputText)
     else if (key == Qt::Key::Key_Escape)
     {
         pushDown();
+    }
+    else if (modifiers == Qt::Modifier::ALT)
+    {
+        if (key == Qt::Key::Key_Left)
+        {
+            switchToPreviousAction();
+        }
+        else if (key == Qt::Key::Key_Right)
+        {
+            switchToForwardAction();
+        }
+    }
+}
+
+void LauncherWindow::initHistory()
+{
+    actionHistoryPointer_ = actionHistory_.end();
+}
+
+void LauncherWindow::saveHistory()
+{
+
+    if (actionHistory_.empty())
+    {
+        assert(actionHistoryPointer_ == actionHistory_.end());
+        actionHistory_.push_back(currentAction_);
+        actionHistoryPointer_ = actionHistory_.begin();
+    }
+    else
+    {
+        if (next(actionHistoryPointer_) != actionHistory_.end())
+        {
+            actionHistory_.erase(next(actionHistoryPointer_), actionHistory_.end());
+        }
+        actionHistory_.push_back(currentAction_);
+        actionHistoryPointer_ = prev(actionHistory_.end());
+    }
+}
+
+void LauncherWindow::switchToPreviousAction()
+{
+    if (actionHistoryPointer_ != actionHistory_.begin())
+    {
+        actionHistoryPointer_--;
+        changeAction(*actionHistoryPointer_);
+    }
+}
+
+void LauncherWindow::switchToForwardAction()
+{
+    if (actionHistoryPointer_ != actionHistory_.end())
+    {
+        actionHistoryPointer_++;
+        changeAction(*actionHistoryPointer_);
     }
 }

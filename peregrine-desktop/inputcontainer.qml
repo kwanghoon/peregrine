@@ -13,7 +13,7 @@ Item {
         font.pixelSize: 12
         onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
         Keys.onPressed: {
-            inputHandlerDelegate.onKeyPressed(event.key, text);
+            inputHandlerDelegate.onKeyPressed(event.key, event.modifiers, text);
         }
     }
 

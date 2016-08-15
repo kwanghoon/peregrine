@@ -37,7 +37,13 @@ private:
 
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
-    void onKeyPressed(int key, QString inputText);
+    void onKeyPressed(int key, int modifiers, QString inputText);
+
+    // history control
+    void initHistory();
+    void saveHistory();
+    void switchToPreviousAction();
+    void switchToNextAction();
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
@@ -45,6 +51,8 @@ private:
     QString currentAction_;
     QSystemTrayIcon* tray_ = nullptr;
     std::unique_ptr<SyncManager> syncManager_;
+    std::list<QString> actionHistory_;
+    decltype(actionHistory_)::iterator actionHistoryPointer_;
 };
 
 #endif // LAUNCHERWINDOW_H
