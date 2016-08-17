@@ -368,7 +368,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
         }
         else if (key == Qt::Key::Key_Right)
         {
-            switchToForwardAction();
+            switchToNextAction();
         }
     }
 }
@@ -407,7 +407,7 @@ void LauncherWindow::switchToPreviousAction()
     }
 }
 
-void LauncherWindow::switchToForwardAction()
+void LauncherWindow::switchToNextAction()
 {
     if (actionHistoryPointer_ != actionHistory_.end())
     {
