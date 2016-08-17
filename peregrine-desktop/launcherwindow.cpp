@@ -182,6 +182,13 @@ void LauncherWindow::loadSetting()
 
 void LauncherWindow::loadPlugins()
 {
+    //
+    PluginManager::getInstance().setCallbacks([this](const QString& text) {
+        this->setHeaderText(text);
+        return 0;
+    });
+
+    // 
     QDir pluginDir(global::userConfig.pluginDir);
     auto subdirs = pluginDir.entryList(QDir::Filter::Dirs | QDir::Filter::NoDotAndDotDot);
     for (QDir subdir : subdirs)
@@ -276,6 +283,11 @@ void LauncherWindow::popUp()
 void LauncherWindow::pushDown()
 {
     this->setHidden(true);
+}
+
+void LauncherWindow::setHeaderText(const QString& text)
+{
+    ui->headerTextLabel->setText(text);
 }
 
 void LauncherWindow::onInputTextChanged(const QString& inputText)

@@ -34,6 +34,9 @@ namespace
             child = child.nextSiblingElement();
         }
     }
+
+    PG_FUNC_TABLE funcTable;
+
 }
 
 PluginModule::PluginModule(QDir dir, const QString& name)
@@ -48,12 +51,11 @@ PluginModule::PluginModule(QDir dir, const QString& name)
         throw std::runtime_error(messae.toStdString());
     }
 
-    // call plugin's initialize function
-    PG_FUNC_TABLE table;
     typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*);
     auto initPluginFunc = (fpInitializePlugin)lib->resolve("InitializePlugin");
     g_pluginContext.currPlugin = this;
-    int ret = initPluginFunc(&table);
+    assert(!!funcTable.fpSetHeaderText);
+    int ret = initPluginFunc(&funcTable);
     g_pluginContext.currPlugin = nullptr;
     if (ret < 0)
     {
@@ -154,6 +156,16 @@ PluginModule* PluginManager::loadPluginModule(const QDir& dir, const QString& na
         return nullptr;
     }
     return &moduleList_.back();
+}
+
+void PluginManager::setCallbacks(std::function<int(const QString&)> setHeaderTextFunc)
+{
+    static std::function<int(const QString&)> s_setHeaderTextFunc;
+    s_setHeaderTextFunc = setHeaderTextFunc;
+    funcTable.fpSetHeaderText = [](const char* text) {
+        s_setHeaderTextFunc(text);
+        return 0;
+    };
 }
 
 PluginModule* PluginManager::tryGetModule(const QString& actionId)

@@ -35,6 +35,8 @@ private:
     void popUp();
     void pushDown();
 
+    void setHeaderText(const QString& text);
+
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
     void onKeyPressed(int key, int modifiers, QString inputText);

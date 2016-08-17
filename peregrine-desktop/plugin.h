@@ -6,6 +6,7 @@
 #include <list>
 #include <vector>
 #include <memory>
+#include <functional>
 
 class PluginModule
 {
@@ -33,6 +34,7 @@ class PluginManager
 public:
     bool loadPlugin(const QString& dir);
     PluginModule* loadPluginModule(const QDir& dir, const QString& name);
+    void setCallbacks(std::function<int(const QString&)> setHeaderTextFunc);
     static PluginManager& getInstance() { return instance_; }
 
 private:
