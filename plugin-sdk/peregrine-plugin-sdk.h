@@ -1,7 +1,10 @@
 #pragma once
 
+typedef int(*SetHeaderTextFunc)(const char* text);
+
 struct PG_FUNC_TABLE
 {
+    SetHeaderTextFunc fpSetHeaderText;
 };
 
 struct PG_SUGGESTION_ITEM
