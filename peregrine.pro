@@ -3,7 +3,8 @@ TEMPLATE = subdirs
 SUBDIRS = peregrine \
 	echo \
 	file \
-	website
+	website \
+	console-testbed
 
 peregrine.subdir = peregrine-desktop
 echo.subdir = plugins/echo
