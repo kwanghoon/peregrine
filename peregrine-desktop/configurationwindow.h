@@ -7,6 +7,15 @@ namespace Ui {
 class ConfigurationWindow;
 }
 
+class ConfigurationController : public QObject
+{
+    Q_OBJECT
+
+public:
+    Q_INVOKABLE bool registerAsStarupApp();
+    Q_INVOKABLE bool deregisterAsStarupApp();
+};
+
 class ConfigurationWindow : public QDialog
 {
     Q_OBJECT

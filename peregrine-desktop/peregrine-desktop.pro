@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     suggestionlistcontroller.cpp \
     actionuihelper.cpp \
     configurationwindow.cpp \
-    syncmanager.cpp
+    syncmanager.cpp \
+    ../utils/StartupRegister.cpp
 
 HEADERS += action.h \
     plugin.h \
@@ -39,7 +40,8 @@ HEADERS += action.h \
     suggestionlistcontroller.h \
     actionuihelper.h \
     configurationwindow.h \
-    syncmanager.h
+    syncmanager.h \
+    ../utils/StartupRegister.h
 
 FORMS += launcherwindow.ui \
     actionselectdialog.ui \

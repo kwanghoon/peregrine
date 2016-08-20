@@ -4,13 +4,31 @@ import QtQuick.Controls 1.4
 TabView {
     width: 400
     height: 400
-    property alias tab1: tab1
     Tab {
         title: "General"
 
         Item {
             CheckBox {
                 text: "Register As Startup Program"
+
+                property bool ignoreCheckedChangedFlag: false
+                onCheckedChanged: {
+                    if (ignoreCheckedChangedFlag) {
+                        ignoreCheckedChangedFlag = false;
+                        return;
+                    }
+
+                    var success;
+                    if (checked) {
+                        success = controller.registerAsStarupApp();
+                    } else {
+                        success = controller.deregisterAsStarupApp();
+                    }
+                    if (!success) {
+                        ignoreCheckedChangedFlag = true;
+                        checked = !checked;
+                    }
+                }
             }
         }
     }
@@ -61,6 +79,14 @@ TabView {
                     text: "sign up"
                 }
             }
+        }
+    }
+
+    function initConfigs(configs) {
+        if (configs.isStartupApp) {
+            var cb = getTab(0).item.children[0];
+            cb.ignoreCheckedChangedFlag = true;
+            cb.checked = configs.isStartupApp;
         }
     }
 }
