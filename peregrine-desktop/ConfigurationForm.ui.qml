@@ -31,9 +31,54 @@ TabView {
                 }
             }
         }
+
+        onLoaded: {
+            var configs = controller.getConfigs();
+            if (configs.isStartupApp) {
+                var cb = item.children[0];
+                cb.ignoreCheckedChangedFlag = true;
+                cb.checked = configs.isStartupApp;
+            }
+        }
     }
     Tab {
         title: "Action"
+        Row {
+            layoutDirection: Qt.RightToLeft
+            anchors.fill: parent
+            ListView {
+                id: actionList
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 180; height: 240
+
+                model: ListModel {}
+
+                delegate: Text {
+                    text: actionid
+                }
+            }
+            Rectangle {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: actionList.left
+                color: "yellow"
+            }
+            function addItem(s) {
+                actionList.model.append(s);
+            }
+        }
+
+        onLoaded: {
+            var configs = controller.getConfigs();
+            var actionListView = item.children[0];
+            for (var i = 0; i < configs.actionList.length; i++) {
+                var action = configs.actionList[i];
+                actionListView.model.append({
+                    actionid: action.actionid});
+            }
+        }
     }
     Tab {
         title: "Account"
@@ -79,14 +124,6 @@ TabView {
                     text: "sign up"
                 }
             }
-        }
-    }
-
-    function initConfigs(configs) {
-        if (configs.isStartupApp) {
-            var cb = getTab(0).item.children[0];
-            cb.ignoreCheckedChangedFlag = true;
-            cb.checked = configs.isStartupApp;
         }
     }
 }

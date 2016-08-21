@@ -1,8 +1,9 @@
 #include "configurationwindow.h"
 #include "ui_configurationwindow.h"
+#include <utils/StartupRegister.h>
+#include "action.h"
 #include <QQuickItem>
 #include <QQmlContext>
-#include "../utils/StartupRegister.h"
 
 namespace
 {
@@ -14,19 +15,13 @@ ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     ui(new Ui::ConfigurationWindow)
 {
     ui->setupUi(this);
-    ui->configurationQuickWidget->setSource(QUrl::fromLocalFile("ConfigurationForm.ui.qml"));
-
+    
     // set context
     auto controller = new ConfigurationController();
     auto context = ui->configurationQuickWidget->rootContext();
     context->setContextProperty("controller", controller);
 
-    QQuickItem* root = ui->configurationQuickWidget->rootObject();
-
-    QVariantMap configs;
-    bool registered = utils::isRegisteredAsStartupApp(QCoreApplication::applicationFilePath(), kPeregrineTaskName);
-    configs.insert("isStartupApp", registered);
-    QMetaObject::invokeMethod(root, "initConfigs", Q_ARG(QVariant, QVariant::fromValue(configs)));
+    ui->configurationQuickWidget->setSource(QUrl::fromLocalFile("ConfigurationForm.ui.qml"));
 }
 
 ConfigurationWindow::~ConfigurationWindow()
@@ -44,4 +39,25 @@ bool ConfigurationController::deregisterAsStarupApp()
 {
     bool ret = utils::deregisterAsStartupApp(kPeregrineTaskName);
     return ret;
+}
+
+QVariantMap ConfigurationController::getConfigs()
+{
+    QVariantMap configs;
+    {
+        bool registered = utils::isRegisteredAsStartupApp(QCoreApplication::applicationFilePath(), kPeregrineTaskName);
+        configs.insert("isStartupApp", registered);
+
+        QVariantList actionList;
+        auto& al = ActionManager::getInstance().getActionList();
+        for (auto& a : al)
+        {
+            QVariantMap actionDesc;
+            actionDesc.insert("image", a->imagePath);
+            actionDesc.insert("actionid", a->id);
+            actionList.push_back(actionDesc);
+        }
+        configs.insert("actionList", actionList);
+    }
+    return configs;
 }

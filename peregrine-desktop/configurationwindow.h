@@ -2,6 +2,7 @@
 #define CONFIGURATIONWINDOW_H
 
 #include <QDialog>
+#include <QVariantMap>
 
 namespace Ui {
 class ConfigurationWindow;
@@ -14,6 +15,7 @@ class ConfigurationController : public QObject
 public:
     Q_INVOKABLE bool registerAsStarupApp();
     Q_INVOKABLE bool deregisterAsStarupApp();
+    Q_INVOKABLE QVariantMap getConfigs();
 };
 
 class ConfigurationWindow : public QDialog

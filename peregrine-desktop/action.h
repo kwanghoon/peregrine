@@ -43,6 +43,9 @@ class ActionManager
 public:
     bool addAction(std::unique_ptr<Action> action);
     Action* getActionById(const QString& id);
+
+    // #TODO: thread-safety
+    const std::list<std::unique_ptr<Action>>& getActionList() const;
     static ActionManager& getInstance() { return instance_; }
     
 private:

@@ -67,6 +67,11 @@ Action* ActionManager::getActionById(const QString& id)
     return nullptr;
 }
 
+const std::list<std::unique_ptr<Action>>& ActionManager::getActionList() const
+{
+    return actions_;
+}
+
 ActionManager ActionManager::instance_;
 
 void LoadAction(QDomElement actionElem, QDir dir)

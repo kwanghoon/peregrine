@@ -14,7 +14,8 @@ TARGET = peregrine-desktop
 TEMPLATE = app
 
 INCLUDEPATH += ../plugin-sdk \
-    ../thirdparty
+    ../thirdparty \
+    ..
 
 SOURCES += main.cpp \
     action.cpp \
