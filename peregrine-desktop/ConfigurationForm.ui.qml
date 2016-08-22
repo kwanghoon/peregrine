@@ -63,7 +63,39 @@ TabView {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: actionList.left
-                color: "yellow"
+                color: "gainsboro"
+
+                property int originX: width / 2
+                property int originY: height / 2
+                property int actionWidth: 80
+                property int actionHeight: 40
+                property int horiGap: 6
+                property int vertiGap: 6
+
+                Repeater {
+                    model: [
+                        // distance 1
+                        {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1},
+                        // distance 2
+                        {x: 2, y: 0}, {x: -2, y: 0}, {x: 0, y: 2}, {x: 0, y: -2},
+                        {x: 1, y: -1}, {x: 1, y: 1}, {x: -1, y: 1}, {x: -1, y: -1},
+                        // distance 3
+                        {x: 3, y: 0}, {x: 2, y: 1}, {x: 1, y: 2}, {x: 0, y: 3},
+                        {x: -1, y: 2}, {x: -2, y: 1}, {x: -3, y: 0}, {x: -2, y: -1},
+                        {x: -1, y: -2}, {x: 0, y: -3}, {x: 1, y: -2}, {x: 2, y: -1}
+                    ]
+
+                    DropArea {
+                        property int slotIndex: index
+                        x: parent.originX + modelData.x * (parent.actionWidth + parent.horiGap) - parent.actionWidth / 2
+                        y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
+                        width: parent.actionWidth; height: parent.actionHeight
+                        Rectangle {
+                            color: !parent.containsDrag ? "	darkgray" : "cornflowerblue"
+                            anchors.fill: parent
+                        }
+                    }
+                }
             }
             function addItem(s) {
                 actionList.model.append(s);
