@@ -50,6 +50,7 @@ TabView {
                 id: actionList
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                z: 1
                 width: 180; height: 240
 
                 model: ListModel {}
@@ -71,6 +72,25 @@ TabView {
                             }
                         }
                     }
+
+                    Drag.active: dragArea.drag.active
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
+                    MouseArea {
+                        id: dragArea
+                        anchors.fill: parent
+                        drag.target: parent
+                        property int xSaved
+                        property int ySaved
+                        onPressed: {
+                            xSaved = parent.x;
+                            ySaved = parent.y;
+                        }
+                        onReleased: {
+                            parent.x = xSaved;
+                            parent.y = ySaved;
+                        }
+                    }
                 }
             }
             Rectangle {
@@ -78,6 +98,7 @@ TabView {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: actionList.left
+                z: 0
                 color: "gainsboro"
 
                 property int originX: width / 2
@@ -111,9 +132,6 @@ TabView {
                         }
                     }
                 }
-            }
-            function addItem(s) {
-                actionList.model.append(s);
             }
         }
 
