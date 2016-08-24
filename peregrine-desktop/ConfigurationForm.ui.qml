@@ -44,6 +44,8 @@ TabView {
     Tab {
         title: "Action"
         Row {
+            id: actionTab
+            property var dropSlot
             layoutDirection: Qt.RightToLeft
             anchors.fill: parent
             ListView {
@@ -89,11 +91,14 @@ TabView {
                         onReleased: {
                             parent.x = xSaved;
                             parent.y = ySaved;
+                            slotPanel.allocActionOnSlot(
+                                actionTab.dropSlot.index, (imagePath != "" ? imagePath : null), actionid);
                         }
                     }
                 }
             }
             Rectangle {
+                id: slotPanel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
@@ -109,6 +114,7 @@ TabView {
                 property int vertiGap: 6
 
                 Repeater {
+                    id: slots
                     model: [
                         // distance 1
                         {x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1},
@@ -122,7 +128,6 @@ TabView {
                     ]
 
                     DropArea {
-                        property int slotIndex: index
                         x: parent.originX + modelData.x * (parent.actionWidth + parent.horiGap) - parent.actionWidth / 2
                         y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
                         width: parent.actionWidth; height: parent.actionHeight
@@ -130,6 +135,41 @@ TabView {
                             color: !parent.containsDrag ? "	darkgray" : "cornflowerblue"
                             anchors.fill: parent
                         }
+                        Text {
+                            anchors.fill: parent
+                            wrapMode: Text.Wrap
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            visible: false
+                        }
+                        Image {
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            visible: false
+                        }
+                        onEntered: {
+                            actionTab.dropSlot = {
+                                index: index
+                            };
+                        }
+                        onExited: {
+                            actionTab.dropSlot = null;
+                        }
+                    }
+                }
+                function allocActionOnSlot(index, imagePath, text) {
+                    var item = slots.itemAt(index);
+                    item.children[0].color = "azure";
+                    var textLabel = item.children[1];
+                    var img = item.children[2];
+                    if (imagePath != null) {
+                        controller.setFieldByLocalPath(img, "source", imagePath);
+                        img.visible = true;
+                        textLabel.visible = false;
+                    } else {
+                        textLabel.text = text;
+                        textLabel.visible = true;
+                        img.visible = false;
                     }
                 }
             }
