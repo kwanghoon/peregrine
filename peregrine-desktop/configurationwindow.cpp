@@ -53,11 +53,16 @@ QVariantMap ConfigurationController::getConfigs()
         for (auto& a : al)
         {
             QVariantMap actionDesc;
-            actionDesc.insert("image", a->imagePath);
+            actionDesc.insert("imagePath", a->imagePath);
             actionDesc.insert("actionid", a->id);
             actionList.push_back(actionDesc);
         }
         configs.insert("actionList", actionList);
     }
     return configs;
+}
+
+void ConfigurationController::setFieldByLocalPath(QObject* target, QString field, QString localPath)
+{
+    target->setProperty(field.toStdString().c_str(), QUrl::fromLocalFile(localPath));
 }

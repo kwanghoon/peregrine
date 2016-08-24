@@ -54,8 +54,23 @@ TabView {
 
                 model: ListModel {}
 
-                delegate: Text {
-                    text: actionid
+                delegate: Item {
+                    width: 180; height: 40
+                    Text {
+                        anchors.centerIn: parent
+                        text: actionid
+                        visible: (imagePath == "")
+                    }
+                    Image {
+                        id: img
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+                        Component.onCompleted: {
+                            if (imagePath != "") {
+                                controller.setFieldByLocalPath(img, "source", imagePath);
+                            }
+                        }
+                    }
                 }
             }
             Rectangle {
@@ -108,7 +123,8 @@ TabView {
             for (var i = 0; i < configs.actionList.length; i++) {
                 var action = configs.actionList[i];
                 actionListView.model.append({
-                    actionid: action.actionid});
+                    actionid: action.actionid,
+                    imagePath: action.imagePath});
             }
         }
     }
