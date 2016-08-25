@@ -92,7 +92,7 @@ TabView {
                             parent.x = xSaved;
                             parent.y = ySaved;
                             slotPanel.allocActionOnSlot(
-                                actionTab.dropSlot.index, (imagePath != "" ? imagePath : null), actionid);
+                                actionTab.dropSlot.index, actionid, (imagePath != "" ? imagePath : null));
                         }
                     }
                 }
@@ -128,6 +128,7 @@ TabView {
                     ]
 
                     DropArea {
+                        property string actionId
                         x: parent.originX + modelData.x * (parent.actionWidth + parent.horiGap) - parent.actionWidth / 2
                         y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
                         width: parent.actionWidth; height: parent.actionHeight
@@ -157,20 +158,38 @@ TabView {
                         }
                     }
                 }
-                function allocActionOnSlot(index, imagePath, text) {
+                function allocActionOnSlot(index, actionId, imagePath) {
                     var item = slots.itemAt(index);
-                    item.children[0].color = "azure";
                     var textLabel = item.children[1];
                     var img = item.children[2];
+                    item.actionId = actionId;
+                    item.children[0].color = "azure";
                     if (imagePath != null) {
                         controller.setFieldByLocalPath(img, "source", imagePath);
                         img.visible = true;
                         textLabel.visible = false;
                     } else {
-                        textLabel.text = text;
+                        textLabel.text = actionId;
                         textLabel.visible = true;
                         img.visible = false;
                     }
+                }
+                Component.onDestruction: {
+                    var settings = {
+                        slots: []
+                    };
+                    for (var i = 0; i < slots.count; i++) {
+                        if (slots.itemAt(i).actionId == '') {
+                            continue;
+                        }
+                        var slotSetting = {
+                            x: slots.model[i].x,
+                            y: slots.model[i].y,
+                            actionId: slots.itemAt(i).actionId
+                        };
+                        settings.slots.push(slotSetting);
+                    }
+                    controller.saveActionSlotSettings(settings);
                 }
             }
         }

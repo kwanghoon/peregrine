@@ -17,6 +17,7 @@ public:
     Q_INVOKABLE bool deregisterAsStarupApp();
     Q_INVOKABLE QVariantMap getConfigs();
     Q_INVOKABLE void setFieldByLocalPath(QObject* target, QString field, QString localPath);
+    Q_INVOKABLE void saveActionSlotSettings(const QVariantMap& slotSettings);
 };
 
 class ConfigurationWindow : public QDialog

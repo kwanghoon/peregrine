@@ -66,3 +66,15 @@ void ConfigurationController::setFieldByLocalPath(QObject* target, QString field
 {
     target->setProperty(field.toStdString().c_str(), QUrl::fromLocalFile(localPath));
 }
+
+void ConfigurationController::saveActionSlotSettings(const QVariantMap& slotSettings)
+{
+    const QVariantList& actionSlots = slotSettings["slots"].toList();
+    for (const auto& e : actionSlots)
+    {
+        auto& slotSetting = e.toMap();
+        int x = slotSetting["x"].toInt();
+        int y = slotSetting["y"].toInt();
+        QString id = slotSettings["actionId"].toString();
+    }
+}
