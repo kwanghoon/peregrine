@@ -1,6 +1,7 @@
 #include "configmanager.h"
 #include "global.h"
 #include <QXmlSimpleReader>
+#include <QDomDocument>
 #include <QDebug>
 #include <memory>
 
@@ -12,38 +13,28 @@ ConfigManager::ConfigManager()
 
 void ConfigManager::loadConfig()
 {
-    struct SettingXMLContentHandler : QXmlDefaultHandler
-    {
-        SettingXMLContentHandler() : QXmlDefaultHandler() {}
-
-        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
-        {
-            if (localName == "plugin")
-            {
-                global::userConfig.pluginDir = atts.value("plugindir");
-                qDebug() << global::userConfig.pluginDir;
-            }
-            else if (localName == "actionslot")
-            {
-                UserConfig::ActionSlotAssignInfo slot;
-                {
-                    slot.actionId = atts.value("actionid");
-                    slot.pos = QPoint(atts.value("x").toInt(),
-                        atts.value("y").toInt());
-                }
-                global::userConfig.actionSlotAssignData.push_back(slot);
-
-            }
-            return true;
-        }
-    };
-    QXmlSimpleReader xmlReader;
     QFile settingFile("settings.xml");
-    unique_ptr<QXmlInputSource> source(new QXmlInputSource(&settingFile));
-    unique_ptr<SettingXMLContentHandler> contentHandler(new SettingXMLContentHandler);
-    xmlReader.setContentHandler(contentHandler.get());
-    if (!xmlReader.parse(source.get()))
+    QDomDocument doc;
+    if (!doc.setContent(&settingFile))
     {
         throw std::runtime_error("Parsing failed. (settings.xml)");
+    }
+    auto root = doc.documentElement();
+
+    auto pluginElem = root.firstChildElement("plugin");
+    global::userConfig.pluginDir = pluginElem.attribute("plugindir");
+
+    auto actionSlotElem = root.firstChildElement("actionslots");
+    auto child = actionSlotElem.firstChildElement("actionslot");
+    while (!child.isNull())
+    {
+        UserConfig::ActionSlotAssignInfo slot;
+        {
+            slot.actionId = child.attribute("actionid");
+            slot.pos = QPoint(child.attribute("x").toInt(),
+                child.attribute("y").toInt());
+        }
+        global::userConfig.actionSlotAssignData.push_back(slot);
+        child = child.nextSiblingElement();
     }
 }
