@@ -9,8 +9,8 @@
 #include "action.h"
 #include "plugin.h"
 #include "global.h"
+#include "configmanager.h"
 #include <peregrine-plugin-sdk.h>
-#include <QXmlSimpleReader>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QKeyEvent>
@@ -50,7 +50,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
 
     initSuggestionListController();
-    loadSetting();
+    global::GetConfigManager().loadConfig();
     loadPlugins();
     
     vector<ActionSelectDialog::ActionAssignInfo> v;
@@ -140,44 +140,6 @@ void LauncherWindow::showActionSelectDialog()
     auto* item = ui->inputContainer->rootObject();
     auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
     textInput->forceActiveFocus();
-}
-
-void LauncherWindow::loadSetting()
-{
-    struct SettingXMLContentHandler : QXmlDefaultHandler
-    {
-        SettingXMLContentHandler() : QXmlDefaultHandler() {}
-
-        bool startElement(const QString&, const QString& localName, const QString&, const QXmlAttributes& atts) override
-        {
-            if (localName == "plugin")
-            {
-                global::userConfig.pluginDir = atts.value("plugindir");
-                qDebug() << global::userConfig.pluginDir;
-            }
-            else if (localName == "actionslot")
-            {
-                UserConfig::ActionSlotAssignInfo slot;
-                {
-                    slot.actionId = atts.value("actionid");
-                    slot.pos = QPoint(atts.value("x").toInt(),
-                        atts.value("y").toInt());
-                }
-                global::userConfig.actionSlotAssignData.push_back(slot);
-
-            }
-            return true;
-        }
-    };
-    QXmlSimpleReader xmlReader;
-    QFile settingFile("settings.xml");
-    unique_ptr<QXmlInputSource> source(new QXmlInputSource(&settingFile));
-    unique_ptr<SettingXMLContentHandler> contentHandler(new SettingXMLContentHandler);
-    xmlReader.setContentHandler(contentHandler.get());
-    if (!xmlReader.parse(source.get()))
-    {
-        throw std::runtime_error("Parsing failed. (settings.xml)");
-    }
 }
 
 void LauncherWindow::loadPlugins()

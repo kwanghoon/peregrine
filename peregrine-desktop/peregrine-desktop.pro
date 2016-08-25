@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     actionuihelper.cpp \
     configurationwindow.cpp \
     syncmanager.cpp \
-    ../utils/StartupRegister.cpp
+    ../utils/StartupRegister.cpp \
+    configmanager.cpp
 
 HEADERS += action.h \
     plugin.h \
@@ -42,7 +43,8 @@ HEADERS += action.h \
     actionuihelper.h \
     configurationwindow.h \
     syncmanager.h \
-    ../utils/StartupRegister.h
+    ../utils/StartupRegister.h \
+    configmanager.h
 
 FORMS += launcherwindow.ui \
     actionselectdialog.ui \
