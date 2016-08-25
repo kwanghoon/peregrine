@@ -91,7 +91,7 @@ TabView {
                         onReleased: {
                             parent.x = xSaved;
                             parent.y = ySaved;
-                            if (actionTab.dropSlot.index == null) {
+                            if (actionTab.dropSlot == null) {
                                 return;
                             }
                             slotPanel.allocActionOnSlot(
