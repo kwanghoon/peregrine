@@ -52,18 +52,10 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     initSuggestionListController();
     global::GetConfigManager().loadConfig();
     loadPlugins();
-    
-    vector<ActionSelectDialog::ActionAssignInfo> v;
-    for (auto& a : global::userConfig.actionSlotAssignData)
-    {
-        auto* action = ActionManager::getInstance().getActionById(a.actionId);
-        assert(action);
-        v.emplace_back();
-        v.back().id = a.actionId;
-        v.back().imagePath = action->imagePath;
-        v.back().pos = a.pos;
-    }
-    actionSelectDlg_.setActionAssignInfo(v);
+    onConfigUpdated();
+    connect(&global::GetConfigManager(), &ConfigManager::onConfigUpdated, [this]() {
+        onConfigUpdated();
+    });
 
     setFocus();
 
@@ -77,6 +69,21 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     });
 
     initHistory();
+}
+
+void LauncherWindow::onConfigUpdated()
+{
+    vector<ActionSelectDialog::ActionAssignInfo> v;
+    for (auto& a : global::userConfig.actionSlotAssignData)
+    {
+        auto* action = ActionManager::getInstance().getActionById(a.actionId);
+        assert(action);
+        v.emplace_back();
+        v.back().id = a.actionId;
+        v.back().imagePath = action->imagePath;
+        v.back().pos = a.pos;
+    }
+    actionSelectDlg_.setActionAssignInfo(v);
 }
 
 LauncherWindow::~LauncherWindow()

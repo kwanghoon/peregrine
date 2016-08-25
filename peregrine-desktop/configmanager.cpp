@@ -26,6 +26,7 @@ void ConfigManager::loadConfig()
 
     auto actionSlotElem = root.firstChildElement("actionslots");
     auto child = actionSlotElem.firstChildElement("actionslot");
+    global::userConfig.actionSlotAssignData.clear();
     while (!child.isNull())
     {
         UserConfig::ActionSlotAssignInfo slot;
@@ -37,6 +38,7 @@ void ConfigManager::loadConfig()
         global::userConfig.actionSlotAssignData.push_back(slot);
         child = child.nextSiblingElement();
     }
+    onConfigUpdated();
 }
 
 void ConfigManager::updateConfig(const QVariantMap& config)
@@ -74,4 +76,9 @@ void ConfigManager::updateConfig(const QVariantMap& config)
     QTextStream ts(&settingFile);
     doc.save(ts, 2);
     settingFile.resize(settingFile.pos());
+    settingFile.close();
+
+    loadConfig();
+
+    onConfigUpdated();
 }

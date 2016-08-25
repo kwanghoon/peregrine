@@ -21,12 +21,13 @@ public:
     explicit LauncherWindow(QWidget *parent = 0);
     ~LauncherWindow();
 
+    void onConfigUpdated();
+
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void mousePressEvent(QMouseEvent *event) override;
 
     void initSuggestionListController();
-    void loadSetting();
     void loadPlugins();
     void tryLoadPlugin(QString path);
     void showActionSelectDialog();
