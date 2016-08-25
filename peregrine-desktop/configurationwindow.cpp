@@ -7,6 +7,8 @@
 #include <QQuickItem>
 #include <QQmlContext>
 
+using namespace std;
+
 namespace
 {
     const char* kPeregrineTaskName = "PeregrineStartupTask";
@@ -50,16 +52,34 @@ QVariantMap ConfigurationController::getConfigs()
         bool registered = utils::isRegisteredAsStartupApp(QCoreApplication::applicationFilePath(), kPeregrineTaskName);
         configs.insert("isStartupApp", registered);
 
-        QVariantList actionList;
-        auto& al = ActionManager::getInstance().getActionList();
-        for (auto& a : al)
         {
-            QVariantMap actionDesc;
-            actionDesc.insert("imagePath", a->imagePath);
-            actionDesc.insert("actionid", a->id);
-            actionList.push_back(actionDesc);
+            QVariantList actionList;
+            auto& al = ActionManager::getInstance().getActionList();
+            for (auto& a : al)
+            {
+                QVariantMap actionDesc;
+                actionDesc.insert("imagePath", a->imagePath);
+                actionDesc.insert("actionid", a->id);
+                actionList.push_back(actionDesc);
+            }
+            configs.insert("actionList", actionList);
         }
-        configs.insert("actionList", actionList);
+
+        // 
+        {
+            QVariantList slotList;
+            for (auto& slot : global::userConfig.actionSlotAssignData)
+            {
+                QVariantMap slotInfo;
+                {
+                    slotInfo.insert("x", slot.pos.x());
+                    slotInfo.insert("y", slot.pos.y());
+                    slotInfo.insert("actionid", slot.actionId);
+                }
+                slotList.push_back(move(slotInfo));
+            }
+            configs.insert("slots", slotList);
+        }
     }
     return configs;
 }

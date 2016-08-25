@@ -161,13 +161,24 @@ TabView {
                         }
                     }
                 }
-                function allocActionOnSlot(index, actionId, imagePath) {
+                function allocActionOnSlot(indexOrPos, actionId, imagePath) {
+                    var index = -1;
+                    if (typeof indexOrPos === 'object') {
+                        for (var i = 0; i < slots.model.length; i++) {
+                            if (slots.model[i].x == indexOrPos.x && slots.model[i].y == indexOrPos.y) {
+                                index = i;
+                                break;
+                            }
+                        }
+                    } else {
+                        index = indexOrPos;
+                    }
                     var item = slots.itemAt(index);
                     var textLabel = item.children[1];
                     var img = item.children[2];
                     item.actionId = actionId;
                     item.children[0].color = "azure";
-                    if (imagePath != null) {
+                    if (imagePath != null && imagePath != '') {
                         controller.setFieldByLocalPath(img, "source", imagePath);
                         img.visible = true;
                         textLabel.visible = false;
@@ -205,6 +216,24 @@ TabView {
                 actionListView.model.append({
                     actionid: action.actionid,
                     imagePath: action.imagePath});
+            }
+
+            // load action slot settings
+            function findAction(actionId) {
+                for (var i = 0; i < configs.actionList.length; i++) {
+                    if (configs.actionList[i].actionid == actionId) {
+                        return configs.actionList[i];
+                    }
+                }
+                return null;
+            }
+
+            for (var i = 0; i < configs.slots.length; i++) {
+                var slotPanel = item.children[1];
+                slotPanel.allocActionOnSlot(
+                    {x: configs.slots[i].x, y: configs.slots[i].y},
+                    configs.slots[i].actionid,
+                    findAction(configs.slots[i].actionid).imagePath);
             }
         }
     }
