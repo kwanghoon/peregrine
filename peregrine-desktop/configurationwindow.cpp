@@ -1,7 +1,9 @@
 #include "configurationwindow.h"
 #include "ui_configurationwindow.h"
-#include <utils/StartupRegister.h>
+#include "configmanager.h"
 #include "action.h"
+#include "global.h"
+#include <utils/StartupRegister.h>
 #include <QQuickItem>
 #include <QQmlContext>
 
@@ -69,12 +71,5 @@ void ConfigurationController::setFieldByLocalPath(QObject* target, QString field
 
 void ConfigurationController::saveActionSlotSettings(const QVariantMap& slotSettings)
 {
-    const QVariantList& actionSlots = slotSettings["slots"].toList();
-    for (const auto& e : actionSlots)
-    {
-        auto& slotSetting = e.toMap();
-        int x = slotSetting["x"].toInt();
-        int y = slotSetting["y"].toInt();
-        QString id = slotSettings["actionId"].toString();
-    }
+    global::GetConfigManager().updateConfig(slotSettings);
 }

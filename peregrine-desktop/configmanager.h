@@ -9,6 +9,8 @@ public:
     ConfigManager();
 
     void loadConfig();
+
+    void updateConfig(const QVariantMap& config);
 };
 
 #endif // CONFIGMANAGER_H
