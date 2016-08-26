@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QObject>
+#include <functional>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -13,9 +14,10 @@ class SyncManager : public QObject
 public:
     SyncManager();
 
-    void login(const QString& id, const QString& password);
+    void login(const QString& id, const QString& password, 
+        std::function<void()> thenFunc = {}, std::function<void()> catchFunc = {});
     void putConfigs(const QVariantMap& configs);
-    void getConfigs();
+    void getConfigs(std::function<void(const QVariantMap& configs)> thenFunc = {}, std::function<void()> catchFunc = {});
 
 private:
     QNetworkAccessManager* networkManager_ = nullptr;

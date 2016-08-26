@@ -20,6 +20,7 @@
 #include <QQmlEngine>
 #include <QQmlProperty>
 #include <QSystemTrayIcon>
+#include <QJsonDocument>
 #include <QMenu>
 #include <memory>
 #include <cassert>
@@ -57,9 +58,20 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         onConfigUpdated();
     });
 
-    setFocus();
+    auto getConfigDone = [](const QVariantMap& configs) {
+        // #TODO: synchronization
+        global::GetConfigManager().updateConfig(configs["configs"].toMap());
+    };
+    auto thenFunc = [getConfigDone]() {
+        global::GetSyncManager().getConfigs(getConfigDone, []() {
+            __nop();
+        });
+    };
+    auto catchFunc = []() {
+    };
+    global::GetSyncManager().login("user", "1234", thenFunc, catchFunc);
 
-    global::GetSyncManager().login("user", "1234");
+    setFocus();
 
     // debug
     connect(ui->pushButton, &QPushButton::clicked, [this]() {
