@@ -2,6 +2,7 @@
 import routes = require('./routes/index');
 import user = require('./routes/user');
 import login = require('./routes/login');
+import configs = require('./routes/configs');
 import http = require('http');
 import path = require('path');
 
@@ -16,6 +17,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.bodyParser());
 app.use(app.router);
 
 import stylus = require('stylus');
@@ -30,6 +32,8 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/login', login.login);
+app.get('/configs', configs.get);
+app.put('/configs', configs.put);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
