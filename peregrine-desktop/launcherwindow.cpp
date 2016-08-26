@@ -59,8 +59,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 
     setFocus();
 
-    syncManager_.reset(new SyncManager);
-    syncManager_->login("user", "12345");
+    global::GetSyncManager().login("user", "1234");
 
     // debug
     connect(ui->pushButton, &QPushButton::clicked, [this]() {

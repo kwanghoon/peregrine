@@ -14,9 +14,18 @@ public:
     SyncManager();
 
     void login(const QString& id, const QString& password);
+    void putConfigs(const QVariantMap& configs);
+    void getConfigs();
 
 private:
-    void finished(QNetworkReply* reply);
-
     QNetworkAccessManager* networkManager_ = nullptr;
+    enum class State
+    {
+        unconnected,
+        connectionFailed,
+        loginFailed,
+        connected,
+    };
+    State state_ = State::unconnected;
+    QString id_;
 };

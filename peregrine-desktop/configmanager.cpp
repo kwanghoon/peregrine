@@ -1,4 +1,5 @@
 #include "configmanager.h"
+#include "syncmanager.h" // #HACK
 #include "global.h"
 #include <QXmlSimpleReader>
 #include <QDomDocument>
@@ -81,4 +82,7 @@ void ConfigManager::updateConfig(const QVariantMap& config)
     loadConfig();
 
     onConfigUpdated();
+
+    // #HACK:
+    global::GetSyncManager().putConfigs(config);
 }

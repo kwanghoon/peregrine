@@ -53,7 +53,6 @@ private:
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
     QSystemTrayIcon* tray_ = nullptr;
-    std::unique_ptr<SyncManager> syncManager_;
     std::list<QString> actionHistory_;
     decltype(actionHistory_)::iterator actionHistoryPointer_;
 };
