@@ -20,3 +20,6 @@
 # plugins
 /plugins/*/debug
 /plugins/*/release
+
+# cmake build files
+/thirdparty/zlib-build

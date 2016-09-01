@@ -13,6 +13,10 @@ CONFIG += c++11
 TARGET = peregrine-desktop
 TEMPLATE = app
 
+CONFIG(release, debug|release):OPTIM_MODE=release
+CONFIG(debug, debug|release):OPTIM_MODE=debug
+CONFIG(debug, debug|release):OPTIM_SUFFIX=d
+
 INCLUDEPATH += ../plugin-sdk \
     ../thirdparty \
     ..
@@ -56,7 +60,7 @@ DISTFILES += \
     ConfigurationForm.ui.qml
 
 # boost
-INCLUDEPATH	+= $$(BOOST_ROOT)
+INCLUDEPATH += $$(BOOST_ROOT)
 
 # Jinja2CppLight
 INCLUDEPATH += ../thirdparty/Jinja2CppLight/src
@@ -68,9 +72,18 @@ win32-msvc* {
 }
 
 equals(TEMPLATE, "vcapp") {
-    CONFIG(release, debug|release):OPTIM_MODE=release
-    CONFIG(debug, debug|release):OPTIM_MODE=debug
-
     QMAKE_POST_LINK += \
         call $$quote($$shell_path($$_PRO_FILE_PWD_/../scripts/copy-outputs.bat)) $$OPTIM_MODE $$quote($$shell_path($$_PRO_FILE_PWD_/..)) $$escape_expand(\\n)
+}
+
+# quazip
+DEFINES +=  QUAZIP_STATIC
+QUAZIP_DIR = ../thirdparty/quazip/quazip
+include($$QUAZIP_DIR/quazip.pri)
+
+# zlib for quazip
+INCLUDEPATH += ../thirdparty/zlib \
+    ../thirdparty/zlib-build
+win32-msvc* {
+    LIBS += -l$$absolute_path(../thirdparty/zlib-build/$$OPTIM_MODE/zlibstatic$$OPTIM_SUFFIX)
 }
