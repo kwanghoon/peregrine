@@ -4,3 +4,9 @@
 [submodule "thirdparty/exprtk"]
 	path = thirdparty/exprtk
 	url = https://github.com/ArashPartow/exprtk.git
+[submodule "thirdparty/zlib"]
+	path = thirdparty/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "thirdparty/quazip"]
+	path = thirdparty/quazip
+	url = https://github.com/binaryking/quazip.git
