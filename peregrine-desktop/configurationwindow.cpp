@@ -4,6 +4,7 @@
 #include "action.h"
 #include "global.h"
 #include <utils/StartupRegister.h>
+#include <quazip.h>
 #include <QQuickItem>
 #include <QQmlContext>
 
@@ -92,4 +93,37 @@ void ConfigurationController::setFieldByLocalPath(QObject* target, QString field
 void ConfigurationController::saveActionSlotSettings(const QVariantMap& slotSettings)
 {
     global::GetConfigManager().updateConfig(slotSettings);
+}
+
+bool ConfigurationController::installPlugin(QUrl fileUrl)
+{
+    // checks if file extension matches *.wing
+    QFileInfo fileInfo = fileUrl.toLocalFile();
+    if (fileInfo.suffix() != "wing")
+    {
+        return false;
+    }
+
+    if (!fileInfo.exists())
+    {
+        return false;
+    }
+
+    QuaZip pluginZip(fileInfo.absoluteFilePath());
+    if (!pluginZip.open(QuaZip::mdUnzip))
+    {
+        return false;
+    }
+
+    QStringList fileList = pluginZip.getFileNameList();
+
+    if (fileList.filter("plugin.xml").isEmpty())
+    {
+        return false;
+    }
+
+    // #TODO: unzip the file under the 'plugins' directory. 
+    //        and then load the plugin module.
+
+    return true;
 }

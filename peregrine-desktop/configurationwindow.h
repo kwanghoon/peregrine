@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QVariantMap>
+#include <QUrl>
 
 namespace Ui {
 class ConfigurationWindow;
@@ -18,6 +19,7 @@ public:
     Q_INVOKABLE QVariantMap getConfigs();
     Q_INVOKABLE void setFieldByLocalPath(QObject* target, QString field, QString localPath);
     Q_INVOKABLE void saveActionSlotSettings(const QVariantMap& slotSettings);
+    Q_INVOKABLE bool installPlugin(QUrl fileUrl);
 };
 
 class ConfigurationWindow : public QDialog

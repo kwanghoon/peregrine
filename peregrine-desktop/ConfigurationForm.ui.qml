@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.4
+import QtQuick.Dialogs 1.2
 
 TabView {
     width: 400
@@ -234,6 +235,33 @@ TabView {
                     {x: configs.slots[i].x, y: configs.slots[i].y},
                     configs.slots[i].actionid,
                     findAction(configs.slots[i].actionid).imagePath);
+            }
+        }
+    }
+    Tab {
+        title: "Plugins"
+        Item {
+            Button {
+                text: "Install Plugin"
+                onClicked: {
+                    fileDialog.visible = true
+                }
+            }
+
+            FileDialog {
+                id: fileDialog
+                title: "Please choose a file"
+                folder: shortcuts.home
+                onAccepted: {
+                    if (false == controller.installPlugin(fileDialog.fileUrls[0])) {
+                        console.log("Invalid Plugin File!");
+                    } else {
+                        console.log("Plugin Installation Succeeded!");
+                    }
+                }
+                onRejected: {
+                    console.log("Canceled")
+                }
             }
         }
     }
