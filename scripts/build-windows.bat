@@ -10,10 +10,13 @@ if "%vs140comntools%" neq "" (
 	goto EXIT_FAILED
 )
 
-where qmake
-if %errorlevel% neq 0 (
-	echo couldn't run 'qmake'
-	goto EXIT_FAILED
+set commands_required=(qmake cmake)
+for %%c in %commands_required% do (
+	where %%c
+	if "%errorlevel%" neq "0" (
+		echo couldn't find '%%c'
+		goto EXIT_FAILED
+	)
 )
 
 set config=%1
@@ -27,6 +30,23 @@ if "%config%" neq "release" if "%config%" neq "debug" (
 
 pushd ..
 	set project_root=%cd%
+	
+	::
+	echo build non-qt libraries
+	cd thirdparty
+	
+	:: zlib
+	if exist zlib-build (
+		rmdir /s/q zlib-build
+		timeout 3
+	)
+	mkdir zlib-build
+	cd zlib-build
+	cmake ..\zlib
+	cmake --build . --config %config% --target zlibstatic
+	cd ..
+	
+	cd ..
 	
 	::
 	echo build peregrine
