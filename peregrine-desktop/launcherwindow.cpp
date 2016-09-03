@@ -250,7 +250,10 @@ void LauncherWindow::setupTrayIcon()
         menu->addSeparator();
         QAction* menuAction = menu->addAction("Configuration", configAction);
         menu->addSeparator();
-        menu->addAction("Exit", [this] { this->close(); });
+        menu->addAction("Exit", [this] {
+            appExit_ = true;
+            close(); 
+        });
     }
     tray_->setContextMenu(menu);
 }
@@ -405,5 +408,18 @@ void LauncherWindow::switchToNextAction()
     {
         actionHistoryPointer_++;
         changeAction(*actionHistoryPointer_);
+    }
+}
+
+void LauncherWindow::closeEvent(QCloseEvent *event)
+{
+    if (appExit_)
+    {
+        event->accept();
+    }
+    else
+    {
+        pushDown();
+        event->ignore();
     }
 }

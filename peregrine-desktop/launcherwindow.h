@@ -38,6 +38,9 @@ private:
 
     void setHeaderText(const QString& text);
 
+    // QWidget 
+    virtual void closeEvent(QCloseEvent *event) override;
+
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
     void onKeyPressed(int key, int modifiers, QString inputText);
@@ -55,6 +58,7 @@ private:
     QSystemTrayIcon* tray_ = nullptr;
     std::list<QString> actionHistory_;
     decltype(actionHistory_)::iterator actionHistoryPointer_;
+    bool appExit_ = false;
 };
 
 #endif // LAUNCHERWINDOW_H
