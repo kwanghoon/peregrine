@@ -153,11 +153,15 @@ bool ConfigurationController::installPlugin(QUrl fileUrl)
 
     // rename temporary dir
     QString name = PluginManager::getPluginNameFromDir(tempDir);
-    if (QDir().rename(tempDir.path(), "plugins/" + name))
+    QString newPluginDir("plugins/" + name);
+    if (!QDir().rename(tempDir.path(), newPluginDir))
     {
         tempDir.removeRecursively();
         return false;
     }
+
+    // load
+    PluginManager::getInstance().loadPlugin(newPluginDir);
 
     return true;
 }
