@@ -40,6 +40,7 @@ private:
 
     // QWidget 
     virtual void closeEvent(QCloseEvent *event) override;
+    virtual bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
@@ -59,6 +60,11 @@ private:
     std::list<QString> actionHistory_;
     decltype(actionHistory_)::iterator actionHistoryPointer_;
     bool appExit_ = false;
+
+#   ifdef Q_OS_WIN
+    const int kHotKeyId_ = 123;
+#   endif // Q_OS_WIN
+
 };
 
 #endif // LAUNCHERWINDOW_H

@@ -22,8 +22,13 @@
 #include <QSystemTrayIcon>
 #include <QJsonDocument>
 #include <QMenu>
+#include <QTimer>
 #include <memory>
 #include <cassert>
+
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#endif // Q_OS_WIN
 
 using namespace std;
 
@@ -80,6 +85,12 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     });
 
     initHistory();
+
+#   ifdef Q_OS_WIN
+    if (::RegisterHotKey((HWND)winId(), kHotKeyId_, MOD_ALT | MOD_CONTROL | MOD_NOREPEAT,
+        VK_OEM_2)) // VK_OEM_2 is '/'
+    {}
+#   endif
 }
 
 void LauncherWindow::onConfigUpdated()
@@ -100,6 +111,8 @@ void LauncherWindow::onConfigUpdated()
 LauncherWindow::~LauncherWindow()
 {
     delete ui;
+
+    ::UnregisterHotKey((HWND)winId(), kHotKeyId_);
 }
 
 void LauncherWindow::initSuggestionListController()
@@ -261,6 +274,23 @@ void LauncherWindow::setupTrayIcon()
 void LauncherWindow::popUp()
 {
     this->setHidden(false);
+
+    // popup the window in front of the other windows.
+#   ifdef Q_OS_WIN
+    showMinimized();
+    showNormal();
+#   endif
+
+    // On windows, some delays are required to have keyboard focus after 'popup'
+    QTimer::singleShot(100, [this]() {
+        // #DUPLICATE
+        // focus on 'inputText' element.
+        ui->inputContainer->setFocus();
+
+        auto* item = ui->inputContainer->rootObject();
+        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+        textInput->forceActiveFocus();
+    });
 }
 
 void LauncherWindow::pushDown()
@@ -422,4 +452,14 @@ void LauncherWindow::closeEvent(QCloseEvent *event)
         pushDown();
         event->ignore();
     }
+}
+
+bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+    MSG* pMsg = reinterpret_cast<MSG*>(message);
+    if (pMsg->message == WM_HOTKEY)
+    {
+        popUp();
+    }
+    return QMainWindow::nativeEvent(eventType, message, result);
 }
