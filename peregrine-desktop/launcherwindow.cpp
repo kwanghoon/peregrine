@@ -367,6 +367,8 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
             }
             auto action = ActionManager::getInstance().getActionById(currentAction_);
             action->run(inputText);
+
+            pushDown();
         }
         else
         {
