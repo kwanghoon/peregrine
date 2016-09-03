@@ -168,6 +168,17 @@ void PluginManager::setCallbacks(std::function<int(const QString&)> setHeaderTex
     };
 }
 
+QString PluginManager::getPluginNameFromDir(const QDir& dir)
+{
+    QFile pluginSettingFile(dir.absoluteFilePath("plugin.xml"));
+
+    QDomDocument doc;
+    doc.setContent(&pluginSettingFile);
+
+    auto docElem = doc.documentElement();
+    return docElem.attribute("name");    
+}
+
 PluginModule* PluginManager::tryGetModule(const QString& actionId)
 {
     for (auto& p : moduleList_)

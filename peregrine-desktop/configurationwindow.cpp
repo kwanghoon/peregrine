@@ -3,8 +3,10 @@
 #include "configmanager.h"
 #include "action.h"
 #include "global.h"
+#include "plugin.h"
 #include <utils/StartupRegister.h>
 #include <quazip.h>
+#include <quazipfile.h>
 #include <QQuickItem>
 #include <QQmlContext>
 
@@ -122,8 +124,40 @@ bool ConfigurationController::installPlugin(QUrl fileUrl)
         return false;
     }
 
-    // #TODO: unzip the file under the 'plugins' directory. 
-    //        and then load the plugin module.
+    // clean up temp dir
+    QDir tempDir;
+    if (tempDir.cd("temp-plugin"))
+    {
+        tempDir.removeRecursively();
+        tempDir.cdUp();
+    }
+    tempDir.mkdir("temp-plugin");
+    tempDir.cd("temp-plugin");
+
+    // unzip
+    pluginZip.goToFirstFile();
+    for (QString f : fileList)
+    {
+        QuaZipFile archived(&pluginZip);
+        archived.open(QIODevice::ReadOnly);
+
+        auto uncompressed = archived.readAll();
+        QFile created(tempDir.absoluteFilePath(f));
+        created.open(QFile::WriteOnly);
+        created.write(uncompressed);
+        created.close();
+
+        pluginZip.goToNextFile();
+    }
+    pluginZip.close();
+
+    // rename temporary dir
+    QString name = PluginManager::getPluginNameFromDir(tempDir);
+    if (QDir().rename(tempDir.path(), "plugins/" + name))
+    {
+        tempDir.removeRecursively();
+        return false;
+    }
 
     return true;
 }

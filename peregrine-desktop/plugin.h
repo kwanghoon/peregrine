@@ -36,6 +36,7 @@ public:
     PluginModule* loadPluginModule(const QDir& dir, const QString& name);
     void setCallbacks(std::function<int(const QString&)> setHeaderTextFunc);
     static PluginManager& getInstance() { return instance_; }
+    static QString getPluginNameFromDir(const QDir& dir);
 
 private:
     PluginModule* tryGetModule(const QString& actionId);
