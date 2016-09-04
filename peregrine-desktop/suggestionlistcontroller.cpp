@@ -73,6 +73,11 @@ void SuggestionListController::runSelected()
     QMetaObject::invokeMethod(suggestionListView_, "runSelected");
 }
 
+void SuggestionListController::setVisible(bool visible)
+{
+    QQmlProperty::write(suggestionListView_, "visible", visible);
+}
+
 void SuggestionListController::onSuggestionItemClicked(int index)
 {
     suggestingItems_[index].handler(suggestingItems_[index].data);

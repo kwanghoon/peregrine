@@ -19,6 +19,7 @@ public:
     void selectDown();
     int getCurrentIndex() const;
     void runSelected();
+    void setVisible(bool visible);
     
 private:
     struct SuggestingItem

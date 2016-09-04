@@ -314,6 +314,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
     global::suggestionListController->clearList();
+    global::suggestionListController->setVisible(true);
     if (inputText.isEmpty())
     {
         return;
@@ -375,6 +376,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
         else
         {
             global::suggestionListController->runSelected();
+            global::suggestionListController->setVisible(false);
         }
     }
     else if (key == Qt::Key::Key_Up)
