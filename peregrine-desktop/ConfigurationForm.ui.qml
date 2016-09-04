@@ -117,6 +117,17 @@ TabView {
                 property int horiGap: 6
                 property int vertiGap: 6
 
+                Button {
+                    id: emptySlotButton
+                    z: 2
+                    visible: false
+                    iconSource: "close-button.png"
+                    property int index: -1
+                    onClicked: {
+                        slotPanel.removeActionOnSlot(index);
+                    }
+                }
+
                 Repeater {
                     id: slots
                     model: [
@@ -132,6 +143,7 @@ TabView {
                     ]
 
                     DropArea {
+                        id: slot
                         property string actionId
                         x: parent.originX + modelData.x * (parent.actionWidth + parent.horiGap) - parent.actionWidth / 2
                         y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
@@ -139,6 +151,20 @@ TabView {
                         Rectangle {
                             color: !parent.containsDrag ? "	darkgray" : "cornflowerblue"
                             anchors.fill: parent
+
+                            MouseArea {
+                                hoverEnabled: true
+                                anchors.fill: parent
+                                onEntered: {
+                                    emptySlotButton.visible = true;
+                                    emptySlotButton.x = slot.x + slot.width - emptySlotButton.width / 2;
+                                    emptySlotButton.y = slot.y - emptySlotButton.height / 2;
+                                    emptySlotButton.index = index;
+                                }
+                                onExited: {
+                                    emptySlotButton.visible = false;
+                                }
+                            }
                         }
                         Text {
                             anchors.fill: parent
@@ -189,6 +215,21 @@ TabView {
                         img.visible = false;
                     }
                 }
+
+                function removeActionOnSlot(index) {
+                    var item = slots.itemAt(index);
+                    item.actionId = '';
+                    item.children[0].color = Qt.binding(function() {
+                        return !this.parent.containsDrag ? "darkgray" : "cornflowerblue"; });
+
+                    var textLabel = item.children[1];
+                    var img = item.children[2];
+                    img.source = '';
+                    img.visible = false;
+                    textLabel.visible = false;
+                    textLabel.text = '';
+                }
+
                 Component.onDestruction: {
                     var settings = {
                         slots: []

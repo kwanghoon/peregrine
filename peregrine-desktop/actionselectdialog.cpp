@@ -37,6 +37,14 @@ void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
 
 void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo)
 {
+    // clear
+    slotMap_ = {};
+    for (auto p : data_)
+    {
+        delete p.second.imageLabel;
+    }
+    data_.clear();
+
     for (auto& e : assignInfo)
     {
         getActionIdByPos(e.pos) = e.id;
