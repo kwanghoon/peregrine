@@ -138,8 +138,10 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
     {
         pushDown();
     }
-    else if (event->key() == Qt::Key::Key_F11)
+    else if (event->key() == Qt::Key::Key_F12 && (event->modifiers() & Qt::Modifier::ALT) != 0)
     {
+        appExit_ = true;
+        close();
     }
 }
 
