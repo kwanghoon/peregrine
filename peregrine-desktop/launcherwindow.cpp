@@ -257,8 +257,8 @@ void LauncherWindow::setupTrayIcon()
             config.exec();
         };
 
-        menu->addAction("Show", [this] { popUp(); });
-        menu->addAction("Hide", [this] { pushDown(); });
+        showAction_ = menu->addAction("Show", [this] { popUp(); });
+        hideAction_ = menu->addAction("Hide", [this] { pushDown(); });
         menu->addMenu("Run Action..");
 
         // shortcut toggle
@@ -283,6 +283,8 @@ void LauncherWindow::setupTrayIcon()
 void LauncherWindow::popUp()
 {
     this->setHidden(false);
+    hideAction_->setEnabled(true);
+    showAction_->setEnabled(false);
 
     // popup the window in front of the other windows.
 #   ifdef Q_OS_WIN
@@ -305,6 +307,8 @@ void LauncherWindow::popUp()
 void LauncherWindow::pushDown()
 {
     this->setHidden(true);
+    hideAction_->setEnabled(false);
+    showAction_->setEnabled(true);
 }
 
 void LauncherWindow::setHeaderText(const QString& text)

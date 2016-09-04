@@ -62,6 +62,8 @@ private:
 
     QSystemTrayIcon* tray_ = nullptr;
     QAction* toggleShortcutAction_ = nullptr;
+    QAction* showAction_ = nullptr;
+    QAction* hideAction_ = nullptr;
 
 #   ifdef Q_OS_WIN
     const int kHotKeyId_ = 123;
