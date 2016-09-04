@@ -21,3 +21,7 @@ namespace global
         return *syncManagerInstance;
     }
 }
+
+#ifdef Q_OS_WIN
+#   pragma comment(lib, "user32.lib")
+#endif // Q_OS_WIN
