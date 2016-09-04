@@ -56,10 +56,12 @@ private:
     ActionSelectDialog actionSelectDlg_;
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
-    QSystemTrayIcon* tray_ = nullptr;
     std::list<QString> actionHistory_;
     decltype(actionHistory_)::iterator actionHistoryPointer_;
     bool appExit_ = false;
+
+    QSystemTrayIcon* tray_ = nullptr;
+    QAction* toggleShortcutAction_ = nullptr;
 
 #   ifdef Q_OS_WIN
     const int kHotKeyId_ = 123;

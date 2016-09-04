@@ -260,8 +260,15 @@ void LauncherWindow::setupTrayIcon()
         menu->addAction("Show", [this] { popUp(); });
         menu->addAction("Hide", [this] { pushDown(); });
         menu->addMenu("Run Action..");
-        menu->addAction("Enable");
-        menu->addAction("Disable");
+
+        // shortcut toggle
+        toggleShortcutAction_ = menu->addAction("Shortcut Enabled");
+        toggleShortcutAction_->setCheckable(true);
+        toggleShortcutAction_->setChecked(true);
+        connect(toggleShortcutAction_, &QAction::triggered, [this]() {
+            toggleShortcutAction_->setChecked(toggleShortcutAction_->isChecked());
+        });
+
         menu->addSeparator();
         QAction* menuAction = menu->addAction("Configuration", configAction);
         menu->addSeparator();
@@ -465,7 +472,10 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
     MSG* pMsg = reinterpret_cast<MSG*>(message);
     if (pMsg->message == WM_HOTKEY)
     {
-        popUp();
+        if (toggleShortcutAction_->isChecked())
+        {
+            popUp();
+        }
     }
     return QMainWindow::nativeEvent(eventType, message, result);
 }
