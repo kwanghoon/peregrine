@@ -38,13 +38,9 @@
     <Content Include="tsconfig.json" />
     <Content Include="README.md" />
     <Content Include="typings.json" />
-    <Content Include="views\about.jade" />
-    <Content Include="views\download.jade" />
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
     <Content Include="views\error.jade" />
-    <Content Include="views\plugins.jade" />
-    <Content Include="views\register.jade" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\dataAccess\" />
