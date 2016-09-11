@@ -9,6 +9,7 @@
 #include <quazipfile.h>
 #include <QQuickItem>
 #include <QQmlContext>
+#include <QCryptographicHash>
 
 using namespace std;
 
@@ -82,6 +83,16 @@ QVariantMap ConfigurationController::getConfigs()
                 slotList.push_back(move(slotInfo));
             }
             configs.insert("slots", slotList);
+        }
+
+        //
+        auto& accountInfo = global::GetConfigManager().getAccountInfo();
+        if (accountInfo.filled)
+        {
+            QVariantMap v;
+            v.insert("email", accountInfo.email);
+            v.insert("passwordLength", accountInfo.passwordLength);
+            configs.insert("account", v);
         }
     }
     return configs;
@@ -163,5 +174,21 @@ bool ConfigurationController::installPlugin(QUrl fileUrl)
     // load
     PluginManager::getInstance().loadPlugin(newPluginDir);
 
+    return true;
+}
+
+bool ConfigurationController::login(const QString& email, const QString& password)
+{
+    // #TODO: check account validity through communication with the sync server.
+    QVariantMap accountInfo;
+    {
+        accountInfo["email"] = email;
+        QString salted = "zelkova-" + password + 'x' + email + "-peregrine";
+        accountInfo["password"] = QCryptographicHash::hash(salted.toUtf8(),
+            QCryptographicHash::Sha256).toBase64();
+        accountInfo["salt"] = "peregrine-the-crossplatform-launcher";
+        accountInfo["passwordLength"] = password.length();
+    }
+    global::GetConfigManager().updateAccountConfig(accountInfo);
     return true;
 }

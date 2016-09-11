@@ -1,12 +1,17 @@
 #include "configmanager.h"
 #include "syncmanager.h" // #HACK
 #include "global.h"
+#include <SimpleCrypt/simplecrypt.h>
 #include <QXmlSimpleReader>
 #include <QDomDocument>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QDebug>
 #include <memory>
 
 using namespace std;
+
+const uint64_t kAccountCryptKey = (0x20de01f4ec48a1b8 ^ 0x9a70877ba78acb38 + 0x40edfedc7e70bb1a ^ 0x54c13e537e530ce4);
 
 ConfigManager::ConfigManager()
 {
@@ -39,6 +44,21 @@ void ConfigManager::loadConfig()
         global::userConfig.actionSlotAssignData.push_back(slot);
         child = child.nextSiblingElement();
     }
+
+    // read account
+    auto accountElem = root.firstChildElement("account");
+    if (!accountElem.isNull())
+    {
+        SimpleCrypt crypter;
+        crypter.setKey(kAccountCryptKey);
+        QString jsonStr = crypter.decryptToString(accountElem.text());
+        auto json = QJsonDocument::fromJson(jsonStr.toLocal8Bit());
+        account_.filled = true;
+        account_.email = json.object()["email"].toString();
+        account_.passwordHash = json.object()["password"].toString();
+        account_.passwordLength = json.object()["passwordLength"].toInt();
+    }
+
     onConfigUpdated();
 }
 
@@ -72,7 +92,7 @@ void ConfigManager::updateConfig(const QVariantMap& config)
     }
     root.replaceChild(actionSlotsElem, root.firstChildElement("actionslots"));
 
-    //
+    // save
     settingFile.seek(0);
     QTextStream ts(&settingFile);
     doc.save(ts, 2);
@@ -85,4 +105,44 @@ void ConfigManager::updateConfig(const QVariantMap& config)
 
     // #HACK:
     global::GetSyncManager().putConfigs(config);
+}
+
+void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)
+{
+    QFile settingFile("settings.xml");
+    settingFile.open(QIODevice::ReadWrite);
+    QDomDocument doc;
+    if (!doc.setContent(&settingFile))
+    {
+        throw std::runtime_error("Parsing failed. (settings.xml)");
+    }
+    auto root = doc.documentElement();
+
+    // update
+    // account information is stored with encryption for security.
+    auto accountElem = doc.createElement("account");
+    QString json = QJsonDocument::fromVariant(accountConfig).toJson();
+    SimpleCrypt crypter;
+    crypter.setKey(kAccountCryptKey);
+    auto textNode = doc.createTextNode(crypter.encryptToString(json));
+    accountElem.appendChild(textNode);
+
+    auto old = root.firstChildElement("account");
+    if (!old.isNull())
+    {
+        root.removeChild(old);
+    }
+    root.appendChild(accountElem);
+
+    // save
+    settingFile.seek(0);
+    QTextStream ts(&settingFile);
+    doc.save(ts, 2);
+    settingFile.resize(settingFile.pos());
+    settingFile.close();
+}
+
+const ConfigManager::AccountInfo& ConfigManager::getAccountInfo() const
+{
+    return account_;
 }
