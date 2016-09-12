@@ -1,8 +1,17 @@
 ﻿extends layout
 
+block head
+	script(src='registerlib.js')
+
 block content
 	h1 Create an account
 	| E-mail:
-	input(type='text')
+	br
+	input#idField(type='text')
+	br
 	| Password:
-	input(type='text')
+	br
+	input#passwordField(type='text')
+	br
+	br
+	input(type='button' value='Create a new account' onclick='sendRegisterRequest()')

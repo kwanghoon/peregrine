@@ -7,6 +7,6 @@ obj
 typings
 /*.js
 /routes/*.js
+/public/*.js
 /app/**/*.js
 *.map
-

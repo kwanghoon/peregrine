@@ -7,6 +7,7 @@ import bodyParser = require('body-parser');
 import multer = require('multer');
 
 import routes = require('./routes/index');
+import register = require('./routes/registerlib');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.all('/*', function (req, res, next) {
 });
 
 app.use('/', routes);
+app.use('/register', register);
 
 // about
 var aboutRouter = express.Router();
@@ -45,11 +47,6 @@ app.use('/', downloadRouter);
 var pluginsRouter = express.Router();
 pluginsRouter.get('/plugins', function (req, res) { res.render('plugins', { location: 'plugins' }); });
 app.use('/', pluginsRouter);
-
-// register
-var registerRouter = express.Router();
-registerRouter.get('/register', function (req, res) { res.render('register', { location: 'register' }); });
-app.use('/', registerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -47,6 +47,7 @@
     <Content Include="views\register.jade" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\" />
     <Folder Include="app\dataAccess\" />
     <Folder Include="app\dataAccess\schemas\" />
     <Folder Include="app\repository\" />
@@ -86,7 +87,9 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="app\**\*.ts" />
+    <TypeScriptCompile Include="public\registerlib.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
+    <TypeScriptCompile Include="routes\register.ts" />
     <TypeScriptCompile Include="typings\globals\body-parser\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\cookie-parser\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\debug\index.d.ts" />
