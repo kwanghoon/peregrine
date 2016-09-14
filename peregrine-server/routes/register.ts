@@ -7,18 +7,13 @@ let router = express.Router();
 import mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/account');
 
-
-const UserSchema = new mongoose.Schema({
-    email: { type: String, required: true },
-    pwHash: { type: String, required: true }
-});
-let User = mongoose.model('User', UserSchema);
+import UserModel = require('../app/db/UserModel');
 
 router.get('/', function (req, res) {
     res.render('register');
 });
 router.put('/', function (req, res) {
-    User.find({ email: req.query.email }, function (err, docs) {
+    UserModel.find({ email: req.query.email }, function (err, docs) {
         if (docs.length != 0) {
             res.send({
                 success: false,
@@ -29,9 +24,10 @@ router.put('/', function (req, res) {
         }
     });
     function addUser() {
-        let user = new User({
+        let user = new UserModel({
             email: req.query.email,
-            pwHash: req.query.pwHash
+            pwHash: req.query.pwHash,
+            config: {}
         });
         user.save().then(function () {
             res.send({ success: true });

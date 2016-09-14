@@ -6,9 +6,6 @@ import cookieParser = require('cookie-parser');
 import bodyParser = require('body-parser');
 import multer = require('multer');
 
-import routes = require('./routes/index');
-import register = require('./routes/register');
-
 var app = express();
 
 // view engine setup
@@ -30,21 +27,25 @@ app.all('/*', function (req, res, next) {
     next();
 });
 
+import routes = require('./routes/index');
 app.use('/', routes);
+import register = require('./routes/register');
 app.use('/register', register);
+import config = require('./routes/config');
+app.use('/config', config);
 
 // about
-var aboutRouter = express.Router();
+let aboutRouter = express.Router();
 aboutRouter.get('/about', function (req, res) { res.render('about', { location: 'about' }); });
 app.use('/', aboutRouter);
 
 // download
-var downloadRouter = express.Router();
+let downloadRouter = express.Router();
 downloadRouter.get('/download', function (req, res) { res.render('download', { location: 'download' }); });
 app.use('/', downloadRouter);
 
 // plugins
-var pluginsRouter = express.Router();
+let pluginsRouter = express.Router();
 pluginsRouter.get('/plugins', function (req, res) { res.render('plugins', { location: 'plugins' }); });
 app.use('/', pluginsRouter);
 
