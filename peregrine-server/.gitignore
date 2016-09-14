@@ -8,6 +8,6 @@ db
 typings
 /*.js
 /routes/*.js
-/public/*.js
+/public/**/*.js
 /app/**/*.js
 *.map
