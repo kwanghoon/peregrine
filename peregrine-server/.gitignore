@@ -2,6 +2,7 @@ public/stylesheets/*.css
 
 node_modules
 obj
+db
 
 # typescript 
 typings
