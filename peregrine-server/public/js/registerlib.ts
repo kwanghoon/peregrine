@@ -36,9 +36,20 @@ function sendRegisterRequest() {
     console.log('password: ', passwordField.value);
     twistPassword(emailField.value, passwordField.value)
         .then(function (twistedPassword: string) {
-            // #TODO: aJax 리퀘스트 보내기
             console.log('email: ', emailField.value);
             console.log('pw: ', twistedPassword);
+            $.ajax({
+                url: 'register?email=' + emailField.value + '&pwHash=' + twistedPassword,
+                type: 'PUT',
+                success: (ret) => {
+                    if (ret.success == true) {
+                        $('#messagePanel').text('registration success!');
+                        window.location.assign('/about');
+                    } else {
+                        $('#messagePanel').text(ret.message);
+                    }
+                }
+            });
             return null;
         });
 }

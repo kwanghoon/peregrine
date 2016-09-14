@@ -28,8 +28,22 @@ function sendRegisterRequest() {
     console.log('email: ', emailField.value);
     console.log('password: ', passwordField.value);
     twistPassword(emailField.value, passwordField.value)
-        .then(function (passwordHash) {
-        console.log('pw: ', passwordHash);
+        .then(function (twistedPassword) {
+        console.log('email: ', emailField.value);
+        console.log('pw: ', twistedPassword);
+        $.ajax({
+            url: 'register?email=' + emailField.value + '&pwHash=' + twistedPassword,
+            type: 'PUT',
+            success: (ret) => {
+                if (ret.success == true) {
+                    $('#messagePanel').text('registration success!');
+                    window.location.assign('/about');
+                }
+                else {
+                    $('#messagePanel').text(ret.message);
+                }
+            }
+        });
         return null;
     });
 }

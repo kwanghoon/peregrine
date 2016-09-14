@@ -11,7 +11,9 @@ block content
 	br
 	| Password:
 	br
-	input#passwordField(type='text')
+	input#passwordField(type='password')
 	br
 	br
-	input(type='button' value='Create a new account' onclick='sendRegisterRequest()')
+	button.btn(onclick='sendRegisterRequest()') Create a new account
+	br
+	p(style='font-weight: bold')#messagePanel
