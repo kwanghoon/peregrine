@@ -7,7 +7,7 @@ import bodyParser = require('body-parser');
 import multer = require('multer');
 
 import routes = require('./routes/index');
-import register = require('./routes/registerlib');
+import register = require('./routes/register');
 
 var app = express();
 

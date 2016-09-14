@@ -61,6 +61,7 @@
     <Folder Include="app\model\" />
     <Folder Include="app\model\interfaces\" />
     <Folder Include="public\" />
+    <Folder Include="public\js\" />
     <Folder Include="routes\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
@@ -87,7 +88,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="app\**\*.ts" />
-    <TypeScriptCompile Include="public\registerlib.ts" />
+    <TypeScriptCompile Include="public\js\registerlib.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\register.ts" />
     <TypeScriptCompile Include="typings\globals\body-parser\index.d.ts" />
