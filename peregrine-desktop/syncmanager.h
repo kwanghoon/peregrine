@@ -15,7 +15,7 @@ public:
     SyncManager();
 
     void login(const QString& id, const QString& passwordHash, 
-        std::function<void()> thenFunc = {}, std::function<void()> catchFunc = {});
+        std::function<void(const QJsonObject& json)> thenFunc = {}, std::function<void()> catchFunc = {});
     void putConfigs(const QVariantMap& configs);
     void getConfigs(std::function<void(const QJsonObject& configs)> thenFunc = {}, std::function<void()> catchFunc = {});
 

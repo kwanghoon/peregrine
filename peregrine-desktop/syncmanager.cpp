@@ -15,20 +15,23 @@ SyncManager::SyncManager()
 {
     networkManager_ = new QNetworkAccessManager(this);
     connect(&global::GetConfigManager(), &ConfigManager::onConfigUpdated,
-        [this](const QVariantMap& config) {
-            putConfigs(config);
+        [this](const QVariantMap& config, const QString& reason) {
+            if (reason != "sync")
+            {
+                putConfigs(config);
+            }
         });
 }
 
 void SyncManager::login(const QString& email, const QString& passwordHash,
-    function<void()> thenFunc, function<void()> catchFunc)
+    function<void(const QJsonObject& json)> thenFunc, function<void()> catchFunc)
 {
     email_ = email;
     passwordHash_ = passwordHash;
     getConfigs([thenFunc](const QJsonObject& json) {
             if (thenFunc)
             {
-                thenFunc();
+                thenFunc(json["config"].toObject());
             }
         },
         [this, &catchFunc]() {

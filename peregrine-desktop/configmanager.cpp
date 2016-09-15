@@ -59,7 +59,7 @@ void ConfigManager::loadConfig()
     }
 }
 
-void ConfigManager::updateConfig(const QVariantMap& config)
+void ConfigManager::updateConfig(const QVariantMap& config, const QString& reason)
 {
     QFile settingFile("settings.xml");
     settingFile.open(QIODevice::ReadWrite);
@@ -98,7 +98,7 @@ void ConfigManager::updateConfig(const QVariantMap& config)
 
     loadConfig();
 
-    onConfigUpdated(config);
+    onConfigUpdated(config, reason);
 }
 
 void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)

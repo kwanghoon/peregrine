@@ -12,7 +12,7 @@ public:
 
     void loadConfig();
 
-    void updateConfig(const QVariantMap& config);
+    void updateConfig(const QVariantMap& config, const QString& reason);
     void updateAccountConfig(const QVariantMap& accountConfig);
 
     struct AccountInfo
@@ -30,7 +30,7 @@ public:
     }
 
 signals:
-    void onConfigUpdated(const QVariantMap& config);
+    void onConfigUpdated(const QVariantMap& config, const QString& reason);
 
 private:
     AccountInfo account_;

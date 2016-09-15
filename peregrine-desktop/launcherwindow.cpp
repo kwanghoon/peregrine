@@ -64,18 +64,16 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         onConfigUpdated();
     });
 
-    //auto getConfigDone = [](const QJsonObject& configs) {
-    //    // #TODO: synchronization
-    //    global::GetConfigManager().updateConfig(configs.toVariantMap());
-    //};
-    //auto thenFunc = [getConfigDone]() {
-    //    global::GetSyncManager().getConfigs(getConfigDone, []() {
-    //        __nop();
-    //    });
-    //};
-    //auto catchFunc = []() {
-    //};
-    ////global::GetSyncManager().login("user", "1234", thenFunc, catchFunc);
+    auto thenFunc = [](const QJsonObject& configs) {
+        global::GetConfigManager().updateConfig(configs.toVariantMap(), "sync");
+    };
+    auto catchFunc = []() {};
+    auto& accountInfo = global::GetConfigManager().getAccountInfo();
+    if (accountInfo.filled)
+    {
+        global::GetSyncManager().login(accountInfo.email, accountInfo.passwordHash,
+            thenFunc, catchFunc);
+    }
 
     setFocus();
 
