@@ -319,6 +319,18 @@ void LauncherWindow::popUp()
         auto* item = ui->inputContainer->rootObject();
         auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
         textInput->forceActiveFocus();
+
+        bool pressing = false;
+#       ifdef Q_OS_WIN
+        if ((::GetKeyState(VK_LCONTROL) & 0x8000) != 0 && (::GetKeyState(VK_LMENU) & 0x8000) != 0)
+        {
+            pressing = true;
+        }
+#       endif
+        if (pressing)
+        {
+            showActionSelectDialog();
+        }
     });
 }
 
