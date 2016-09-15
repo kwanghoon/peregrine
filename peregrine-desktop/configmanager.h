@@ -24,8 +24,13 @@ public:
     };
     const AccountInfo& getAccountInfo() const;
 
+    int getSlots() const
+    {
+        return receivers(SIGNAL(ConfigManager::onConfigUpdated()));
+    }
+
 signals:
-    void onConfigUpdated();
+    void onConfigUpdated(const QVariantMap& config);
 
 private:
     AccountInfo account_;

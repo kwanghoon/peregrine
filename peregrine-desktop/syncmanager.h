@@ -14,20 +14,16 @@ class SyncManager : public QObject
 public:
     SyncManager();
 
-    void login(const QString& id, const QString& password, 
+    void login(const QString& id, const QString& passwordHash, 
         std::function<void()> thenFunc = {}, std::function<void()> catchFunc = {});
     void putConfigs(const QVariantMap& configs);
-    void getConfigs(std::function<void(const QVariantMap& configs)> thenFunc = {}, std::function<void()> catchFunc = {});
+    void getConfigs(std::function<void(const QJsonObject& configs)> thenFunc = {}, std::function<void()> catchFunc = {});
 
 private:
+    void sendGetRequest(const QString& path, std::function<void(const QJsonObject& json)> thenFunc, std::function<void()> catchFunc = {});
+    void sendPostRequest(const QString& path, const QVariantMap& formData, std::function<void()> thenFunc, std::function<void()> catchFunc = {});
+
     QNetworkAccessManager* networkManager_ = nullptr;
-    enum class State
-    {
-        unconnected,
-        connectionFailed,
-        loginFailed,
-        connected,
-    };
-    State state_ = State::unconnected;
-    QString id_;
+    QString email_;
+    QString passwordHash_;
 };

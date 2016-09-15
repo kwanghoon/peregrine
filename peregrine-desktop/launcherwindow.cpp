@@ -21,6 +21,7 @@
 #include <QQmlProperty>
 #include <QSystemTrayIcon>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QMenu>
 #include <QTimer>
 #include <memory>
@@ -63,18 +64,18 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         onConfigUpdated();
     });
 
-    auto getConfigDone = [](const QVariantMap& configs) {
-        // #TODO: synchronization
-        global::GetConfigManager().updateConfig(configs["configs"].toMap());
-    };
-    auto thenFunc = [getConfigDone]() {
-        global::GetSyncManager().getConfigs(getConfigDone, []() {
-            __nop();
-        });
-    };
-    auto catchFunc = []() {
-    };
-    global::GetSyncManager().login("user", "1234", thenFunc, catchFunc);
+    //auto getConfigDone = [](const QJsonObject& configs) {
+    //    // #TODO: synchronization
+    //    global::GetConfigManager().updateConfig(configs.toVariantMap());
+    //};
+    //auto thenFunc = [getConfigDone]() {
+    //    global::GetSyncManager().getConfigs(getConfigDone, []() {
+    //        __nop();
+    //    });
+    //};
+    //auto catchFunc = []() {
+    //};
+    ////global::GetSyncManager().login("user", "1234", thenFunc, catchFunc);
 
     setFocus();
 

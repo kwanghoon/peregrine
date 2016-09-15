@@ -1,5 +1,4 @@
 #include "configmanager.h"
-#include "syncmanager.h" // #HACK
 #include "global.h"
 #include <SimpleCrypt/simplecrypt.h>
 #include <QXmlSimpleReader>
@@ -58,8 +57,6 @@ void ConfigManager::loadConfig()
         account_.passwordHash = json.object()["password"].toString();
         account_.passwordLength = json.object()["passwordLength"].toInt();
     }
-
-    onConfigUpdated();
 }
 
 void ConfigManager::updateConfig(const QVariantMap& config)
@@ -101,10 +98,7 @@ void ConfigManager::updateConfig(const QVariantMap& config)
 
     loadConfig();
 
-    onConfigUpdated();
-
-    // #HACK:
-    global::GetSyncManager().putConfigs(config);
+    onConfigUpdated(config);
 }
 
 void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)

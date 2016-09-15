@@ -1,6 +1,7 @@
 #include "configurationwindow.h"
 #include "ui_configurationwindow.h"
 #include "configmanager.h"
+#include "syncmanager.h"
 #include "action.h"
 #include "global.h"
 #include "plugin.h"
@@ -179,16 +180,17 @@ bool ConfigurationController::installPlugin(QUrl fileUrl)
 
 bool ConfigurationController::login(const QString& email, const QString& password)
 {
-    // #TODO: check account validity through communication with the sync server.
+    QString salted = "zelkova-" + password + 'x' + email + "-peregrine";
+    QString passwordHash = QCryptographicHash::hash(salted.toUtf8(),
+        QCryptographicHash::Sha256).toBase64();
     QVariantMap accountInfo;
     {
         accountInfo["email"] = email;
-        QString salted = "zelkova-" + password + 'x' + email + "-peregrine";
-        accountInfo["password"] = QCryptographicHash::hash(salted.toUtf8(),
-            QCryptographicHash::Sha256).toBase64();
+        accountInfo["password"] = passwordHash;
         accountInfo["salt"] = "peregrine-the-crossplatform-launcher";
         accountInfo["passwordLength"] = password.length();
     }
+    global::GetSyncManager().login(email, passwordHash);
     global::GetConfigManager().updateAccountConfig(accountInfo);
     return true;
 }
