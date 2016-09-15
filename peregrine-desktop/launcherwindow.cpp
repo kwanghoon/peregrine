@@ -37,6 +37,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LauncherWindow)
 {
+    setWindowFlags(Qt::FramelessWindowHint);
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
@@ -152,7 +153,25 @@ void LauncherWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
-        showActionSelectDialog();
+        holdingWindow_ = true;
+        mousePressPos_.rx() = event->x();
+        mousePressPos_.ry() = event->y();
+    }
+}
+
+void LauncherWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        holdingWindow_ = false;
+    }
+}
+
+void LauncherWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (holdingWindow_)
+    {
+        move(event->globalX() - mousePressPos_.x(), event->globalY() - mousePressPos_.y());
     }
 }
 
@@ -363,7 +382,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     for (auto& l : currAction->links)
     {
         if (l.keyword.startsWith(inputText))
-        {
+        { 
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
             {

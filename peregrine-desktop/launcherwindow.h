@@ -26,6 +26,8 @@ public:
 private:
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QMouseEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
 
     void initSuggestionListController();
     void loadPlugins();
@@ -59,6 +61,8 @@ private:
     std::list<QString> actionHistory_;
     decltype(actionHistory_)::iterator actionHistoryPointer_;
     bool appExit_ = false;
+    bool holdingWindow_ = false;
+    QPoint mousePressPos_;
 
     QSystemTrayIcon* tray_ = nullptr;
     QAction* toggleShortcutAction_ = nullptr;
@@ -68,7 +72,6 @@ private:
 #   ifdef Q_OS_WIN
     const int kHotKeyId_ = 123;
 #   endif // Q_OS_WIN
-
 };
 
 #endif // LAUNCHERWINDOW_H
