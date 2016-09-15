@@ -129,9 +129,13 @@ void LauncherWindow::initSuggestionListController()
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key::Key_Shift)
+    if (event->key() == Qt::Key::Key_Control || event->key() == Qt::Key::Key_Alt)
     {
-        showActionSelectDialog();
+        int keyCombinationFlags = (Qt::Modifier::CTRL | Qt::Modifier::ALT);
+        if ((event->modifiers() & keyCombinationFlags) == keyCombinationFlags)
+        {
+            showActionSelectDialog();
+        }
     }
     else if (event->key() == Qt::Key::Key_Escape)
     {
@@ -376,12 +380,15 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
 void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
 {
-    if (key == Qt::Key::Key_Shift)
+    if (key == Qt::Key::Key_Control || key == Qt::Key::Key_Alt)
     {
         // retrieve focus from the input box
-        setFocus();
-
-        showActionSelectDialog();
+        int keyCombinationFlags = (Qt::Modifier::CTRL | Qt::Modifier::ALT);
+        if ((modifiers & keyCombinationFlags) == keyCombinationFlags)
+        {
+            setFocus();
+            showActionSelectDialog();
+        }
     }
     else if (key == Qt::Key::Key_Return)
     {
