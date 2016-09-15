@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 TabView {
     width: 400
     height: 400
+    currentIndex: controller.initialTabIndex
     Tab {
         title: "General"
 

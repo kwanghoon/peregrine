@@ -56,6 +56,7 @@ void ConfigManager::loadConfig()
         account_.email = json.object()["email"].toString();
         account_.passwordHash = json.object()["password"].toString();
         account_.passwordLength = json.object()["passwordLength"].toInt();
+        onAccountInfoUpdated();
     }
 }
 
@@ -134,6 +135,9 @@ void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)
     doc.save(ts, 2);
     settingFile.resize(settingFile.pos());
     settingFile.close();
+
+    loadConfig();
+
 }
 
 const ConfigManager::AccountInfo& ConfigManager::getAccountInfo() const

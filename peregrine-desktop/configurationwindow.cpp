@@ -19,7 +19,7 @@ namespace
     const char* kPeregrineTaskName = "PeregrineStartupTask";
 }
 
-ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
+ConfigurationWindow::ConfigurationWindow(QWidget *parent, TabKind tab) :
     QDialog(parent),
     ui(new Ui::ConfigurationWindow)
 {
@@ -29,6 +29,10 @@ ConfigurationWindow::ConfigurationWindow(QWidget *parent) :
     auto controller = new ConfigurationController();
     auto context = ui->configurationQuickWidget->rootContext();
     context->setContextProperty("controller", controller);
+    if (tab == TabKind::Account)
+    {
+        controller->initialTabIndex = 3;
+    }
 
     ui->configurationQuickWidget->setSource(QUrl::fromLocalFile("ConfigurationForm.ui.qml"));
 }

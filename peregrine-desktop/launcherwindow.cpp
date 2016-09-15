@@ -251,11 +251,6 @@ void LauncherWindow::setupTrayIcon()
 
     auto* menu = new QMenu(this);
     {
-        auto configAction = [this]() {
-            ConfigurationWindow config;
-            config.exec();
-        };
-
         showAction_ = menu->addAction("Show", [this] { popUp(); });
         hideAction_ = menu->addAction("Hide", [this] { pushDown(); });
         menu->addMenu("Run Action..");
@@ -269,7 +264,27 @@ void LauncherWindow::setupTrayIcon()
         });
 
         menu->addSeparator();
-        QAction* menuAction = menu->addAction("Configuration", configAction);
+
+        // SyncSetting Action
+        auto syncSettingAction = [this]() {
+            ConfigurationWindow config(nullptr, ConfigurationWindow::TabKind::Account);
+            config.exec();
+        };
+        QAction* syncSettingActionMenu = menu->addAction("Not Synced", syncSettingAction);
+        connect(&global::GetConfigManager(), &ConfigManager::onAccountInfoUpdated, [syncSettingActionMenu]() {
+            if (global::GetConfigManager().getAccountInfo().filled)
+            {
+                QString text = "Synced with " + global::GetConfigManager().getAccountInfo().email;
+                syncSettingActionMenu->setText(text);
+            }
+        });
+        
+        // Configuration Action
+        auto configAction = [this]() {
+            ConfigurationWindow config;
+            config.exec();
+        };
+        menu->addAction("Configuration", configAction);
         menu->addSeparator();
         menu->addAction("Exit", [this] {
             appExit_ = true;

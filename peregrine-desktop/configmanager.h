@@ -31,6 +31,7 @@ public:
 
 signals:
     void onConfigUpdated(const QVariantMap& config, const QString& reason);
+    void onAccountInfoUpdated();
 
 private:
     AccountInfo account_;
