@@ -8,6 +8,13 @@ import mongoose = require('mongoose');
 import UserModel = require('../app/db/UserModel');
 
 router.get('/', function (req, res) {
+    if (typeof req.query.email == 'undefined' ||
+        typeof req.query.pwHash == 'undefined') {
+        res.send({
+            success: false,
+            reason: 'Invalid Parameters'
+        });
+    }
     UserModel.find({ email: req.query.email }, function (err, docs) {
         if (docs.length != 0) {
             let user = docs[0];
