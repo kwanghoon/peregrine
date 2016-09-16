@@ -113,7 +113,9 @@ LauncherWindow::~LauncherWindow()
     delete ui;
 
     ::UnregisterHotKey((HWND)winId(), kHotKey_PopUpId_);
+#   ifndef NDEBUG
     ::UnregisterHotKey((HWND)winId(), kHotKey_ExitId_);
+#   endif
 }
 
 void LauncherWindow::initSuggestionListController()
@@ -558,11 +560,13 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
                 popUp();
             }
         }
+#   ifndef NDEBUG
         else if (pMsg->wParam == kHotKey_ExitId_)
         {
             appExit_ = true;
             close();
         }
+#   endif
     }
 #   endif // Q_OS_WIN
 
