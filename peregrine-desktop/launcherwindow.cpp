@@ -386,7 +386,6 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
     global::suggestionListController->clearList();
-    global::suggestionListController->setVisible(true);
     if (inputText.isEmpty())
     {
         return;
@@ -394,7 +393,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     for (auto& l : currAction->links)
     {
         if (l.keyword.startsWith(inputText))
-        { 
+        {
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
             {
@@ -417,9 +416,12 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         auto suggestions = currAction->controller->getSuggestionItems(currentAction_, inputText);
         for (auto& sugg : suggestions)
         {
-            global::suggestionListController->addItem(sugg.first, [](boost::any) {},  sugg.second);
+            global::suggestionListController->addItem(sugg.first, [](boost::any) {}, sugg.second);
         }
     }
+
+    bool visible = global::suggestionListController->getCount() != 0;
+    global::suggestionListController->setVisible(visible);
 }
 
 void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
