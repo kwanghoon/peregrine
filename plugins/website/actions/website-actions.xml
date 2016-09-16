@@ -42,12 +42,22 @@
 			<runaction id="website" input="https://www.reddit.com/"/>
 		</do>
 		<links>
+			<link actionid="website-reddit-food" keyword="food"/>
 			<link actionid="website-reddit-funny" keyword="funny"/>
 			<link actionid="website-reddit-gaming" keyword="gaming"/>
 			<link actionid="website-reddit-videos" keyword="videos"/>
 			<link actionid="website-reddit-movies" keyword="movies"/>
 			<link actionid="website-reddit-music" keyword="music"/>
+			<link actionid="website-reddit-news" keyword="news"/>
+			<link actionid="website-reddit-science" keyword="science"/>
+			<link actionid="website-reddit-space" keyword="space"/>
+			<link actionid="website-reddit-sports" keyword="sports"/>
 		</links>
+	</action>
+	<action name="reddit/food" id="website-reddit-food">
+		<do>
+			<runaction id="website" input="https://www.reddit.com/r/food"/>
+		</do>
 	</action>
 	<action name="reddit/funny" id="website-reddit-funny">
 		<do>
@@ -72,6 +82,26 @@
 	<action name="reddit/music" id="website-reddit-music">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/music"/>
+		</do>
+	</action>
+	<action name="reddit/news" id="website-reddit-news">
+		<do>
+			<runaction id="website" input="https://www.reddit.com/r/news"/>
+		</do>
+	</action>
+	<action name="reddit/science" id="website-reddit-science">
+		<do>
+			<runaction id="website" input="https://www.reddit.com/r/science"/>
+		</do>
+	</action>
+	<action name="reddit/space" id="website-reddit-space">
+		<do>
+			<runaction id="website" input="https://www.reddit.com/r/space"/>
+		</do>
+	</action>
+	<action name="reddit/sports" id="website-reddit-sports">
+		<do>
+			<runaction id="website" input="https://www.reddit.com/r/sports"/>
 		</do>
 	</action>
 	
