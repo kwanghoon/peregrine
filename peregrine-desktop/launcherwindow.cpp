@@ -401,7 +401,8 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
                 continue;
             }
 
-            QString s = "Move to '" + linkedAction->name + "' Action";
+            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
+                .arg(linkedAction->name).arg(inputText).arg(l.keyword.mid(inputText.length()));
             auto handler = [this](boost::any data) {
                 QString linkedActionId = boost::any_cast<QString>(data);
                 changeAction(linkedActionId);

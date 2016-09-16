@@ -19,7 +19,7 @@ ListView {
 
     delegate: Item {
         width: parent.width
-        height: 20
+        height: 40
         Text {
             text: value
         }
