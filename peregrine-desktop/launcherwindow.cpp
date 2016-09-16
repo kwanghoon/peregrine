@@ -81,9 +81,15 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     initHistory();
 
 #   ifdef Q_OS_WIN
-    if (::RegisterHotKey((HWND)winId(), kHotKeyId_, MOD_ALT | MOD_CONTROL | MOD_NOREPEAT,
+    if (::RegisterHotKey((HWND)winId(), kHotKey_PopUpId_, MOD_ALT | MOD_CONTROL | MOD_NOREPEAT,
         VK_OEM_2)) // VK_OEM_2 is '/'
     {}
+    // Ctrl + `: 
+#   ifndef NDEBUG
+    if (::RegisterHotKey((HWND)winId(), kHotKey_ExitId_, MOD_CONTROL | MOD_NOREPEAT,
+        VK_OEM_3)) // VK_OEM_3 is '`'
+    {}
+#   endif
 #   endif
 }
 
@@ -106,7 +112,8 @@ LauncherWindow::~LauncherWindow()
 {
     delete ui;
 
-    ::UnregisterHotKey((HWND)winId(), kHotKeyId_);
+    ::UnregisterHotKey((HWND)winId(), kHotKey_PopUpId_);
+    ::UnregisterHotKey((HWND)winId(), kHotKey_ExitId_);
 }
 
 void LauncherWindow::initSuggestionListController()
@@ -313,7 +320,7 @@ void LauncherWindow::setupTrayIcon()
                 syncSettingActionMenu->setText(text);
             }
         });
-        
+
         // Configuration Action
         auto configAction = [this]() {
             ConfigurationWindow config;
@@ -323,7 +330,7 @@ void LauncherWindow::setupTrayIcon()
         menu->addSeparator();
         menu->addAction("Exit", [this] {
             appExit_ = true;
-            close(); 
+            close();
         });
     }
     tray_->setContextMenu(menu);
@@ -540,13 +547,24 @@ void LauncherWindow::closeEvent(QCloseEvent *event)
 
 bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
+#   ifdef Q_OS_WIN
     MSG* pMsg = reinterpret_cast<MSG*>(message);
     if (pMsg->message == WM_HOTKEY)
     {
-        if (toggleShortcutAction_->isChecked())
+        if (pMsg->wParam == kHotKey_PopUpId_)
         {
-            popUp();
+            if (toggleShortcutAction_->isChecked())
+            {
+                popUp();
+            }
+        }
+        else if (pMsg->wParam == kHotKey_ExitId_)
+        {
+            appExit_ = true;
+            close();
         }
     }
+#   endif // Q_OS_WIN
+
     return QMainWindow::nativeEvent(eventType, message, result);
 }

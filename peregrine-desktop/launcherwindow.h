@@ -72,7 +72,8 @@ private:
     QAction* hideAction_ = nullptr;
 
 #   ifdef Q_OS_WIN
-    const int kHotKeyId_ = 123;
+    const int kHotKey_PopUpId_ = 123;
+    const int kHotKey_ExitId_ = 124;
 #   endif // Q_OS_WIN
 };
 
