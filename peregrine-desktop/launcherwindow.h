@@ -28,8 +28,10 @@ private:
     virtual void mousePressEvent(QMouseEvent *event) override;
     virtual void mouseReleaseEvent(QMouseEvent *event) override;
     virtual void mouseMoveEvent(QMouseEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
 
     void initSuggestionListController();
+    void updateSuggestionListPosition();
     void loadPlugins();
     void tryLoadPlugin(QString path);
     void showActionSelectDialog();

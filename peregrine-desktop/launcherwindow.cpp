@@ -37,7 +37,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LauncherWindow)
 {
-    setWindowFlags(Qt::FramelessWindowHint);
+    //setWindowFlags(Qt::FramelessWindowHint);
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
@@ -78,12 +78,6 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 
     setFocus();
 
-    // debug
-    connect(ui->pushButton, &QPushButton::clicked, [this]() {
-        QQuickItem* suggestionListView = ui->suggestionList->rootObject();
-        QMetaObject::invokeMethod(suggestionListView, "fitHeightToChildren");
-    });
-
     initHistory();
 
 #   ifdef Q_OS_WIN
@@ -117,6 +111,10 @@ LauncherWindow::~LauncherWindow()
 
 void LauncherWindow::initSuggestionListController()
 {
+    ui->suggestionList->setParent(this);
+
+    QTimer::singleShot(100, this, &LauncherWindow::updateSuggestionListPosition);
+
     QQuickItem* suggestionListView = ui->suggestionList->rootObject();
     assert(!!suggestionListView);
     assert(suggestionListView->objectName() == "suggestionListView");
@@ -126,6 +124,14 @@ void LauncherWindow::initSuggestionListController()
 
     global::suggestionListController = new SuggestionListController(
         ui->suggestionList, suggestionListView, suggestionModel, inputHandlerDelegate_);
+}
+
+void LauncherWindow::updateSuggestionListPosition()
+{
+    QPoint pos = ui->inputContainer->mapTo(this, QPoint(0, 0));
+    pos.rx() += ui->inputContainer->geometry().x();
+    pos.ry() += ui->inputContainer->geometry().bottom();
+    ui->suggestionList->move(pos);
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
@@ -173,6 +179,12 @@ void LauncherWindow::mouseMoveEvent(QMouseEvent *event)
     {
         move(event->globalX() - mousePressPos_.x(), event->globalY() - mousePressPos_.y());
     }
+}
+
+void LauncherWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    updateSuggestionListPosition();
 }
 
 void LauncherWindow::showActionSelectDialog()
