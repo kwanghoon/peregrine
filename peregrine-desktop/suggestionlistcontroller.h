@@ -20,6 +20,7 @@ public:
     int getCurrentIndex() const;
     void runSelected();
     void setVisible(bool visible);
+    int getCount() const { return suggestingItems_.size(); }
     
 private:
     struct SuggestingItem
