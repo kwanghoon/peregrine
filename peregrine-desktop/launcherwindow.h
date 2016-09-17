@@ -61,6 +61,9 @@ private:
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
     std::list<QString> actionHistory_;
+    std::list<QString> inputHistory_;
+    std::list<QString>::const_iterator inputHistoryIterator_;
+
     decltype(actionHistory_)::iterator actionHistoryPointer_;
     bool appExit_ = false;
     bool holdingWindow_ = false;

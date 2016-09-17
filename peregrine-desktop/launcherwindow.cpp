@@ -152,11 +152,33 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
         if ((event->modifiers() & keyCombinationFlags) == keyCombinationFlags)
         {
             showActionSelectDialog();
+            return;
         }
     }
-    else if (event->key() == Qt::Key::Key_Escape)
+    
+    if (event->key() == Qt::Key::Key_Escape)
     {
         pushDown();
+    }
+    else if (event->key() == Qt::Key::Key_Z && (event->modifiers() & Qt::Modifier::CTRL) != 0)
+    {
+        if ((event->modifiers() & Qt::Modifier::SHIFT) != 0)
+        {
+            qDebug() << "redo";
+        }
+        else
+        {
+            if (!actionHistory_.empty())
+            {
+                if (inputHistoryIterator_ != actionHistory_.begin())
+                {
+                    inputHistoryIterator_--;
+                }
+                auto* item = ui->inputContainer->rootObject();
+                auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+                textInput->setProperty("text", *inputHistoryIterator_);
+            }
+        }
     }
     else if (event->key() == Qt::Key::Key_F12 && (event->modifiers() & Qt::Modifier::ALT) != 0)
     {
@@ -368,6 +390,8 @@ void LauncherWindow::popUp()
             textInput->setProperty("text", s);
         }
 
+        inputHistoryIterator_ = inputHistory_.end();
+
         bool pressing = false;
 #       ifdef Q_OS_WIN
         if ((::GetKeyState(VK_LCONTROL) & 0x8000) != 0 && (::GetKeyState(VK_LMENU) & 0x8000) != 0)
@@ -443,7 +467,21 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
 void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
 {
-    if (key == Qt::Key::Key_Control || key == Qt::Key::Key_Alt)
+    // undo
+    if (key == Qt::Key::Key_Z && (modifiers & Qt::Modifier::CTRL) != 0)
+    {
+        if (!inputHistory_.empty())
+        {
+            if (inputHistoryIterator_ != inputHistory_.begin())
+            {
+                inputHistoryIterator_--;
+            }
+            auto* item = ui->inputContainer->rootObject();
+            auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+            textInput->setProperty("text", *inputHistoryIterator_);
+        }
+    }
+    else if (key == Qt::Key::Key_Control || key == Qt::Key::Key_Alt)
     {
         // retrieve focus from the input box
         int keyCombinationFlags = (Qt::Modifier::CTRL | Qt::Modifier::ALT);
@@ -465,6 +503,12 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
             }
             auto action = ActionManager::getInstance().getActionById(currentAction_);
             action->run(inputText);
+
+            inputHistory_.push_back(inputText);
+            if (inputHistory_.size() > 10)
+            {
+                inputHistory_.pop_front();
+            }
 
             pushDown();
         }
