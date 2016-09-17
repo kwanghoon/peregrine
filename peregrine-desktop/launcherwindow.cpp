@@ -24,6 +24,7 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QTimer>
+#include <QClipboard>
 #include <memory>
 #include <cassert>
 
@@ -359,6 +360,13 @@ void LauncherWindow::popUp()
         auto* item = ui->inputContainer->rootObject();
         auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
         textInput->forceActiveFocus();
+
+        // load clipboard text if available
+        QString s = QApplication::clipboard()->text();
+        if (!s.isEmpty())
+        {
+            textInput->setProperty("text", s);
+        }
 
         bool pressing = false;
 #       ifdef Q_OS_WIN
