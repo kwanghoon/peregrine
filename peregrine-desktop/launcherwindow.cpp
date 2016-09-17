@@ -466,6 +466,15 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
             global::suggestionListController->setVisible(false);
         }
     }
+    else if (key == Qt::Key::Key_Tab)
+    {
+        int currentIndex = global::suggestionListController->getCurrentIndex();
+        if (currentIndex != -1)
+        {
+            global::suggestionListController->runSelected();
+            global::suggestionListController->setVisible(false);
+        }
+    }
     else if (key == Qt::Key::Key_Up)
     {
         global::suggestionListController->selectUp();

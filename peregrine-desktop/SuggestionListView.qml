@@ -72,6 +72,7 @@ ListView {
 
     function clearItems() {
         model.clear();
+        currentIndex = -1;
     }
 
     function fitHeightToChildren() {
