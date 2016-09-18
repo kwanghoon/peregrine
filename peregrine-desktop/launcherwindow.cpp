@@ -274,7 +274,7 @@ void LauncherWindow::tryLoadPlugin(QString path)
     PluginManager::getInstance().loadPlugin(path);
 }
 
-void LauncherWindow::changeAction(QString actionId)
+void LauncherWindow::changeAction(QString actionId, QString inputText)
 {
     currentAction_ = actionId;
 
@@ -310,6 +310,13 @@ void LauncherWindow::changeAction(QString actionId)
             qmlString = QTextStream(&f).readAll();
         }
         QMetaObject::invokeMethod(customUiItem, "loadCustomUi", Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
+    }
+
+    if (!inputText.isEmpty())
+    {
+        auto* item = ui->inputContainer->rootObject();
+        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+        textInput->setProperty("text", inputText);
     }
 }
 
@@ -448,11 +455,10 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
             QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
                 .arg(linkedAction->name).arg(inputText).arg(l.keyword.mid(inputText.length()));
-            auto handler = [this](boost::any data) {
-                QString linkedActionId = boost::any_cast<QString>(data);
-                changeAction(linkedActionId);
+            auto handler = [this, l](boost::any) {
+                changeAction(l.linkedActionId, l.inputText);
             };
-            global::suggestionListController->addItem(s, handler, linkedAction->id);
+            global::suggestionListController->addItem(s, handler, nullptr);
         }
     }
 

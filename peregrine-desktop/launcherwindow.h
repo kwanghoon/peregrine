@@ -35,7 +35,7 @@ private:
     void loadPlugins();
     void tryLoadPlugin(QString path);
     void showActionSelectDialog();
-    void changeAction(QString actionId);
+    void changeAction(QString actionId, QString inputText = QString());
     void setupTrayIcon();
     void popUp();
     void pushDown();

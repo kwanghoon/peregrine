@@ -139,6 +139,7 @@ void LoadAction(QDomElement actionElem, QDir dir)
             e.linkedActionId = child.attribute("actionid");
             assert(!e.linkedActionId.isEmpty());
             e.keyword = child.attribute("keyword");
+            e.inputText = child.attribute("input_text");
         }
         currentAction->links.push_back(e);
     }
