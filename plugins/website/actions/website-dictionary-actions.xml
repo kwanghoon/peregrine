@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<!-- Dictionaries -->
+	<action name="Dictionaries" id="website-dictionaries">
+		<do>
+		</do>
+		<links>
+			<link actionid="website-naver-endic" keyword="NaverEndic"/>
+			<link actionid="website-naver-krdic" keyword="NaverKrdic"/>
+			<link actionid="website-urbandic" keyword="UrbanDic"/>
+			<link actionid="website-thesaurus" keyword="thesaurus"/>
+		</links>
+	</action>	
+
+	<!-- Naver Dictionary English to Korean -->
+	<action name="Naver English Dictionary" id="website-naver-endic">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://endic.naver.com/search.nhn?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://endic.naver.com/"/>
+		</do>
+	</action>
+
+	<!-- Naver Korean -->
+	<action name="Naver Korean Dictionary" id="website-naver-krdic">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://krdic.naver.com/search.nhn?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://krdic.naver.com/"/>
+		</do>
+	</action>
+	
+	<!-- Urban Dictionary -->
+	<action name="Urban Dictionary" id="website-urbandic">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://www.urbandictionary.com/define.php?term={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://www.urbandictionary.com/"/>
+		</do>
+	</action>
+	
+	<!-- thesaurus -->
+	<action name="Thesaurus" id="website-thesaurus">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://www.thesaurus.com/browse/{{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://www.thesaurus.com/"/>
+		</do>
+	</action>
+</actions>

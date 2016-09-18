@@ -7,5 +7,6 @@
 	<actionfiles>
 		<actionfile path="actions/website-actions.xml"/>
 		<actionfile path="actions/website-developer-actions.xml"/>		
+		<actionfile path="actions/website-dictionary-actions.xml"/>		
 	</actionfiles>
 </plugin>
