@@ -438,7 +438,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
     for (auto& l : currAction->links)
     {
-        if (l.keyword.startsWith(inputText))
+        if (l.keyword.startsWith(inputText, Qt::CaseInsensitive))
         {
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
