@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<!-- developers -->
+	<action name="Developer Websites" id="website-developers">
+		<do>
+		</do>
+		<links>
+			<link actionid="website-qt" keyword="qt"/>
+			<link actionid="website-boost" keyword="boost"/>
+			<link actionid="website-cppreference" keyword="CppReference"/>
+			<link actionid="website-mdn" keyword="mdn"/>
+			<link actionid="website-w3schools" keyword="w3schools"/>
+			<link actionid="website-jquery" keyword="jquery"/>
+			<link actionid="website-bootstrap" keyword="BootStrap"/>
+			<link actionid="website-angularjs" keyword="aNGularjs"/>
+			<link actionid="website-react" keyword="react"/>
+			<link actionid="website-msdn" keyword="msdn"/>
+			<link actionid="website-stackoverflow" keyword="StackOverflow"/>
+			<link actionid="website-github" keyword="GitHub"/>
+			<link actionid="website-bitbucket" keyword="BitBucket"/>
+			<link actionid="website-unity" keyword="unity"/>
+			<link actionid="website-unrealengine" keyword="UnrealEngine"/>
+			<link actionid="website-cocos2dx" keyword="cocos2dx"/>
+			<link actionid="website-spring" keyword="SpringFramework"/>
+		</links>
+	</action>	
+	
+	<!-- QT -->
+	<action name="QT" id="website-qt">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://doc.qt.io/qt-5/search-results.html?q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://doc.qt.io/"/>
+		</do>
+	</action>
+	
+	<!-- boost -->
+	<action name="boost" id="website-boost">
+		<do>
+			<runaction
+				id="website" 
+				input="http://www.boost.org/"/>
+		</do>
+	</action>
+
+	<!-- cppreference -->
+	<action name="cppreference" id="website-cppreference">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://en.cppreference.com/mwiki/index.php?search={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://en.cppreference.com/"/>
+		</do>
+	</action>
+
+	<!-- MDN -->
+	<action name="MDN" id="website-mdn">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://developer.mozilla.org/en-US/search?q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://developer.mozilla.org/"/>
+		</do>
+	</action>
+	
+	<!-- w3schools -->
+	<action name="w3schools" id="website-w3schools">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://www.google.co.kr/search?q={{input_text}}%20site%3Aw3schools.com"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://www.w3schools.com/"/>
+		</do>
+	</action>
+	
+	<!-- jQuery -->
+	<action name="jQuery" id="website-jquery">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://jquery.com/?s={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://jquery.com/"/>
+		</do>
+	</action>
+
+	<!-- Bootstrap -->
+	<action name="Bootstrap" id="website-bootstrap">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://www.google.co.kr/search?q={{input_text}}%20site%3Agetbootstrap.com"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://getbootstrap.com/"/>
+		</do>
+	</action>
+
+	<!-- AngularJS -->
+	<action name="AngularJS" id="website-angularjs">
+		<do>
+			<runaction 
+				id="website" 
+				input="https://angular.io/"/>
+		</do>
+	</action>
+
+	<!-- React -->
+	<action name="React" id="website-react">
+		<do>
+			<runaction 
+				id="website" 
+				input="https://facebook.github.io/react/"/>
+		</do>
+	</action>
+	
+	<!-- MSDN -->
+	<action name="MSDN" id="website-msdn">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://social.msdn.microsoft.com/Search/en-US?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://msdn.microsoft.com/"/>
+		</do>
+	</action>
+
+	<!-- StackOverflow -->
+	<action name="StackOverflow" id="website-stackoverflow">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://stackoverflow.com/search?q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://stackoverflow.com/"/>
+		</do>
+	</action>
+	
+	<!-- GitHub-->
+	<action name="GitHub" id="website-github">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://github.com/search?utf8=%E2%9C%93&amp;q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://github.com/"/>
+		</do>
+	</action>
+	
+	<!-- Bitbucket-->
+	<action name="Bitbucket" id="website-bitbucket">
+		<do>
+			<runaction 
+				id="website" 
+				input="https://bitbucket.org/"/>
+		</do>
+	</action>
+
+	<!-- Unity -->
+	<action name="unity" id="website-unity">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://unity3d.com/search?gq={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://unity3d.com/"/>
+		</do>
+	</action>
+	
+	<!-- Unreal Engine -->
+	<action name="unreal" id="website-unrealengine">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://www.unrealengine.com/search?q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://www.unrealengine.com/"/>
+		</do>
+	</action>
+	
+	<!-- Cocos2d-x -->
+	<action name="cocos2d-x" id="website-cocos2dx">
+		<do>
+			<runaction 
+				id="website" 
+				input="http://www.cocos2d-x.org/"/>
+		</do>
+	</action>
+	
+	<!-- Spring -->
+	<action name="Spring Framework" id="website-spring">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="https://spring.io/search?q={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="https://projects.spring.io/spring-framework/"/>
+		</do>
+	</action>
+
+</actions>
