@@ -12,4 +12,19 @@
 		<actionslot x='1' y='-1' actionid='webpage'/>
 		<actionslot x='-1' y='1' actionid='mozilla-colorpicker'/>
 	</actionslots>
+	
+	<customactions>
+		<action name="python" id="website-python">
+			<do>
+				<runaction 
+					condition="'input_text' != ''"
+					id="website" 
+					input="https://www.python.org/search/?q={{input_text}}"/>
+				<runaction 
+					condition="'input_text' == ''"
+					id="website" 
+					input="https://www.python.org/"/>
+			</do>
+		</action>
+	</customactions>
 </settings>

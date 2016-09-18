@@ -1,10 +1,12 @@
 #include "configmanager.h"
 #include "global.h"
+#include "action.h"
 #include <SimpleCrypt/simplecrypt.h>
 #include <QXmlSimpleReader>
 #include <QDomDocument>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDir>
 #include <QDebug>
 #include <memory>
 
@@ -42,6 +44,17 @@ void ConfigManager::loadConfig()
         }
         global::userConfig.actionSlotAssignData.push_back(slot);
         child = child.nextSiblingElement();
+    }
+
+    // read custom actions
+    auto customActionsElem = root.firstChildElement("customactions");
+    if (!customActionsElem.isNull())
+    {
+        for (auto action = customActionsElem.firstChildElement("action");
+            !action.isNull(); action = action.nextSiblingElement("action"))
+        {
+            LoadAction(action, QDir());
+        }
     }
 
     // read account
