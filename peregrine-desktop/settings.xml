@@ -26,5 +26,21 @@
 					input="https://www.python.org/"/>
 			</do>
 		</action>
+		
+		<action name="My Development Sites" id="my-development-sites">
+			<adopt id="website-developers"/>
+			<links>
+				<link actionid="website-python" keyword="python"/>
+				<link actionid="website-google" keyword="jsstandards" input_text="javascript standards progress"/>
+			</links>
+		</action>
+		
+		<action name="My Files" id="my-files">
+			<adopt id="file"/>
+			<links>
+				<link actionid="file" keyword="git" input_text="D:/git"/>
+				<link actionid="file" keyword="utils" input_text="D:/JinUtilities"/>
+			</links>
+		</action>
 	</customactions>
 </settings>

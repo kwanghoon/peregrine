@@ -25,6 +25,8 @@
 #include <QMenu>
 #include <QTimer>
 #include <QClipboard>
+#include <boost/range.hpp>
+#include <boost/range/join.hpp>
 #include <memory>
 #include <cassert>
 
@@ -296,7 +298,6 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
     {
         argsForActivatedEvent = action->args;
         action = ActionManager::getInstance().getActionById(action->adopt);
-        assert(!action->customUiPath.isEmpty());
     }
     if (!action->customUiPath.isEmpty())
     {
@@ -438,12 +439,20 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
+    Action* adoptedAction = nullptr;
+    if (!currAction->adopt.isEmpty())
+    {
+        adoptedAction = ActionManager::getInstance().getActionById(currAction->adopt);
+    }
     global::suggestionListController->clearList();
     if (inputText.isEmpty())
     {
         return;
     }
-    for (auto& l : currAction->links)
+    auto emptyRange = decltype(currAction->links){};
+    auto joinedLinks = boost::join(currAction->links, 
+        adoptedAction ? adoptedAction->links : emptyRange);
+    for (auto& l : joinedLinks)
     {
         if (l.keyword.startsWith(inputText, Qt::CaseInsensitive))
         {
@@ -463,9 +472,11 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 
     // plugin provided suggestions
-    if (currAction->controller)
+    auto* controller = adoptedAction ? adoptedAction->controller : currAction->controller;
+    if (controller)
     {
-        auto suggestions = currAction->controller->getSuggestionItems(currentAction_, inputText);
+        auto suggestions = controller->getSuggestionItems(
+            adoptedAction ? adoptedAction->id : currentAction_, inputText);
         for (auto& sugg : suggestions)
         {
             global::suggestionListController->addItem(sugg.first, [](boost::any) {}, sugg.second);
