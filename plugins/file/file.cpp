@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/format.hpp>
 #include <string>
 
 #ifdef Q_OS_WIN
@@ -83,6 +84,10 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     
     // p 아래 'filename*' 조건으로 모든 파일을 검색
     string filenameFrontPart = path.filename().string();
+    if (filenameFrontPart == "." || filenameFrontPart == "/")
+    {
+        filenameFrontPart.clear();
+    }
     const int kMaxItems = 10;
     *items = (PG_SUGGESTION_ITEM*)malloc(sizeof(PG_SUGGESTION_ITEM) * kMaxItems);
     for (auto it = filesystem::directory_iterator(parentDir); it != filesystem::directory_iterator(); it++)
@@ -90,7 +95,10 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
         string childFilename = it->path().filename().string();
         if (istarts_with(childFilename, filenameFrontPart))
         {
-            (*items)[*n].displayText = strdup(childFilename.c_str());
+            string s = str(boost::format("<b>%s</b>%s") 
+                % childFilename.substr(0, filenameFrontPart.length()) 
+                % childFilename.substr(filenameFrontPart.length()));
+            (*items)[*n].displayText = strdup(s.c_str());
             (*items)[*n].token = 0; // #TODO
             (*n)++;
             if (*n >= kMaxItems)
