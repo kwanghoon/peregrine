@@ -85,10 +85,14 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     if (::RegisterHotKey((HWND)winId(), kHotKey_PopUpId_, MOD_ALT | MOD_CONTROL | MOD_NOREPEAT,
         VK_OEM_2)) // VK_OEM_2 is '/'
     {}
-    // Ctrl + `: 
 #   ifndef NDEBUG
+    // Ctrl + `: 
     if (::RegisterHotKey((HWND)winId(), kHotKey_ExitId_, MOD_CONTROL | MOD_NOREPEAT,
         VK_OEM_3)) // VK_OEM_3 is '`'
+    {}
+    // Ctrl + 1 to open Configuration window. debug only.
+    if (::RegisterHotKey((HWND)winId(), kHotKey_ConfigId_, MOD_CONTROL | MOD_NOREPEAT,
+        '1'))
     {}
 #   endif
 #   endif
@@ -116,6 +120,7 @@ LauncherWindow::~LauncherWindow()
     ::UnregisterHotKey((HWND)winId(), kHotKey_PopUpId_);
 #   ifndef NDEBUG
     ::UnregisterHotKey((HWND)winId(), kHotKey_ExitId_);
+    ::UnregisterHotKey((HWND)winId(), kHotKey_ConfigId_);
 #   endif
 }
 
@@ -626,6 +631,11 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
         {
             appExit_ = true;
             close();
+        }
+        else if (pMsg->wParam == kHotKey_ConfigId_)
+        {
+            ConfigurationWindow config;
+            config.exec();
         }
 #   endif
     }

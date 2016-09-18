@@ -78,6 +78,7 @@ private:
     const int kHotKey_PopUpId_ = 123;
 #   ifndef NDEBUG
     const int kHotKey_ExitId_ = 124;
+    const int kHotKey_ConfigId_ = 125;
 #   endif
 #   endif // Q_OS_WIN
 };
