@@ -57,7 +57,8 @@ FORMS += launcherwindow.ui \
 DISTFILES += \
     inputcontainer.qml \
     SuggestionListView.qml \
-    ConfigurationForm.ui.qml
+    ConfigurationForm.ui.qml \
+    CustomUi.qml
 
 # boost
 INCLUDEPATH += $$(BOOST_ROOT)

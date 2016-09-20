@@ -44,6 +44,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
+    ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
 
     QIcon appIcon("heart.png");
     setWindowIcon(appIcon);
@@ -133,6 +134,7 @@ void LauncherWindow::initSuggestionListController()
     QTimer::singleShot(100, this, &LauncherWindow::updateSuggestionListPosition);
 
     QQuickItem* suggestionListView = ui->suggestionList->rootObject();
+    QString s = suggestionListView->objectName();
     assert(!!suggestionListView);
     assert(suggestionListView->objectName() == "suggestionListView");
     
@@ -280,7 +282,7 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
 {
     currentAction_ = actionId;
 
-    QQuickItem* customUiItem = ui->inputContainer->rootObject()->findChild<QQuickItem*>("customUiRoot");
+    QQuickItem* customUiItem = ui->customUi->rootObject();
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
 
     if (currentAction_.isEmpty())
