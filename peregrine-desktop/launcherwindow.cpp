@@ -148,9 +148,9 @@ void LauncherWindow::initSuggestionListController()
 void LauncherWindow::updateSuggestionListPosition()
 {
     QPoint pos = ui->inputContainer->mapTo(this, QPoint(0, 0));
-    pos.rx() += ui->inputContainer->geometry().x();
-    pos.ry() += ui->inputContainer->geometry().bottom();
+    pos.ry() += ui->inputContainer->geometry().height();
     ui->suggestionList->move(pos);
+    ui->suggestionList->setFixedWidth(ui->inputContainer->width());
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
