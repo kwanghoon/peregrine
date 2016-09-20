@@ -1,14 +1,12 @@
 import QtQuick 2.0
 
 Item {
-    width: 320
-    height: 80
     TextInput {
         id: inputText
-        x: 20
-        y: 20
-        width: 80
+        x: 10; y: 10
+        width: parent.width
         height: 20
+
         text: qsTr("Text Input")
         font.pixelSize: 12
         onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
