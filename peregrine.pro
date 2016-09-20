@@ -4,7 +4,8 @@ SUBDIRS = peregrine \
 	echo \
 	file \
 	website \
-	console-testbed
+	console-testbed \
+	peregrine-test
 
 peregrine.subdir = peregrine-desktop
 echo.subdir = plugins/echo
