@@ -183,8 +183,7 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
                 {
                     inputHistoryIterator_--;
                 }
-                auto* item = ui->inputContainer->rootObject();
-                auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+                auto* textInput = ui->inputContainer->rootObject();
                 textInput->setProperty("text", *inputHistoryIterator_);
             }
         }
@@ -245,8 +244,7 @@ void LauncherWindow::showActionSelectDialog()
     // focus on 'inputText' element.
     ui->inputContainer->setFocus();
 
-    auto* item = ui->inputContainer->rootObject();
-    auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+    auto* textInput = ui->inputContainer->rootObject();
     textInput->forceActiveFocus();
 }
 
@@ -317,8 +315,7 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
 
     if (!inputText.isEmpty())
     {
-        auto* item = ui->inputContainer->rootObject();
-        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+        auto* textInput = ui->inputContainer->rootObject();
         textInput->setProperty("text", inputText);
     }
 }
@@ -394,8 +391,7 @@ void LauncherWindow::popUp()
         // focus on 'inputText' element.
         ui->inputContainer->setFocus();
 
-        auto* item = ui->inputContainer->rootObject();
-        auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+        auto* textInput = ui->inputContainer->rootObject();
         textInput->forceActiveFocus();
 
         // load clipboard text if available
@@ -500,8 +496,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
             {
                 inputHistoryIterator_--;
             }
-            auto* item = ui->inputContainer->rootObject();
-            auto* textInput = dynamic_cast<QQuickItem*>(item->children()[0]);
+            auto* textInput = ui->inputContainer->rootObject();
             textInput->setProperty("text", *inputHistoryIterator_);
         }
     }
