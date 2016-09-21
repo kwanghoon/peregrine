@@ -10,5 +10,5 @@ int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
 int RunAction(const char* actionId, const char* data)
 {
     qDebug() << "action id: " << actionId << ", data: " << data;
-    return 0;
+    return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
 }

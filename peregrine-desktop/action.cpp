@@ -7,16 +7,16 @@
 
 using namespace std;
 
-bool Action::run(const QString& input)
+int Action::run(const QString& input)
 {
+    int actionReturnValue = 0;
     if (controller)
     {
-        int ret = controller->runAction(id, input);
-        if (ret < 0)
+        actionReturnValue = controller->runAction(id, input);
+        if (actionReturnValue < 0)
         {
-            return false;
+            return actionReturnValue;
         }
-        return true;
     }
 
     for (auto& todo : doList)
@@ -43,9 +43,13 @@ bool Action::run(const QString& input)
 
         Jinja2CppLight::Template inputTemplate(todo.inputTemplate.toStdString());
         inputTemplate.setValue("input_text", input.toStdString());
-        action->run(QString::fromStdString(inputTemplate.render()));
+        actionReturnValue = action->run(QString::fromStdString(inputTemplate.render()));
+        if (actionReturnValue < 0)
+        {
+            break;
+        }
     }
-    return true;
+    return actionReturnValue;
 }
 
 bool ActionManager::addAction(std::unique_ptr<Action> action)

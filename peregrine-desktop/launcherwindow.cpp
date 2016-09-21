@@ -521,7 +521,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
                 return;
             }
             auto action = ActionManager::getInstance().getActionById(currentAction_);
-            action->run(inputText);
+            int ret = action->run(inputText);
 
             inputHistory_.push_back(inputText);
             if (inputHistory_.size() > 10)
@@ -529,7 +529,10 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
                 inputHistory_.pop_front();
             }
 
-            pushDown();
+            if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
+            {
+                pushDown();
+            }
         }
         else
         {

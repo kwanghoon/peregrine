@@ -12,7 +12,7 @@ class PluginModule;
 class Action
 {
 public:
-    bool run(const QString& input);
+    int run(const QString& input);
 
     QString id;
     QString name;
