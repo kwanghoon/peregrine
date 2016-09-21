@@ -1,9 +1,12 @@
 #include "launcherwindow.h"
+#include "global.h"
 #include <QApplication>
-#include <QtWebView/QtWebView>
 #include <QSharedMemory>
 #include <QDebug>
 #include <QDir>
+#include <QMessageBox>
+#include <QtWebView/QtWebView>
+#include <algorithm>
 
 namespace
 {
@@ -20,6 +23,23 @@ int main(int argc, char *argv[])
     }
 
     QApplication a(argc, argv);
+
+    if (argc > 1)
+    {
+        if (std::any_of(argv + 1, argv + argc, [](const char* arg) {
+            return (strcmp(arg, "--version") == 0 || stricmp(arg, "-v") == 0);
+        }))
+        {
+            QString s = QString("Peregrine Version: %1").arg(global::getAppVersion());
+
+            QMessageBox msgBox;
+            msgBox.setText(s);
+            msgBox.exec();
+
+            qDebug() << s;
+            return 0;
+        }
+    }
 
     QDir::setCurrent(QApplication::applicationDirPath());
 
