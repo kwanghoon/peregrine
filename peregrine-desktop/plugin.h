@@ -13,7 +13,7 @@ class PluginModule
 public:
     PluginModule(QDir dir, const QString& name);
 
-    bool runAction(const QString& actionId, const QString& input);
+    int runAction(const QString& actionId, const QString& input);
     std::vector<std::pair<QString, size_t>> getSuggestionItems(const QString& actionId, const QString& input);
     const QString& name() const { return name_; };
 

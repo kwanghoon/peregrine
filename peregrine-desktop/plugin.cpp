@@ -72,10 +72,9 @@ PluginModule::PluginModule(QDir dir, const QString& name)
     lib_ = std::move(lib);
 }
 
-bool PluginModule::runAction(const QString& actionId, const QString& input)
+int PluginModule::runAction(const QString& actionId, const QString& input)
 {
-    runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
-    return true;
+    return runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
 }
 
 std::vector<std::pair<QString, size_t>> PluginModule::getSuggestionItems(const QString& actionId, const QString& input)
