@@ -586,7 +586,6 @@ void LauncherWindow::initHistory()
 
 void LauncherWindow::saveHistory()
 {
-
     if (actionHistory_.empty())
     {
         assert(actionHistoryPointer_ == actionHistory_.end());
