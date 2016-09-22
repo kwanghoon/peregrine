@@ -254,6 +254,11 @@ void LauncherWindow::loadPlugins()
     PluginManager::getInstance().setCallbacks([this](const QString& text) {
         this->setHeaderText(text);
         return 0;
+    }, [this](const char* functionName, const char* jsonArgument) {
+        auto* customUiItem = this->ui->customUi->rootObject();
+        auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
+        QMetaObject::invokeMethod(userUi, functionName, Q_ARG(QVariant, jsonArgument));
+        return 0;
     });
 
     // 

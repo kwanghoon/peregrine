@@ -1,10 +1,12 @@
 #pragma once
 
 typedef int(*SetHeaderTextFunc)(const char* text);
+typedef int(*InvokeQmlFunc)(const char* funcName, const char* jsonArg);
 
 struct PG_FUNC_TABLE
 {
     SetHeaderTextFunc fpSetHeaderText;
+    InvokeQmlFunc fpInvokeQmlFunc;
 };
 
 struct PG_SUGGESTION_ITEM

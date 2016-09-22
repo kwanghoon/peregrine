@@ -158,12 +158,19 @@ PluginModule* PluginManager::loadPluginModule(const QDir& dir, const QString& na
     return &moduleList_.back();
 }
 
-void PluginManager::setCallbacks(std::function<int(const QString&)> setHeaderTextFunc)
+void PluginManager::setCallbacks(std::function<int(const QString&)> setHeaderTextFunc, 
+    std::function<int(const char*, const char*)> invokeQmlFuncFunc)
 {
-    static std::function<int(const QString&)> s_setHeaderTextFunc;
+    static decltype(setHeaderTextFunc) s_setHeaderTextFunc;
+    static decltype(invokeQmlFuncFunc) s_invokeQmlFuncFunc;
     s_setHeaderTextFunc = setHeaderTextFunc;
+    s_invokeQmlFuncFunc = invokeQmlFuncFunc;
     funcTable.fpSetHeaderText = [](const char* text) {
         s_setHeaderTextFunc(text);
+        return 0;
+    };
+    funcTable.fpInvokeQmlFunc = [](const char* funcName, const char* jsonArg) {
+        s_invokeQmlFuncFunc(funcName, jsonArg);
         return 0;
     };
 }
