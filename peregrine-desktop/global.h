@@ -12,4 +12,6 @@ namespace global
     extern SuggestionListController* suggestionListController;
     ConfigManager& GetConfigManager();
     SyncManager& GetSyncManager();
+    const char* getAppVersion();
+
 }

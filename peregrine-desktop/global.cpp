@@ -20,6 +20,11 @@ namespace global
     {
         return *syncManagerInstance;
     }
+
+    const char* getAppVersion()
+    {
+        return "2016.09.21.01";
+    }
 }
 
 #ifdef Q_OS_WIN
