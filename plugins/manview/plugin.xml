@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="manview">
+	<actions>
+		<action name="manview" id="manview" ui="manviewui.qml" controller="manview"/>		
+	</actions>
+</plugin>
