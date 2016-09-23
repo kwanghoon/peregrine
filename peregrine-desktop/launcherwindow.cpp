@@ -474,6 +474,13 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         }
     }
 
+    if (!currAction->customUiPath.isEmpty())
+    {
+        auto* customUiItem = this->ui->customUi->rootObject();
+        auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
+        QMetaObject::invokeMethod(userUi, "onInputTextChanged", Q_ARG(QVariant, inputText));
+    }
+
     // plugin provided suggestions
     auto* controller = adoptedAction ? adoptedAction->controller : currAction->controller;
     if (controller)
