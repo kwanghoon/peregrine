@@ -101,6 +101,13 @@ void LoadAction(QDomElement actionElem, QDir dir)
         currentAction->customUiPath = dir.filePath(actionElem.attribute("ui"));
     }
 
+    // ui size
+    bool ok = false;
+    currentAction->uiWidth = actionElem.attribute("ui_width", "800").toInt(&ok);
+    assert(ok);
+    currentAction->uiHeight = actionElem.attribute("ui_height", "600").toInt(&ok);
+    assert(ok);
+
     // adopt
     auto adopt = actionElem.firstChildElement("adopt");
     if (!adopt.isNull())

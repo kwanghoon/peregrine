@@ -46,6 +46,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
     ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
     ui->customUi->hide();
+    resize(width(), ui->inputContainer->height());
 
     QIcon appIcon("heart.png");
     setWindowIcon(appIcon);
@@ -301,6 +302,7 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
 
     QString argsForActivatedEvent;
+    int uiWidth = action->uiWidth, uiHeight = action->uiHeight;
     if (!action->adopt.isEmpty())
     {
         argsForActivatedEvent = action->args;
@@ -318,11 +320,14 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
             qmlString = QTextStream(&f).readAll();
         }
         QMetaObject::invokeMethod(customUiItem, "loadCustomUi", Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
+        ui->customUi->resize(uiWidth, uiHeight);
+        resize(uiWidth + 20, ui->inputContainer->height() + uiHeight);
         ui->customUi->show();
     }
     else
     {
         ui->customUi->hide();
+        resize(width(), ui->inputContainer->height());
     }
 
     if (!inputText.isEmpty())

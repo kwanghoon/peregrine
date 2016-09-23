@@ -19,6 +19,7 @@ public:
     QString imagePath;
     PluginModule* controller = nullptr;
     QString customUiPath;
+    int uiWidth, uiHeight;
     QString adopt;
     QString args;
 
