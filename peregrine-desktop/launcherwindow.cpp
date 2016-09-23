@@ -515,7 +515,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
             showActionSelectDialog();
         }
     }
-    else if (key == Qt::Key::Key_Return)
+    else if (key == Qt::Key::Key_Return || key == Qt::Key::Key_Enter)
     {
         int currentIndex = global::suggestionListController->getCurrentIndex();
         if (currentIndex == -1)

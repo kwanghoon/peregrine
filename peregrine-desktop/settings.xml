@@ -11,7 +11,7 @@
 		<actionslot x='1' y='1' actionid='file'/>
 		<actionslot x='1' y='-1' actionid='webpage'/>
 		<actionslot x='-1' y='1' actionid='mozilla-colorpicker'/>
-		<actionslot x='-1' y='-1' actionid='calculator'/>
+		<actionslot x='-1' y='-1' actionid='unit-converter'/>
 	</actionslots>
 	
 	<customactions>
