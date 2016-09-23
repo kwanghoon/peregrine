@@ -286,11 +286,12 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
     currentAction_ = actionId;
 
     QQuickItem* customUiItem = ui->customUi->rootObject();
+    QMetaObject::invokeMethod(customUiItem, "clearChildren");
+
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
 
     if (currentAction_.isEmpty())
     {
-        QMetaObject::invokeMethod(customUiItem, "clearChildren");
         actionDisplay->clear();
         return;
     }
