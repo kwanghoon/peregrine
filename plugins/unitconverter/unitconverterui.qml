@@ -2,45 +2,62 @@
 import QtQuick.Controls 1.4
 
 Rectangle {
+	id: root
 	anchors.fill: parent
 	height: 30
-	Text
-	{
+	property real fromFactor: 1
+	property real toFactor: 1
+	property string fromUnit: 'm'
+	property string toUnit: 'm'
+	property string inputTextSaved: '1'
+	Text {
 		text: "<b>Peregrine Unit Converter</b>"
 		font.pointSize: 22
 	}
 	Text {
+		id: arrow
 		y: 40
-		width: 300
-		text: "100 <font color='red'><b>cm</b></font>"
-		anchors.left: parent.left
-		font.pointSize: 18
-	}
-	Text {
-		y: 40
+		width: 50
 		text: "↔"
 		anchors.horizontalCenter: parent.horizontalCenter
+		horizontalAlignment: Text.AlignHCenter
 		font.pointSize: 20
 	}
 	Text {
+		id: fromText
 		y: 40
-		width: 300
-		text: "200 <font color='red'><b>km</b></font>"
-		anchors.right: parent.right
+		width: 200
+		anchors.right: arrow.left
 		font.pointSize: 18
 		horizontalAlignment: Text.AlignRight
+	}
+	Text {
+		id: toText
+		y: 40
+		width: 200
+		anchors.left: arrow.right
+		font.pointSize: 18
 	}
 	TabView {
 		y: 75
 		width: parent.width
 		tabPosition: Qt.TopEdge
-		Tab
-		{
+		Tab {
 			title: "Length"
 			Repeater {
 				model: [{}, {}]
-				GroupBox {			
-					title: index == 0 ? "Source" : "Dest"
+				function updateResult(factor, unit, isFrom) {
+					if (isFrom) {
+						root.fromFactor = factor;
+						root.fromUnit = unit;
+					} else {
+						root.toFactor = 1 / factor;
+						root.toUnit = unit;
+					}
+					root.onInputTextChanged(inputTextSaved);
+				}
+				GroupBox {
+					title: index == 0 ? "From" : "To"
 					width: parent.width / 2 - 10
 					anchors.left: index == 0 ? parent.left : null
 					anchors.right: index == 1? parent.right : null
@@ -51,61 +68,80 @@ Rectangle {
 							RadioButton {
 								text: "m"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								checked: true
+								onClicked: updateResult(1, text, index == 0)
 							}
 							RadioButton {
 								text: "cm"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(0.01, text , index == 0)
 							}
 							RadioButton {
 								text: "mm"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(0.001, text , index == 0)
 							}
 						}
 						Row {
 							RadioButton {
 								text: "inches"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(0.0254, text , index == 0)
 							}
 							RadioButton {
 								text: "FT"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(0.3048, text , index == 0)
 							}
 							RadioButton {
 								text: "km"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(1000, text , index == 0)
 							}
 						}
-						Row
-						{
+						Row {
 							RadioButton {
 								text: "mile"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(1609.344, text , index == 0)
 							}
 							RadioButton {
 								text: "NM"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(1852, text , index == 0)
+							}
+							RadioButton {
+								text: "au"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: updateResult(1.4959787e+11, text , index == 0)
 							}
 						}
 					}
 				}
 			}
 		}
-		Tab
-		{
+		Tab {
 			title: "Area"
-
 		}
-		Tab
-		{
+		Tab {
 			title: "Volume"
 		}
-		Tab
-		{
+		Tab {
 			title: "Weight"
 		}
-		Tab
-		{
+		Tab {
 			title: "Speed"
 		}
+	}
+	function onInputTextChanged(input) {
+		var n = Number(input);
+		if (isNaN(n)) {
+			fromText.text = 'NaN';
+			toText.text = 'NaN'
+		} else {
+			fromText.text = input + " <font color='red'><b>" + root.fromUnit + "</b></font>";
+			toText.text = input * root.fromFactor * root.toFactor  + " <font color='red'><b>" + root.toUnit + "</b></font>";
+		}
+		root.inputTextSaved = input;
 	}
 }
