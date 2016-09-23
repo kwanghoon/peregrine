@@ -7,12 +7,8 @@ Rectangle {
 		id: "webView"
 		anchors.fill: parent
 	}
-	Component.onDestruction: console.log("destructing");
 	
 	function onActivated(args) {
 		webView.url = args;
-	}
-	
-	function onDeactivated() {
 	}
 }
