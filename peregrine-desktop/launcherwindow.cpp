@@ -45,6 +45,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
     ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
+    ui->customUi->hide();
 
     QIcon appIcon("heart.png");
     setWindowIcon(appIcon);
@@ -317,6 +318,11 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
             qmlString = QTextStream(&f).readAll();
         }
         QMetaObject::invokeMethod(customUiItem, "loadCustomUi", Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
+        ui->customUi->show();
+    }
+    else
+    {
+        ui->customUi->hide();
     }
 
     if (!inputText.isEmpty())
