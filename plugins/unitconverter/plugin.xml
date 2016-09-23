@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="unit-converter">
+	<actions>
+		<action name="unit-converter" id="unit-converter" ui="unitconverterui.qml" />		
+	</actions>
+</plugin>
