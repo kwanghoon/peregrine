@@ -100,7 +100,12 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     }
 
     // 1. input이 valid한 패쓰인지 확인
-    if (!isValidPath(input))
+    string s = input;
+    while (!s.empty() && s.back() == ' ')
+    { // remove trailig spaces
+        s.pop_back();
+    }
+    if (!isValidPath(s))
     {
         return 0;
     }
