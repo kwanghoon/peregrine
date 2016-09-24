@@ -40,6 +40,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LauncherWindow)
 {
+    // initialize UI
     //setWindowFlags(Qt::FramelessWindowHint);
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
@@ -52,18 +53,23 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     setWindowIcon(appIcon);
 
     setupTrayIcon();
+    setFocus();
 
+    // prepare communication with QML
     inputHandlerDelegate_ = new InputHandlerDelegate(this);
     {
-        connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextChanged, this, &LauncherWindow::onInputTextChanged);
-        connect(inputHandlerDelegate_, &InputHandlerDelegate::onKeyPressed, this, &LauncherWindow::onKeyPressed);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onInputTextChanged, 
+            this, &LauncherWindow::onInputTextChanged);
+        connect(inputHandlerDelegate_, &InputHandlerDelegate::onKeyPressed, 
+            this, &LauncherWindow::onKeyPressed);
     }
     auto* context = ui->inputContainer->rootContext();
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
     context = ui->suggestionList->rootContext();
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
-
     initSuggestionListController();
+
+    // load configs
     global::GetConfigManager().loadConfig();
     loadPlugins();
     onConfigUpdated();
@@ -71,6 +77,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         onConfigUpdated();
     });
 
+    // prepare config synchronization
     auto thenFunc = [](const QJsonObject& configs) {
         global::GetConfigManager().updateConfig(configs.toVariantMap(), "sync");
     };
@@ -81,8 +88,6 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         global::GetSyncManager().login(accountInfo.email, accountInfo.passwordHash,
             thenFunc, catchFunc);
     }
-
-    setFocus();
 
     initHistory();
 
@@ -122,10 +127,12 @@ LauncherWindow::~LauncherWindow()
 {
     delete ui;
 
+#   ifdef Q_OS_WIN
     ::UnregisterHotKey((HWND)winId(), kHotKey_PopUpId_);
 #   ifndef NDEBUG
     ::UnregisterHotKey((HWND)winId(), kHotKey_ExitId_);
     ::UnregisterHotKey((HWND)winId(), kHotKey_ConfigId_);
+#   endif
 #   endif
 }
 
@@ -390,6 +397,8 @@ void LauncherWindow::setupTrayIcon()
     tray_->setContextMenu(menu);
 }
 
+// Show the launcher window and bring it to foreground.
+// As a result, users will be able to type keywords on the input box.
 void LauncherWindow::popUp()
 {
     this->setHidden(false);
@@ -434,6 +443,7 @@ void LauncherWindow::popUp()
     });
 }
 
+// Hide the launcher window. 
 void LauncherWindow::pushDown()
 {
     this->setHidden(true);
@@ -446,6 +456,7 @@ void LauncherWindow::setHeaderText(const QString& text)
     ui->headerTextLabel->setText(text);
 }
 
+// It will be called when the input text is changed
 void LauncherWindow::onInputTextChanged(const QString& inputText)
 {
     if (currentAction_.isNull())

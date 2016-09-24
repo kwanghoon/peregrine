@@ -3,7 +3,6 @@
 
 #include "actionselectdialog.h"
 #include <QMainWindow>
-#include <memory>
 
 namespace Ui {
     class LauncherWindow;

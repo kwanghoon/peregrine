@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QtWebView/QtWebView>
 #include <algorithm>
+#include <memory>
 
 namespace
 {
@@ -15,6 +16,7 @@ namespace
 
 int main(int argc, char *argv[])
 {
+    // prevent duplicated execution
     sharedObject.reset(new QSharedMemory("--==Peregrine==--"));
     if (!sharedObject->create(4, QSharedMemory::AccessMode::ReadWrite))
     {
@@ -24,6 +26,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    // if '--version' argument is specified, show the version information and exit program.
     if (argc > 1)
     {
         auto isVersionArgument = [](const char* arg) {
