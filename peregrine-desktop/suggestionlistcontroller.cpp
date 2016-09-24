@@ -21,10 +21,13 @@ SuggestionListController::SuggestionListController(QWidget* suggestionListWidget
         [this](int index) { onSuggestionItemClicked(index); });
 }
 
-void SuggestionListController::addItem(const QString& text, std::function<void(boost::any)> handler, boost::any data)
+void SuggestionListController::addItem(const QString& text, const QString& imagePath, 
+    std::function<void(boost::any)> handler, boost::any data)
 {
     QVariant arg(text);
-    QMetaObject::invokeMethod(suggestionListView_, "addItem", Q_ARG(QVariant, arg));
+
+    QMetaObject::invokeMethod(suggestionListView_, "addItem", 
+        Q_ARG(QVariant, arg), Q_ARG(QVariant, imagePath));
 
     // #HACK: size of the ListView's children isn't updated immediately after adding.
     //        to get the size reflecting new items added, have a small bit of delays.

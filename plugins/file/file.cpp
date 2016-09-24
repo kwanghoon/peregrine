@@ -58,6 +58,37 @@ bool isValidPath(const std::string& _path)
     return true;
 }
 
+char* GetFileIconPath(filesystem::path p)
+{
+    const char* kKnownExtensions[] = {
+        "exe", "html", "iso", "pdf", "xml", "txt", "zip", "mp3", "mp4",
+        "ppt", "doc", "ai", "avi", "css", "csv", "pdf", "png", 
+        "rtf", "xls", "svg",
+    };
+    if (filesystem::is_directory(p))
+    {
+        return strdup("plugins/file/filetype-icons/files.svg");
+    }
+
+    std::string ext = p.extension().string();
+    if (!ext.empty())
+    {
+        ext = ext.substr(1);
+        auto it = find_if(std::begin(kKnownExtensions), std::end(kKnownExtensions), [&](const char* filetype) {
+            return ext == filetype;
+        });
+        if (it != std::end(kKnownExtensions))
+        {
+            // #TODO: Buffer Overrun
+            char s[300];
+            sprintf(s, "plugins/file/filetype-icons/%s.svg", *it);
+            return strdup(s);
+        }
+    }
+
+    return strdup("plugins/file/filetype-icons/file.svg");
+}
+
 int GetSuggestionItems(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items)
 {
     *n = 0;
@@ -99,6 +130,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
                 % childFilename.substr(0, filenameFrontPart.length()) 
                 % childFilename.substr(filenameFrontPart.length()));
             (*items)[*n].displayText = strdup(s.c_str());
+            (*items)[*n].imagePath = GetFileIconPath(it->path());
             (*items)[*n].token = 0; // #TODO
             (*n)++;
             if (*n >= kMaxItems)

@@ -482,7 +482,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
             auto handler = [this, l](boost::any) {
                 changeAction(l.linkedActionId, l.inputText);
             };
-            global::suggestionListController->addItem(s, handler, nullptr);
+            global::suggestionListController->addItem(s, QString("heart.png"), handler, nullptr);
         }
     }
 
@@ -501,7 +501,8 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
             adoptedAction ? adoptedAction->id : currentAction_, inputText);
         for (auto& sugg : suggestions)
         {
-            global::suggestionListController->addItem(sugg.first, [](boost::any) {}, sugg.second);
+            global::suggestionListController->addItem(sugg.text, sugg.imagePath, 
+                [](boost::any) {}, sugg.token);
         }
     }
 

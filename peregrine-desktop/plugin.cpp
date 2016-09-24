@@ -36,7 +36,6 @@ namespace
     }
 
     PG_FUNC_TABLE funcTable;
-
 }
 
 PluginModule::PluginModule(QDir dir, const QString& name)
@@ -77,7 +76,7 @@ int PluginModule::runAction(const QString& actionId, const QString& input)
     return runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
 }
 
-std::vector<std::pair<QString, size_t>> PluginModule::getSuggestionItems(const QString& actionId, const QString& input)
+std::vector<PluginModule::SuggestionItem> PluginModule::getSuggestionItems(const QString& actionId, const QString& input)
 {
     if (!getSuggestionItemsFunc_)
     {
@@ -88,11 +87,12 @@ std::vector<std::pair<QString, size_t>> PluginModule::getSuggestionItems(const Q
     PG_SUGGESTION_ITEM* items = nullptr;
     getSuggestionItemsFunc_(actionId.toStdString().c_str(), input.toStdString().c_str(), &n, &items);
 
-    std::vector<std::pair<QString, size_t>> ret;
+    std::vector<SuggestionItem> ret;
     for (int i = 0; i < n; i++)
     {
-        ret.push_back({ items[i].displayText, items[i].token });
+        ret.push_back({ items[i].displayText, items[i].imagePath, items[i].token });
         ::free(items[i].displayText);
+        ::free(items[i].imagePath);
     }
     ::free(items);
 

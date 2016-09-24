@@ -11,19 +11,15 @@ ListView {
     model: ListModel {
         id: suggestionModel
         objectName: "suggestionModel"
-
-        function add(val) {
-            append({ value: val });
-        }
     }
 
     delegate: Item {
         width: parent.width
         height: 40
-        Rectangle {
+        Image {
             x: 0; y: 0
             width: 40; height: 40
-            color: "red"
+            source: image
         }
         Text {
             x: 40; y: 0
@@ -72,8 +68,8 @@ ListView {
         currentIndex = -1;
     }
 
-    function addItem(val) {
-        model.append({ value: val });
+    function addItem(val, image) {
+        model.append({ value: val, image: image });
     }
 
     function clearItems() {

@@ -14,7 +14,13 @@ public:
     PluginModule(QDir dir, const QString& name);
 
     int runAction(const QString& actionId, const QString& input);
-    std::vector<std::pair<QString, size_t>> getSuggestionItems(const QString& actionId, const QString& input);
+    struct SuggestionItem
+    {
+        QString text;
+        QString imagePath;
+        size_t token;
+    };
+    std::vector<SuggestionItem> getSuggestionItems(const QString& actionId, const QString& input);
     const QString& name() const { return name_; };
 
 private:

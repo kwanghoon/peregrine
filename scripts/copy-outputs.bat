@@ -71,7 +71,7 @@ for /d %%a in (*) do (
 )
 
 echo copy plugin resources
-robocopy %project_root_dir%\plugins %output_dir%\plugins *.xml *.png *qml /S
+robocopy %project_root_dir%\plugins %output_dir%\plugins *.xml *.png *.svg *qml /S
 popd
 
 :EXIT_SUCCEEDED

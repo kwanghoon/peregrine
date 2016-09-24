@@ -11,9 +11,11 @@ class InputHandlerDelegate;
 class SuggestionListController
 {
 public:
-    SuggestionListController(QWidget* suggestionListWidget, QQuickItem* suggestionListView, QObject* suggestionModel, InputHandlerDelegate* inputDelegate);
+    SuggestionListController(QWidget* suggestionListWidget, QQuickItem* suggestionListView,
+        QObject* suggestionModel, InputHandlerDelegate* inputDelegate);
 
-    void addItem(const QString& text, std::function<void(boost::any)> handler, boost::any data);
+    void addItem(const QString& text, const QString& imagePath,
+        std::function<void(boost::any)> handler, boost::any data);
     void clearList();
     void selectUp();
     void selectDown();

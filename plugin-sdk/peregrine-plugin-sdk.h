@@ -12,6 +12,7 @@ struct PG_FUNC_TABLE
 struct PG_SUGGESTION_ITEM
 {
     char* displayText;
+    char* imagePath;
     size_t token;
 };
 
