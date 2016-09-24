@@ -48,7 +48,7 @@ private:
 
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
-    void onKeyPressed(int key, int modifiers, QString inputText);
+    void onKeyPressed(int key, int modifiers, const QString& inputText);
 
     // history control
     void initHistory();

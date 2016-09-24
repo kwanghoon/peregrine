@@ -510,7 +510,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     global::suggestionListController->setVisible(visible);
 }
 
-void LauncherWindow::onKeyPressed(int key, int modifiers, QString inputText)
+void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputText)
 {
     // undo
     if (key == Qt::Key::Key_Z && (modifiers & Qt::Modifier::CTRL) != 0)
