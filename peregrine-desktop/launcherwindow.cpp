@@ -1,5 +1,5 @@
-#include "inputhandlerdelegate.h"
 #include "launcherwindow.h"
+#include "inputhandlerdelegate.h"
 #include "ui_launcherwindow.h"
 #include "configurationwindow.h"
 #include "inputhandlerdelegate.h"
@@ -11,6 +11,8 @@
 #include "global.h"
 #include "configmanager.h"
 #include <peregrine-plugin-sdk.h>
+
+// QT
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QKeyEvent>
@@ -25,11 +27,16 @@
 #include <QMenu>
 #include <QTimer>
 #include <QClipboard>
+
+// boost
 #include <boost/range.hpp>
 #include <boost/range/join.hpp>
+
+// cpp standard libraries
 #include <memory>
 #include <cassert>
 
+// platform specific
 #ifdef Q_OS_WIN
 #   include <windows.h>
 #endif // Q_OS_WIN
@@ -104,8 +111,8 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     if (::RegisterHotKey((HWND)winId(), kHotKey_ConfigId_, MOD_CONTROL | MOD_NOREPEAT,
         '1'))
     {}
-#   endif
-#   endif
+#   endif // NDEBUG
+#   endif // Q_OS_WIN
 }
 
 void LauncherWindow::onConfigUpdated()
@@ -132,8 +139,8 @@ LauncherWindow::~LauncherWindow()
 #   ifndef NDEBUG
     ::UnregisterHotKey((HWND)winId(), kHotKey_ExitId_);
     ::UnregisterHotKey((HWND)winId(), kHotKey_ConfigId_);
-#   endif
-#   endif
+#   endif // NDEBUG
+#   endif // Q_OS_WIN
 }
 
 void LauncherWindow::initSuggestionListController()
@@ -689,7 +696,7 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
             ConfigurationWindow config;
             config.exec();
         }
-#   endif
+#   endif // NDEBUG
     }
 #   endif // Q_OS_WIN
 
