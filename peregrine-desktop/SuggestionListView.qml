@@ -20,7 +20,13 @@ ListView {
     delegate: Item {
         width: parent.width
         height: 40
+        Rectangle {
+            x: 0; y: 0
+            width: 40; height: 40
+            color: "red"
+        }
         Text {
+            x: 40; y: 0
             text: value
         }
         MouseArea {
