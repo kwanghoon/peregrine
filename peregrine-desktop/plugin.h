@@ -21,6 +21,8 @@ public:
         size_t token;
     };
     std::vector<SuggestionItem> getSuggestionItems(const QString& actionId, const QString& input);
+    int runSuggestion(size_t token);
+
     const QString& name() const { return name_; };
 
 private:
@@ -29,10 +31,12 @@ private:
 
     // resolved functions
     typedef int(*fpRunAction)(const char* actionId, const char* data);
-    typedef int (*fpGetSuggestionItems)(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items);
+    typedef int(*fpGetSuggestionItems)(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items);
+    typedef int(*fpRunSuggestion)(size_t token);
     
     fpRunAction runActionFunc_;
     fpGetSuggestionItems getSuggestionItemsFunc_;
+    fpRunSuggestion runSuggestionFunc_;
 };
 
 class PluginManager

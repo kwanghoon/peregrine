@@ -15,6 +15,13 @@
 using namespace std;
 using namespace boost;
 
+namespace
+{
+    size_t nextToken = 1000;
+
+    std::map<size_t/* token */, std::string/* path */> suggested;
+}
+
 int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
 {
     qDebug() << "Initialize file plugin";
@@ -93,6 +100,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
 {
     *n = 0;
     *items = nullptr;
+    suggested.clear();
 
     if (strcmp(currentActionId, "file") != 0)
     {
@@ -112,7 +120,15 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
 
     // 3. valid 하면 parent 디렉토리를 구함 = p
     filesystem::path path = input;
-    filesystem::path parentDir = path.parent_path();
+    filesystem::path parentDir;
+    if (path.root_path() == path)
+    {
+        parentDir = path;
+    }
+    else
+    {
+        parentDir = path.parent_path();
+    }
     if (!filesystem::exists(parentDir))
     {
         return 0;
@@ -136,7 +152,9 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
                 % childFilename.substr(filenameFrontPart.length()));
             (*items)[*n].displayText = strdup(s.c_str());
             (*items)[*n].imagePath = GetFileIconPath(it->path());
-            (*items)[*n].token = 0; // #TODO
+            size_t token = nextToken++;
+            suggested[token] = boost::filesystem::system_complete(it->path()).string();
+            (*items)[*n].token = token;
             (*n)++;
             if (*n >= kMaxItems)
             {
@@ -149,6 +167,10 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
 
 int RunSuggestion(size_t token)
 {
-    // #TODO: not implemented
-    return -1;
+    assert(suggested.count(token) != 0);
+    string path = suggested[token];
+#   ifdef Q_OS_WIN
+    int ret = (int)::ShellExecuteA(0, NULL, path.c_str(), NULL, NULL, SW_NORMAL);
+#   endif
+    return PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR;
 }

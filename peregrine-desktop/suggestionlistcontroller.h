@@ -15,22 +15,22 @@ public:
         QObject* suggestionModel, InputHandlerDelegate* inputDelegate);
 
     void addItem(const QString& text, const QString& imagePath,
-        std::function<void(boost::any)> handler, boost::any data);
+        std::function<int(boost::any)> handler, boost::any data);
     void clearList();
     void selectUp();
     void selectDown();
     int getCurrentIndex() const;
-    void runSelected();
+    int runSelected();
     void setVisible(bool visible);
     int getCount() const { return suggestingItems_.size(); }
     
 private:
     struct SuggestingItem
     {
-        std::function<void(boost::any)> handler;
+        std::function<int(boost::any)> handler;
         boost::any data;
     };
-    void onSuggestionItemClicked(int index);
+    int onSuggestionItemClicked(int index);
 
     QWidget* suggestionListWidget_;
     QQuickItem* suggestionListView_;

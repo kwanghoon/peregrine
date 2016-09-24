@@ -18,11 +18,11 @@ SuggestionListController::SuggestionListController(QWidget* suggestionListWidget
     suggestionListWidget_->setVisible(false);
 
     QObject::connect(inputDelegate_, &InputHandlerDelegate::onSuggestionItemClicked,
-        [this](int index) { onSuggestionItemClicked(index); });
+        [this](int index) -> int { return onSuggestionItemClicked(index); });
 }
 
 void SuggestionListController::addItem(const QString& text, const QString& imagePath, 
-    std::function<void(boost::any)> handler, boost::any data)
+    std::function<int(boost::any)> handler, boost::any data)
 {
     QVariant arg(text);
 
@@ -71,9 +71,12 @@ int SuggestionListController::getCurrentIndex() const
     return currentIndex;
 }
 
-void SuggestionListController::runSelected()
+int SuggestionListController::runSelected()
 {
-    QMetaObject::invokeMethod(suggestionListView_, "runSelected");
+    QVariant ret;
+    QMetaObject::invokeMethod(suggestionListView_, "runSelected",
+        Q_RETURN_ARG(QVariant, ret));
+    return ret.toInt();
 }
 
 void SuggestionListController::setVisible(bool visible)
@@ -81,7 +84,7 @@ void SuggestionListController::setVisible(bool visible)
     QQmlProperty::write(suggestionListView_, "visible", visible);
 }
 
-void SuggestionListController::onSuggestionItemClicked(int index)
+int SuggestionListController::onSuggestionItemClicked(int index)
 {
-    suggestingItems_[index].handler(suggestingItems_[index].data);
+    return suggestingItems_[index].handler(suggestingItems_[index].data);
 }

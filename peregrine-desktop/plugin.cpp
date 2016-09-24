@@ -66,6 +66,7 @@ PluginModule::PluginModule(QDir dir, const QString& name)
     // resolve library functions
     runActionFunc_ = (fpRunAction)lib->resolve("RunAction");
     getSuggestionItemsFunc_ = (fpGetSuggestionItems)lib->resolve("GetSuggestionItems");
+    runSuggestionFunc_ = (fpRunSuggestion)lib->resolve("RunSuggestion");
 
     name_ = name;
     lib_ = std::move(lib);
@@ -99,6 +100,10 @@ std::vector<PluginModule::SuggestionItem> PluginModule::getSuggestionItems(const
     return ret;
 }
 
+int PluginModule::runSuggestion(size_t token)
+{
+    return runSuggestionFunc_(token);
+}
 
 // PluginManager
 bool PluginManager::loadPlugin(const QString& dir)

@@ -62,10 +62,11 @@ ListView {
 
     function runSelected() {
         if (currentIndex == -1) {
-            return;
+            return -1;
         }
-        inputHandlerDelegate.onSuggestionItemClicked(currentIndex);
+        var ret = inputHandlerDelegate.onSuggestionItemClicked(currentIndex);
         currentIndex = -1;
+        return ret;
     }
 
     function addItem(val, image) {

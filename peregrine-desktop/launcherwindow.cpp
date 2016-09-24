@@ -497,8 +497,9 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
             QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
                 .arg(linkedAction->name).arg(inputText).arg(l.keyword.mid(inputText.length()));
-            auto handler = [this, l](boost::any) {
+            auto handler = [this, l](boost::any) -> int {
                 changeAction(l.linkedActionId, l.inputText);
+                return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
             };
             global::suggestionListController->addItem(s, QString("heart.png"), handler, nullptr);
         }
@@ -515,12 +516,15 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     auto* controller = adoptedAction ? adoptedAction->controller : currAction->controller;
     if (controller)
     {
-        auto suggestions = controller->getSuggestionItems(
-            adoptedAction ? adoptedAction->id : currentAction_, inputText);
+        auto id = adoptedAction ? adoptedAction->id : currentAction_;
+        auto suggestions = controller->getSuggestionItems(id, inputText);
         for (auto& sugg : suggestions)
         {
-            global::suggestionListController->addItem(sugg.text, sugg.imagePath, 
-                [](boost::any) {}, sugg.token);
+            auto handler = [controller](boost::any data) -> int {
+                size_t token = boost::any_cast<size_t>(data);
+                return controller->runSuggestion(token);
+            };
+            global::suggestionListController->addItem(sugg.text, sugg.imagePath, handler, sugg.token);
         }
     }
 
@@ -579,7 +583,11 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
         }
         else
         {
-            global::suggestionListController->runSelected();
+            int ret = global::suggestionListController->runSelected();
+            if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
+            {
+                pushDown();
+            }
             global::suggestionListController->setVisible(false);
         }
     }
