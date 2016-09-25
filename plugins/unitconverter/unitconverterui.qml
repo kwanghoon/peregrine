@@ -10,6 +10,16 @@ Rectangle {
 	property string fromUnit: 'm'
 	property string toUnit: 'm'
 	property string inputTextSaved: '1'
+	function updateResult(factor, unit, isFrom) {
+		if (isFrom) {
+			fromFactor = factor;
+			fromUnit = unit;
+		} else {
+			toFactor = 1 / factor;
+			toUnit = unit;
+		}
+		onInputTextChanged(inputTextSaved);
+	}
 	Text {
 		text: "<b>Peregrine Unit Converter</b>"
 		font.pointSize: 22
@@ -46,16 +56,6 @@ Rectangle {
 			title: "Length"
 			Repeater {
 				model: [{}, {}]
-				function updateResult(factor, unit, isFrom) {
-					if (isFrom) {
-						root.fromFactor = factor;
-						root.fromUnit = unit;
-					} else {
-						root.toFactor = 1 / factor;
-						root.toUnit = unit;
-					}
-					root.onInputTextChanged(inputTextSaved);
-				}
 				GroupBox {
 					title: index == 0 ? "From" : "To"
 					width: parent.width / 2 - 10
@@ -69,51 +69,51 @@ Rectangle {
 								text: "m"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
 								checked: true
-								onClicked: updateResult(1, text, index == 0)
+								onClicked: root.updateResult(1, text, index == 0)
 							}
 							RadioButton {
 								text: "cm"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(0.01, text , index == 0)
+								onClicked: root.updateResult(0.01, text , index == 0)
 							}
 							RadioButton {
 								text: "mm"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(0.001, text , index == 0)
+								onClicked: root.updateResult(0.001, text , index == 0)
 							}
 						}
 						Row {
 							RadioButton {
 								text: "inches"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(0.0254, text , index == 0)
+								onClicked: root.updateResult(0.0254, text , index == 0)
 							}
 							RadioButton {
 								text: "FT"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(0.3048, text , index == 0)
+								onClicked: root.updateResult(0.3048, text , index == 0)
 							}
 							RadioButton {
 								text: "km"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(1000, text , index == 0)
+								onClicked: root.updateResult(1000, text , index == 0)
 							}
 						}
 						Row {
 							RadioButton {
 								text: "mile"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(1609.344, text , index == 0)
+								onClicked: root.updateResult(1609.344, text , index == 0)
 							}
 							RadioButton {
 								text: "NM"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(1852, text , index == 0)
+								onClicked: root.updateResult(1852, text , index == 0)
 							}
 							RadioButton {
 								text: "au"
 								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: updateResult(1.4959787e+11, text , index == 0)
+								onClicked: root.updateResult(1.4959787e+11, text , index == 0)
 							}
 						}
 					}
@@ -122,6 +122,61 @@ Rectangle {
 		}
 		Tab {
 			title: "Area"
+			Repeater {
+				model: [{}, {}]
+				GroupBox {
+					title: index == 0 ? "From" : "To"
+					width: parent.width / 2 - 10
+					anchors.left: index == 0 ? parent.left : null
+					anchors.right: index == 1? parent.right : null
+					ExclusiveGroup { id: unitGroupFrom }
+					ExclusiveGroup { id: unitGroupTo }
+					Column {
+						Row {
+							RadioButton {
+								text: "m^2"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								checked: true
+								onClicked: root.updateResult(1, text, index == 0)
+							}
+							RadioButton {
+								text: "ha"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e4, text , index == 0)
+							}
+							RadioButton {
+								text: "km^2"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e6, text , index == 0)
+							}
+						}
+						Row {
+							RadioButton {
+								text: "ft^2"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(9.2903e-2, text , index == 0)
+							}
+							RadioButton {
+								text: "yd^2"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(0.836127, text , index == 0)
+							}
+							RadioButton {
+								text: "ac"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(4046.85642, text , index == 0)
+							}
+						}
+						Row {
+							RadioButton {
+								text: "평"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(3.305785, text , index == 0)
+							}
+						}
+					}
+				}
+			}
 		}
 		Tab {
 			title: "Volume"
