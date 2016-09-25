@@ -14,6 +14,7 @@ ListView {
     }
 
     delegate: Item {
+        id: itemDelegate
         width: parent.width
         height: 40
         Image {
@@ -28,9 +29,9 @@ ListView {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                currentIndex = index;
+                itemDelegate.ListView.currentIndex = index;
                 inputHandlerDelegate.onSuggestionItemClicked(index);
-                currentIndex = -1;
+                itemDelegate.ListView.currentIndex = -1;
             }
         }
     }
