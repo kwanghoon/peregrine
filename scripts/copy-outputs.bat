@@ -31,31 +31,34 @@ mkdir %output_dir%
 echo copy app binaries..
 copy %build_result_dir%\peregrine-desktop\%optim_mode%\peregrine-desktop.exe %output_dir%
 
-where qmake
-if %errorlevel% neq 0 (
-	echo couldn't run 'qmake'
+:: qt dlls
+if "%vs140comntools%" neq "" (
+	call "%vs140comntools%vsvars32.bat"
+) else if "%vs120comntools%" neq "" (
+	call "%vs120comntools%vsvars32.bat"
+) else (
+	echo vs variable not exists.
 	goto EXIT_FAILED
 )
 
+where windeployqt
+if %errorlevel% neq 0 (
+	echo couldn't run 'windeployqt'
+	goto EXIT_FAILED
+)
+pushd %output_dir%
+	windeployqt .
+popd
+
+:: qt qml dlls
 SET TEMPFILE=%TEMP%\TEMP-%DATE%-%RANDOM%.txt
-
-qmake -query QT_INSTALL_BINS>%TEMPFILE%
-set /p qt_install_bins=<%TEMPFILE%
-set qt_modules=(Core Widgets Gui Qml Quick QuickWidgets Xml Network WebView WebEngine WebChannel WebEngineCore)
-if "%optim_mode%" == "debug" (
-	set d_suffix=d
-)
-@echo on
-for %%m in %qt_modules% do (
-	copy "%qt_install_bins%\Qt5%%m%d_suffix%.dll" %output_dir%
-)
-@echo off
-
-qmake -query QT_INSTALL_PLUGINS>%TEMPFILE%
-set /p qt_install_plugins=<%TEMPFILE%
-robocopy %qt_install_plugins%\platforms %output_dir%\platforms *%d_suffix%.dll /S
-
+qmake -query QT_INSTALL_QML>%TEMPFILE%
+set /p qt_install_qml=<%TEMPFILE%
 del %TEMPFILE%
+set qml_modules=(Qt QtQml QtQuick QtQuick.2 QtWebChannel QtWebEngine QtWebSockets QtWebView)
+for %%m in %qml_modules% do (
+	robocopy %qt_install_qml%\%%m %output_dir%\%%m /e
+)
 
 :: app resources
 echo copy app resources..
