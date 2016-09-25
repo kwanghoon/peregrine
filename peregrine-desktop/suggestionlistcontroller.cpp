@@ -82,6 +82,7 @@ int SuggestionListController::runSelected()
 void SuggestionListController::setVisible(bool visible)
 {
     QQmlProperty::write(suggestionListView_, "visible", visible);
+    suggestionListWidget_->setVisible(visible);
 }
 
 int SuggestionListController::onSuggestionItemClicked(int index)

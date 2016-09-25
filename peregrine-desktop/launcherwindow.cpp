@@ -324,6 +324,8 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
     QQuickItem* customUiItem = ui->customUi->rootObject();
     QMetaObject::invokeMethod(customUiItem, "clearChildren");
 
+    global::suggestionListController->setVisible(false);
+
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
 
     if (currentAction_.isEmpty())
