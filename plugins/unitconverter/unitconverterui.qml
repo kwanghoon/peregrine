@@ -180,6 +180,71 @@ Rectangle {
 		}
 		Tab {
 			title: "Volume"
+			Repeater {
+				model: [{}, {}]
+				GroupBox {
+					title: index == 0 ? "From" : "To"
+					width: parent.width / 2 - 10
+					anchors.left: index == 0 ? parent.left : null
+					anchors.right: index == 1? parent.right : null
+					ExclusiveGroup { id: unitGroupFrom }
+					ExclusiveGroup { id: unitGroupTo }
+					Column {
+						Row {
+							RadioButton {
+								text: "l"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								checked: true
+								onClicked: root.updateResult(1, text, index == 0)
+							}
+							RadioButton {
+								text: "ml"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e-3, text , index == 0)
+							}
+							RadioButton {
+								text: "cc"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e-3, text , index == 0)
+							}
+						}
+						Row {
+							RadioButton {
+								text: "dl"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(0.0, text , index == 0)
+							}
+							RadioButton {
+								text: "cm^3"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e-3, text , index == 0)
+							}
+							RadioButton {
+								text: "m^3"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(1e3, text , index == 0)
+							}
+						}
+						Row {
+							RadioButton {
+								text: "gal"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(3.785412, text , index == 0)
+							}
+							RadioButton {
+								text: "bbl"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(158.9, text , index == 0)
+							}
+							RadioButton {
+								text: "oz"
+								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+								onClicked: root.updateResult(2.957353e-2, text , index == 0)
+							}
+						}
+					}
+				}
+			}
 		}
 		Tab {
 			title: "Weight"
