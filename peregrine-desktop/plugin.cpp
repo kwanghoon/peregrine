@@ -91,7 +91,8 @@ std::vector<PluginModule::SuggestionItem> PluginModule::getSuggestionItems(const
     std::vector<SuggestionItem> ret;
     for (int i = 0; i < n; i++)
     {
-        ret.push_back({ items[i].displayText, items[i].imagePath, items[i].token });
+        ret.push_back({ QString::fromUtf8(items[i].displayText), items[i].imagePath, 
+            items[i].token });
         ::free(items[i].displayText);
         ::free(items[i].imagePath);
     }
