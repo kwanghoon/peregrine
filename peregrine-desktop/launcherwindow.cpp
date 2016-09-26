@@ -723,6 +723,7 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
 #   ifndef NDEBUG
         else if (pMsg->wParam == kHotKey_ExitId_)
         {
+            suggestionBox_->close();
             appExit_ = true;
             close();
         }
