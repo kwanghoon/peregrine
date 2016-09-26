@@ -694,6 +694,11 @@ void LauncherWindow::switchToNextAction()
     }
 }
 
+void LauncherWindow::moveEvent(QMoveEvent *event)
+{
+    updateSuggestionListPosition();
+}
+
 void LauncherWindow::closeEvent(QCloseEvent *event)
 {
     if (appExit_)
