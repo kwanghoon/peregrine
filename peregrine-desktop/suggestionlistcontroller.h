@@ -7,11 +7,12 @@
 #include <vector>
 
 class InputHandlerDelegate;
+class QQuickWidget;
 
 class SuggestionListController
 {
 public:
-    SuggestionListController(QWidget* suggestionListWidget, QQuickItem* suggestionListView,
+    SuggestionListController(QQuickWidget* suggestionBox, QQuickItem* suggestionListView, 
         QObject* suggestionModel, InputHandlerDelegate* inputDelegate);
 
     void addItem(const QString& text, const QString& imagePath,
@@ -32,7 +33,7 @@ private:
     };
     int onSuggestionItemClicked(int index);
 
-    QWidget* suggestionListWidget_;
+    QQuickWidget* suggestionBox_;
     QQuickItem* suggestionListView_;
     QObject* suggestionModel_;
     InputHandlerDelegate* inputDelegate_;

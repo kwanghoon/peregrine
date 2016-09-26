@@ -146,23 +146,7 @@
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QQuickWidget" name="suggestionList">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="resizeMode">
-       <enum>QQuickWidget::SizeViewToRootObject</enum>
-      </property>
-     </widget>
-    </item>
    </layout>
-   <zorder>widget</zorder>
-   <zorder>suggestionList</zorder>
-   <zorder>customUi</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

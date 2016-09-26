@@ -57,6 +57,7 @@ private:
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
+    class QQuickWidget* suggestionBox_ = nullptr;
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
     std::list<QString> actionHistory_;

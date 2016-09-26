@@ -51,7 +51,6 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     //setWindowFlags(Qt::FramelessWindowHint);
     ui->setupUi(this);
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
-    ui->suggestionList->setSource(QUrl::fromLocalFile("SuggestionListView.qml"));
     ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
     ui->customUi->hide();
     resize(width(), ui->inputContainer->height());
@@ -72,8 +71,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     }
     auto* context = ui->inputContainer->rootContext();
     context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
-    context = ui->suggestionList->rootContext();
-    context->setContextProperty("inputHandlerDelegate", inputHandlerDelegate_);
+
     initSuggestionListController();
 
     // input history show button
@@ -165,11 +163,15 @@ LauncherWindow::~LauncherWindow()
 
 void LauncherWindow::initSuggestionListController()
 {
-    ui->suggestionList->setParent(this);
+    suggestionBox_ = new QQuickWidget(QUrl::fromLocalFile("SuggestionListView.qml"));
+    suggestionBox_->setWindowFlags(Qt::FramelessWindowHint);
+    suggestionBox_->setAttribute(Qt::WA_ShowWithoutActivating);
+    suggestionBox_->rootContext()->setContextProperty("inputHandlerDelegate",
+        inputHandlerDelegate_);
 
     QTimer::singleShot(100, this, &LauncherWindow::updateSuggestionListPosition);
 
-    QQuickItem* suggestionListView = ui->suggestionList->rootObject();
+    QQuickItem* suggestionListView = suggestionBox_->rootObject();
     QString s = suggestionListView->objectName();
     assert(!!suggestionListView);
     assert(suggestionListView->objectName() == "suggestionListView");
@@ -178,15 +180,15 @@ void LauncherWindow::initSuggestionListController()
     assert(!!suggestionModel);
 
     global::suggestionListController = new SuggestionListController(
-        ui->suggestionList, suggestionListView, suggestionModel, inputHandlerDelegate_);
+        suggestionBox_, suggestionListView, suggestionModel, inputHandlerDelegate_);
 }
 
 void LauncherWindow::updateSuggestionListPosition()
 {
-    QPoint pos = ui->inputContainer->mapTo(this, QPoint(0, 0));
+    QPoint pos = ui->inputContainer->mapToGlobal(QPoint(0, 0));
     pos.ry() += ui->inputContainer->geometry().height();
-    ui->suggestionList->move(pos);
-    ui->suggestionList->setFixedWidth(ui->inputContainer->width());
+    suggestionBox_->move(pos);
+    suggestionBox_->setFixedWidth(ui->inputContainer->width());
 }
 
 void LauncherWindow::keyPressEvent(QKeyEvent *event)
@@ -478,6 +480,7 @@ void LauncherWindow::pushDown()
     this->setHidden(true);
     hideAction_->setEnabled(false);
     showAction_->setEnabled(true);
+    global::suggestionListController->setVisible(false);
 }
 
 void LauncherWindow::setHeaderText(const QString& text)
@@ -493,6 +496,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         return;
     }
 
+    QString trimmedInputText = inputText.trimmed();
     Action* currAction = ActionManager::getInstance().getActionById(currentAction_);
     Action* adoptedAction = nullptr;
     if (!currAction->adopt.isEmpty())
@@ -500,8 +504,9 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         adoptedAction = ActionManager::getInstance().getActionById(currAction->adopt);
     }
     global::suggestionListController->clearList();
-    if (inputText.isEmpty())
+    if (trimmedInputText.isEmpty())
     {
+        global::suggestionListController->setVisible(false);
         return;
     }
     auto emptyRange = decltype(currAction->links){};
@@ -509,7 +514,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         adoptedAction ? adoptedAction->links : emptyRange);
     for (auto& l : joinedLinks)
     {
-        if (l.keyword.startsWith(inputText, Qt::CaseInsensitive))
+        if (l.keyword.startsWith(trimmedInputText, Qt::CaseInsensitive))
         {
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
@@ -518,7 +523,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
             }
 
             QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
-                .arg(linkedAction->name).arg(inputText).arg(l.keyword.mid(inputText.length()));
+                .arg(linkedAction->name).arg(trimmedInputText).arg(l.keyword.mid(trimmedInputText.length()));
             auto handler = [this, l](boost::any) -> int {
                 changeAction(l.linkedActionId, l.inputText);
                 return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
@@ -531,7 +536,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     {
         auto* customUiItem = this->ui->customUi->rootObject();
         auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
-        QMetaObject::invokeMethod(userUi, "onInputTextChanged", Q_ARG(QVariant, inputText));
+        QMetaObject::invokeMethod(userUi, "onInputTextChanged", Q_ARG(QVariant, trimmedInputText));
     }
 
     // plugin provided suggestions
@@ -539,7 +544,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     if (controller)
     {
         auto id = adoptedAction ? adoptedAction->id : currentAction_;
-        auto suggestions = controller->getSuggestionItems(id, inputText);
+        auto suggestions = controller->getSuggestionItems(id, trimmedInputText);
         for (auto& sugg : suggestions)
         {
             auto handler = [controller](boost::any data) -> int {

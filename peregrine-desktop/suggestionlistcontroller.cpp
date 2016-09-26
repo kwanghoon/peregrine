@@ -6,17 +6,17 @@
 #include <QWidget>
 #include <QObject>
 #include <cassert>
+#include <QQuickWidget>
 
-SuggestionListController::SuggestionListController(QWidget* suggestionListWidget, 
-    QQuickItem* suggestionListView,
-    QObject* suggestionModel, InputHandlerDelegate* inputDelegate)
-    : suggestionListWidget_(suggestionListWidget)
+SuggestionListController::SuggestionListController(QQuickWidget* suggestionBox, 
+    QQuickItem* suggestionListView, QObject* suggestionModel, 
+    InputHandlerDelegate* inputDelegate)
+    : suggestionBox_(suggestionBox)
     , suggestionListView_(suggestionListView)
     , suggestionModel_(suggestionModel)
     , inputDelegate_(inputDelegate)
 {
-    suggestionListWidget_->setVisible(false);
-
+    setVisible(false);
     QObject::connect(inputDelegate_, &InputHandlerDelegate::onSuggestionItemClicked,
         [this](int index) -> int { return onSuggestionItemClicked(index); });
 }
@@ -42,14 +42,10 @@ void SuggestionListController::addItem(const QString& text, const QString& image
         item.data = data;
     }
     suggestingItems_.push_back(item);
-
-    suggestionListWidget_->setVisible(true);
 }
 
 void SuggestionListController::clearList()
 {
-    suggestionListWidget_->setVisible(false);
-
     QMetaObject::invokeMethod(suggestionListView_, "clearItems");
 
     suggestingItems_.clear();
@@ -81,8 +77,11 @@ int SuggestionListController::runSelected()
 
 void SuggestionListController::setVisible(bool visible)
 {
-    QQmlProperty::write(suggestionListView_, "visible", visible);
-    suggestionListWidget_->setVisible(visible);
+    suggestionBox_->setVisible(visible);
+    if (visible)
+    {
+        suggestionBox_->raise();
+    }
 }
 
 int SuggestionListController::onSuggestionItemClicked(int index)
