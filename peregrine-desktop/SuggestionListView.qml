@@ -30,7 +30,8 @@ ListView {
             anchors.fill: parent
             onClicked: {
                 itemDelegate.ListView.currentIndex = index;
-                inputHandlerDelegate.onSuggestionItemClicked(index);
+                // #HACK: assume that 1 is pressing tab behavior
+                inputHandlerDelegate.onSuggestionItemClicked(1, index);
                 itemDelegate.ListView.currentIndex = -1;
             }
         }
@@ -61,11 +62,11 @@ ListView {
         }
     }
 
-    function runSelected() {
+    function runSelected(type) {
         if (currentIndex == -1) {
             return -1;
         }
-        var ret = inputHandlerDelegate.onSuggestionItemClicked(currentIndex);
+        var ret = inputHandlerDelegate.onSuggestionItemClicked(type, currentIndex);
         currentIndex = -1;
         return ret;
     }

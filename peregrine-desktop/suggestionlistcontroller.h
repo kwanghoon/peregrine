@@ -9,29 +9,36 @@
 class InputHandlerDelegate;
 class QQuickWidget;
 
-class SuggestionListController
+class SuggestionListController : public QObject
 {
+    Q_OBJECT
+
 public:
     SuggestionListController(QQuickWidget* suggestionBox, QQuickItem* suggestionListView, 
         QObject* suggestionModel, InputHandlerDelegate* inputDelegate);
 
+    enum class SuggestionRunType
+    {
+        Enter,
+        Tab
+    };
     void addItem(const QString& text, const QString& imagePath,
-        std::function<int(boost::any)> handler, boost::any data);
+        std::function<int(SuggestionRunType, boost::any)> handler, boost::any data);
     void clearList();
     void selectUp();
     void selectDown();
     int getCurrentIndex() const;
-    int runSelected();
+    int runSelected(SuggestionListController::SuggestionRunType type);
     void setVisible(bool visible);
     int getCount() const { return suggestingItems_.size(); }
     
 private:
     struct SuggestingItem
     {
-        std::function<int(boost::any)> handler;
+        std::function<int(SuggestionRunType, boost::any)> handler;
         boost::any data;
     };
-    int onSuggestionItemClicked(int index);
+    int onSuggestionItemClicked(int type, int index);
 
     QQuickWidget* suggestionBox_;
     QQuickItem* suggestionListView_;

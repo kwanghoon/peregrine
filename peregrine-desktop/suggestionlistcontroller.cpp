@@ -18,11 +18,11 @@ SuggestionListController::SuggestionListController(QQuickWidget* suggestionBox,
 {
     setVisible(false);
     QObject::connect(inputDelegate_, &InputHandlerDelegate::onSuggestionItemClicked,
-        [this](int index) -> int { return onSuggestionItemClicked(index); });
+        this, &SuggestionListController::onSuggestionItemClicked);
 }
 
 void SuggestionListController::addItem(const QString& text, const QString& imagePath, 
-    std::function<int(boost::any)> handler, boost::any data)
+    std::function<int(SuggestionRunType, boost::any)> handler, boost::any data)
 {
     QVariant arg(text);
 
@@ -67,11 +67,12 @@ int SuggestionListController::getCurrentIndex() const
     return currentIndex;
 }
 
-int SuggestionListController::runSelected()
+int SuggestionListController::runSelected(SuggestionListController::SuggestionRunType type)
 {
     QVariant ret;
     QMetaObject::invokeMethod(suggestionListView_, "runSelected",
-        Q_RETURN_ARG(QVariant, ret));
+        Q_RETURN_ARG(QVariant, ret),
+        Q_ARG(QVariant, static_cast<int>(type)));
     return ret.toInt();
 }
 
@@ -84,7 +85,8 @@ void SuggestionListController::setVisible(bool visible)
     }
 }
 
-int SuggestionListController::onSuggestionItemClicked(int index)
+int SuggestionListController::onSuggestionItemClicked(int type, int index)
 {
-    return suggestingItems_[index].handler(suggestingItems_[index].data);
+    return suggestingItems_[index].handler(static_cast<SuggestionListController::SuggestionRunType>(type),
+        suggestingItems_[index].data);
 }

@@ -11,6 +11,7 @@ class InputHandlerDelegate;
 class SuggestionListController;
 class QSystemTrayIcon;
 class SyncManager;
+class Action;
 
 class LauncherWindow : public QMainWindow
 {
@@ -39,6 +40,7 @@ private:
     void setupTrayIcon();
     void popUp();
     void pushDown();
+    void suggestLinkedActions(Action* currAction, Action* adoptedAction, const QString& input);
 
     void setHeaderText(const QString& text);
 

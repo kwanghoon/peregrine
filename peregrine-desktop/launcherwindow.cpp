@@ -79,7 +79,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
         global::suggestionListController->clearList();
         for (auto it = inputHistory_.crbegin(); it != inputHistory_.crend(); it++)
         {
-            auto handler = [this](boost::any data) {
+            auto handler = [this](SuggestionListController::SuggestionRunType type, boost::any data) {
                 QString pastInputText = boost::any_cast<QString>(data);
 
                 auto* textInput = ui->inputContainer->rootObject();
@@ -509,28 +509,8 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         global::suggestionListController->setVisible(false);
         return;
     }
-    auto emptyRange = decltype(currAction->links){};
-    auto joinedLinks = boost::join(currAction->links, 
-        adoptedAction ? adoptedAction->links : emptyRange);
-    for (auto& l : joinedLinks)
-    {
-        if (l.keyword.startsWith(trimmedInputText, Qt::CaseInsensitive))
-        {
-            Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
-            if (!linkedAction)
-            {
-                continue;
-            }
-
-            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
-                .arg(linkedAction->name).arg(trimmedInputText).arg(l.keyword.mid(trimmedInputText.length()));
-            auto handler = [this, l](boost::any) -> int {
-                changeAction(l.linkedActionId, l.inputText);
-                return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
-            };
-            global::suggestionListController->addItem(s, QString("heart.png"), handler, nullptr);
-        }
-    }
+    
+    suggestLinkedActions(currAction, adoptedAction, trimmedInputText);
 
     if (!currAction->customUiPath.isEmpty())
     {
@@ -547,7 +527,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
         auto suggestions = controller->getSuggestionItems(id, trimmedInputText);
         for (auto& sugg : suggestions)
         {
-            auto handler = [controller](boost::any data) -> int {
+            auto handler = [controller](SuggestionListController::SuggestionRunType, boost::any data) -> int {
                 size_t token = boost::any_cast<size_t>(data);
                 return controller->runSuggestion(token);
             };
@@ -557,6 +537,41 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
     bool visible = global::suggestionListController->getCount() != 0;
     global::suggestionListController->setVisible(visible);
+}
+
+void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAction, const QString& input)
+{
+    auto emptyRange = decltype(currAction->links){};
+    auto joinedLinks = boost::join(currAction->links,
+        adoptedAction ? adoptedAction->links : emptyRange);
+    for (auto& l : joinedLinks)
+    {
+        if (l.keyword.startsWith(input, Qt::CaseInsensitive))
+        {
+            Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
+            if (!linkedAction)
+            {
+                continue;
+            }
+
+            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
+                .arg(linkedAction->name).arg(input).arg(l.keyword.mid(input.length()));
+            auto handler = [this, l, linkedAction](SuggestionListController::SuggestionRunType type, boost::any) -> int {
+                if (type == SuggestionListController::SuggestionRunType::Tab)
+                {
+                    auto* textInput = ui->inputContainer->rootObject();
+                    textInput->setProperty("text", "");
+                    changeAction(l.linkedActionId, l.inputText);
+                }
+                else if (type == SuggestionListController::SuggestionRunType::Enter)
+                {
+                    linkedAction->run("");
+                }
+                return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
+            };
+            global::suggestionListController->addItem(s, QString("heart.png"), handler, nullptr);
+        }
+    }
 }
 
 void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputText)
@@ -610,7 +625,8 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
         }
         else
         {
-            int ret = global::suggestionListController->runSelected();
+            int ret = global::suggestionListController->runSelected(
+                SuggestionListController::SuggestionRunType::Enter);
             if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
             {
                 pushDown();
@@ -623,7 +639,8 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
         int currentIndex = global::suggestionListController->getCurrentIndex();
         if (currentIndex != -1)
         {
-            global::suggestionListController->runSelected();
+            global::suggestionListController->runSelected(
+                SuggestionListController::SuggestionRunType::Tab);
             global::suggestionListController->setVisible(false);
         }
     }
