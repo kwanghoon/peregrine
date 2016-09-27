@@ -87,6 +87,6 @@ void SuggestionListController::setVisible(bool visible)
 
 int SuggestionListController::onSuggestionItemClicked(int type, int index)
 {
-    return suggestingItems_[index].handler(static_cast<SuggestionListController::SuggestionRunType>(type),
+    return suggestingItems_[index].handler((SuggestionListController::SuggestionRunType)(type),
         suggestingItems_[index].data);
 }

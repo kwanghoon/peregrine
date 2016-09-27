@@ -14,6 +14,7 @@ struct PG_SUGGESTION_ITEM
     char* displayText;
     char* imagePath;
     size_t token;
+    char* completeText;
 };
 
 enum PG_BEHAVIOR_ON_RETURN

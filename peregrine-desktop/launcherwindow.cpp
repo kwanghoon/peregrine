@@ -520,15 +520,31 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     }
 
     // plugin provided suggestions
-    auto* controller = adoptedAction ? adoptedAction->controller : currAction->controller;
+    Action* action = adoptedAction ? adoptedAction : currAction;
+    auto* controller = action->controller;
     if (controller)
     {
         auto id = adoptedAction ? adoptedAction->id : currentAction_;
         auto suggestions = controller->getSuggestionItems(id, trimmedInputText);
         for (auto& sugg : suggestions)
         {
-            auto handler = [controller](SuggestionListController::SuggestionRunType, boost::any data) -> int {
+            QString completeText = sugg.completeText;
+            auto handler = [this, action, controller, completeText](
+                SuggestionListController::SuggestionRunType type, boost::any data) -> int {
                 size_t token = boost::any_cast<size_t>(data);
+                if (!completeText.isEmpty())
+                {
+                    if (type == SuggestionListController::SuggestionRunType::Enter)
+                    {
+                        return action->run(completeText);
+                    }
+                    else
+                    {
+                        auto* textInput = ui->inputContainer->rootObject();
+                        textInput->setProperty("text", completeText);
+                        return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
+                    }
+                }
                 return controller->runSuggestion(token);
             };
             global::suggestionListController->addItem(sugg.text, sugg.imagePath, handler, sugg.token);

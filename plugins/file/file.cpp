@@ -20,8 +20,6 @@ namespace
 {
     size_t nextToken = 1000;
 
-    std::map<size_t/* token */, std::string/* path */> suggested;
-
     string convertWstrToUtf8(const wstring& ucs2)
     {
         wstring_convert<codecvt_utf8<wchar_t>> myconv;
@@ -112,7 +110,6 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
 {
     *n = 0;
     *items = nullptr;
-    suggested.clear();
 
     if (strcmp(currentActionId, "file") != 0)
     {
@@ -154,35 +151,31 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     }
     const int kMaxItems = 10;
     *items = (PG_SUGGESTION_ITEM*)malloc(sizeof(PG_SUGGESTION_ITEM) * kMaxItems);
+    memset(*items, 0, sizeof(PG_SUGGESTION_ITEM) * kMaxItems);
     for (auto it = filesystem::directory_iterator(parentDir); it != filesystem::directory_iterator(); it++)
     {
         string childFilename = convertWstrToUtf8(it->path().filename().wstring());
-        if (istarts_with(childFilename, filenameFrontPart))
+        if (!istarts_with(childFilename, filenameFrontPart))
         {
-            string s = str(boost::format("<b>%s</b>%s") 
-                % childFilename.substr(0, filenameFrontPart.length()) 
-                % childFilename.substr(filenameFrontPart.length()));
-            (*items)[*n].displayText = strdup(s.c_str());
-            (*items)[*n].imagePath = GetFileIconPath(it->path());
-            size_t token = nextToken++;
-            suggested[token] = boost::filesystem::system_complete(it->path()).string();
-            (*items)[*n].token = token;
-            (*n)++;
-            if (*n >= kMaxItems)
-            {
-                break;
-            }
+            continue;
+        }
+        string s = str(boost::format("<b>%s</b>%s") 
+            % childFilename.substr(0, filenameFrontPart.length()) 
+            % childFilename.substr(filenameFrontPart.length()));
+        (*items)[*n].displayText = strdup(s.c_str());
+        (*items)[*n].imagePath = GetFileIconPath(it->path());
+        (*items)[*n].completeText = strdup(filesystem::system_complete(it->path()).string().c_str());
+        (*n)++;
+        if (*n >= kMaxItems)
+        {
+            break;
         }
     }
     return 0;
 }
 
-int RunSuggestion(size_t token)
+int RunSuggestion(size_t)
 {
-    assert(suggested.count(token) != 0);
-    string path = suggested[token];
-#   ifdef Q_OS_WIN
-    int ret = (int)::ShellExecuteA(0, NULL, path.c_str(), NULL, NULL, SW_NORMAL);
-#   endif
+    assert(false);
     return PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR;
 }

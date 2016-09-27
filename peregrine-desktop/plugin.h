@@ -19,6 +19,7 @@ public:
         QString text;
         QString imagePath;
         size_t token;
+        QString completeText;
     };
     std::vector<SuggestionItem> getSuggestionItems(const QString& actionId, const QString& input);
     int runSuggestion(size_t token);
