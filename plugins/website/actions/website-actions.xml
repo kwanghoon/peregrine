@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<!-- google -->
-	<action name="google" id="website-google" image="images/google.png">
+	<action name="google" id="website-google" image="images/google.png"
+		header="Search on 'Google'">
 		<do>
 			<runaction 
 				condition="'input_text' != ''"
@@ -20,7 +21,8 @@
 		</links>
 	</action>	
 	<action name="youtube" id="website-google-youtube"/>
-	<action name="google image sarch" id="website-google-image">
+	<action name="google image search" id="website-google-image"
+		header="Search on 'Google Images'">
 		<do>
 			<runaction 
 				id="website" 

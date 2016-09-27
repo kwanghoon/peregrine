@@ -22,6 +22,7 @@ public:
     int uiWidth, uiHeight;
     QString adopt;
     QString args;
+    QString headerText;
 
     struct DoEntry
     {

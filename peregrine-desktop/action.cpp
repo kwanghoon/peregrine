@@ -80,45 +80,45 @@ ActionManager ActionManager::instance_;
 
 void LoadAction(QDomElement actionElem, QDir dir)
 {
-    actionElem.attribute("name");
-    std::unique_ptr<Action> currentAction(new Action);
-    currentAction->id = actionElem.attribute("id");
-    currentAction->name = actionElem.attribute("name");
+    std::unique_ptr<Action> action(new Action);
+    action->id = actionElem.attribute("id");
+    action->name = actionElem.attribute("name");
+    action->headerText = actionElem.attribute("header");
     QString v = actionElem.attribute("image");
     if (!v.isEmpty())
     {
-        currentAction->imagePath = dir.absoluteFilePath(v);
+        action->imagePath = dir.absoluteFilePath(v);
     }
 
     if (actionElem.hasAttribute("controller"))
     {
-        currentAction->controller = PluginManager::getInstance()
+        action->controller = PluginManager::getInstance()
             .loadPluginModule(dir, actionElem.attribute("controller"));
     }
 
     if (actionElem.hasAttribute("ui"))
     {
-        currentAction->customUiPath = dir.filePath(actionElem.attribute("ui"));
+        action->customUiPath = dir.filePath(actionElem.attribute("ui"));
     }
 
     // ui size
     bool ok = false;
-    currentAction->uiWidth = actionElem.attribute("ui_width", "800").toInt(&ok);
+    action->uiWidth = actionElem.attribute("ui_width", "800").toInt(&ok);
     assert(ok);
-    currentAction->uiHeight = actionElem.attribute("ui_height", "600").toInt(&ok);
+    action->uiHeight = actionElem.attribute("ui_height", "600").toInt(&ok);
     assert(ok);
 
     // adopt
     auto adopt = actionElem.firstChildElement("adopt");
     if (!adopt.isNull())
     {
-        currentAction->adopt = adopt.attribute("id");
+        action->adopt = adopt.attribute("id");
         
         for (auto arg = adopt.firstChildElement("arguments").firstChildElement("arg");
             !arg.isNull(); arg = arg.nextSiblingElement("arg"))
         {
             arg.attribute("name");
-            currentAction->args = arg.text();
+            action->args = arg.text();
         }
     }
 
@@ -137,7 +137,7 @@ void LoadAction(QDomElement actionElem, QDir dir)
                 e.condition = child.attribute("condition");
             }
         }
-        currentAction->doList.push_back(e);
+        action->doList.push_back(e);
     }
 
     // links
@@ -152,8 +152,8 @@ void LoadAction(QDomElement actionElem, QDir dir)
             e.keyword = child.attribute("keyword");
             e.inputText = child.attribute("input_text");
         }
-        currentAction->links.push_back(e);
+        action->links.push_back(e);
     }
 
-    ActionManager::getInstance().addAction(move(currentAction));
+    ActionManager::getInstance().addAction(move(action));
 }

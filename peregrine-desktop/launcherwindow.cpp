@@ -332,12 +332,22 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
 
     if (currentAction_.isEmpty())
     {
+        ui->headerTextLabel->setText(QString());
         actionDisplay->clear();
         return;
     }
 
+    // set header text
     auto action = ActionManager::getInstance().getActionById(actionId);
     ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
+    if (action->headerText.isEmpty())
+    {
+        ui->headerTextLabel->setText(QString("Type terms for '%1' action").arg(actionId));
+    }
+    else
+    {
+        ui->headerTextLabel->setText(action->headerText);
+    }
 
     QString argsForActivatedEvent;
     int uiWidth = action->uiWidth, uiHeight = action->uiHeight;
