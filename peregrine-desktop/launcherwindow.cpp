@@ -215,15 +215,7 @@ void LauncherWindow::keyPressEvent(QKeyEvent *event)
         }
         else
         {
-            if (!actionHistory_.empty())
-            {
-                if (inputHistoryIterator_ != actionHistory_.begin())
-                {
-                    inputHistoryIterator_--;
-                }
-                auto* textInput = ui->inputContainer->rootObject();
-                textInput->setProperty("text", *inputHistoryIterator_);
-            }
+            recallInputHistory();
         }
     }
     else if (event->key() == Qt::Key::Key_F12 && (event->modifiers() & Qt::Modifier::ALT) != 0)
@@ -468,7 +460,7 @@ void LauncherWindow::popUp()
             textInput->setProperty("text", s);
         }
 
-        inputHistoryIterator_ = inputHistory_.end();
+        inputHistoryIterator_ = inputHistory_.cend();
 
         bool pressing = false;
 #       ifdef Q_OS_WIN
@@ -600,20 +592,13 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
     }
 }
 
-void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputText)
+bool LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputText)
 {
     // undo
     if (key == Qt::Key::Key_Z && (modifiers & Qt::Modifier::CTRL) != 0)
     {
-        if (!inputHistory_.empty())
-        {
-            if (inputHistoryIterator_ != inputHistory_.begin())
-            {
-                inputHistoryIterator_--;
-            }
-            auto* textInput = ui->inputContainer->rootObject();
-            textInput->setProperty("text", *inputHistoryIterator_);
-        }
+        recallInputHistory();
+        return false;
     }
     else if (key == Qt::Key::Key_Control || key == Qt::Key::Key_Alt)
     {
@@ -633,16 +618,12 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
             qDebug() << inputText;
             if (currentAction_.isEmpty())
             {
-                return;
+                return true;
             }
             auto action = ActionManager::getInstance().getActionById(currentAction_);
             int ret = action->run(inputText);
 
-            inputHistory_.push_back(inputText);
-            if (inputHistory_.size() > 10)
-            {
-                inputHistory_.pop_front();
-            }
+            saveInputHistory(inputText);
 
             if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
             {
@@ -693,6 +674,7 @@ void LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
             switchToNextAction();
         }
     }
+    return true;
 }
 
 void LauncherWindow::initHistory()
@@ -734,6 +716,29 @@ void LauncherWindow::switchToNextAction()
     {
         actionHistoryPointer_++;
         changeAction(*actionHistoryPointer_);
+    }
+}
+
+void LauncherWindow::saveInputHistory(const QString& inputText)
+{
+    inputHistory_.push_back(inputText);
+    if (inputHistory_.size() > 10)
+    {
+        inputHistory_.pop_front();
+    }
+    inputHistoryIterator_ = inputHistory_.cend();
+}
+
+void LauncherWindow::recallInputHistory()
+{
+    if (!inputHistory_.empty())
+    {
+        if (inputHistoryIterator_ != inputHistory_.cbegin())
+        {
+            inputHistoryIterator_--;
+        }
+        auto* textInput = ui->inputContainer->rootObject();
+        textInput->setProperty("text", *inputHistoryIterator_);
     }
 }
 

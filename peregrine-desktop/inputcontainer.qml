@@ -10,6 +10,8 @@ TextInput {
     font.pixelSize: 12
     onTextChanged: inputHandlerDelegate.onInputTextChanged(text);
     Keys.onPressed: {
-        inputHandlerDelegate.onKeyPressed(event.key, event.modifiers, text);
+        if (!inputHandlerDelegate.onKeyPressed(event.key, event.modifiers, text)) {
+            event.accepted = true;
+        }
     }
 }

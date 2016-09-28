@@ -50,13 +50,15 @@ private:
 
     // QML widget input listeners
     void onInputTextChanged(const QString& inputText);
-    void onKeyPressed(int key, int modifiers, const QString& inputText);
+    bool onKeyPressed(int key, int modifiers, const QString& inputText);
 
     // history control
     void initHistory();
     void saveHistory();
     void switchToPreviousAction();
     void switchToNextAction();
+    void saveInputHistory(const QString& inputText);
+    void recallInputHistory();
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
@@ -64,10 +66,10 @@ private:
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;
     std::list<QString> actionHistory_;
+    decltype(actionHistory_)::iterator actionHistoryPointer_;
     std::list<QString> inputHistory_;
     std::list<QString>::const_iterator inputHistoryIterator_;
 
-    decltype(actionHistory_)::iterator actionHistoryPointer_;
     bool appExit_ = false;
     bool holdingWindow_ = false;
     QPoint mousePressPos_;

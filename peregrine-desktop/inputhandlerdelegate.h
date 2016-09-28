@@ -15,7 +15,7 @@ public:
 signals:
     Q_INVOKABLE void onInputTextChanged(const QString& inputText);
     Q_INVOKABLE int onSuggestionItemClicked(int type, int index);
-    Q_INVOKABLE void onKeyPressed(int key, int modifiers, const QString& inputText);
+    Q_INVOKABLE bool onKeyPressed(int key, int modifiers, const QString& inputText);
 
 public slots:
 };
