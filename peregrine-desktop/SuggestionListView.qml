@@ -3,8 +3,8 @@ import QtQuick 2.0
 ListView {
     id: suggestionListView
     objectName: "suggestionListView"
-    width: 320;
-    height: 200;
+    width: 2000
+    height: 200
 
     currentIndex: -1
 
@@ -33,6 +33,11 @@ ListView {
                 // #HACK: assume that 1 is pressing tab behavior
                 inputHandlerDelegate.onSuggestionItemClicked(1, index);
                 itemDelegate.ListView.currentIndex = -1;
+            }
+
+            hoverEnabled: true
+            onEntered: {
+                suggestionListView.currentIndex = index;
             }
         }
     }
