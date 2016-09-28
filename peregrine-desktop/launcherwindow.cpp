@@ -730,7 +730,7 @@ void LauncherWindow::switchToPreviousAction()
 
 void LauncherWindow::switchToNextAction()
 {
-    if (actionHistoryPointer_ != actionHistory_.end())
+    if (next(actionHistoryPointer_) != actionHistory_.end())
     {
         actionHistoryPointer_++;
         changeAction(*actionHistoryPointer_);
