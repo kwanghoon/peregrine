@@ -53,6 +53,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
     ui->customUi->hide();
+    ui->inputHistoryShowButton->setEnabled(false);
     resize(width(), ui->inputContainer->height());
 
     QIcon appIcon("heart.png");
@@ -721,6 +722,10 @@ void LauncherWindow::switchToNextAction()
 
 void LauncherWindow::saveInputHistory(const QString& inputText)
 {
+    if (!ui->inputHistoryShowButton->isEnabled())
+    {
+        ui->inputHistoryShowButton->setEnabled(true);
+    }
     inputHistory_.push_back(inputText);
     if (inputHistory_.size() > 10)
     {
