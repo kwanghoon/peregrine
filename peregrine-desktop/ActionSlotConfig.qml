@@ -52,12 +52,13 @@ Row {
                     if (actionTab.dropSlot == null) {
                         return;
                     }
-                    slotPanel.allocActionOnSlot(
-                        actionTab.dropSlot.index, actionid, (imagePath != "" ? imagePath : null));
+                    slotPanel.allocActionOnSlot(actionTab.dropSlot.index, actionid, 
+                        (imagePath != "" ? imagePath : null));
                 }
             }
         }
     }
+
     Rectangle {
         id: slotPanel
         anchors.top: parent.top
@@ -145,6 +146,7 @@ Row {
                 }
             }
         }
+
         function allocActionOnSlot(indexOrPos, actionId, imagePath) {
             var index = -1;
             if (typeof indexOrPos === 'object') {
@@ -189,7 +191,7 @@ Row {
 
         Component.onDestruction: {
             var settings = {
-                slots: []
+                actionslots: []
             };
             for (var i = 0; i < slots.count; i++) {
                 if (slots.itemAt(i).actionId == '') {
@@ -200,7 +202,7 @@ Row {
                     y: slots.model[i].y,
                     actionId: slots.itemAt(i).actionId
                 };
-                settings.slots.push(slotSetting);
+                settings.actionslots.push(slotSetting);
             }
             controller.saveActionSlotSettings(settings);
         }

@@ -87,7 +87,7 @@ QVariantMap ConfigurationController::getConfigs()
                 }
                 slotList.push_back(move(slotInfo));
             }
-            configs.insert("slots", slotList);
+            configs.insert("actionslots", slotList);
         }
 
         //

@@ -84,12 +84,12 @@ TabView {
                 return null;
             }
 
-            for (var i = 0; i < configs.slots.length; i++) {
+            for (var i = 0; i < configs.actionslots.length; i++) {
                 var slotPanel = item.children[1];
                 slotPanel.allocActionOnSlot(
-                    {x: configs.slots[i].x, y: configs.slots[i].y},
-                    configs.slots[i].actionid,
-                    findAction(configs.slots[i].actionid).imagePath);
+                    {x: configs.actionslots[i].x, y: configs.actionslots[i].y},
+                    configs.actionslots[i].actionid,
+                    findAction(configs.actionslots[i].actionid).imagePath);
             }
         }
     }

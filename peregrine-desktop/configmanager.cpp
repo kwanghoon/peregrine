@@ -85,23 +85,26 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
     auto root = doc.documentElement();
 
     // update 
-    auto actionSlotsElem = doc.createElement("actionslots");
-    const QVariantList& actionSlots = config["slots"].toList();
-    for (const auto& e : actionSlots)
+    if (config.contains("actionslots"))
     {
-        auto& slotSetting = e.toMap();
-        QDomElement actionSlotElem = doc.createElement("actionslot");
+        auto actionSlotsElem = doc.createElement("actionslots");
+        const QVariantList& actionSlots = config["actionslots"].toList();
+        for (const auto& e : actionSlots)
         {
-            int x = slotSetting["x"].toInt();
-            actionSlotElem.setAttribute("x", x);
-            int y = slotSetting["y"].toInt();
-            actionSlotElem.setAttribute("y", y);
-            QString id = slotSetting["actionId"].toString();
-            actionSlotElem.setAttribute("actionid", id);
+            auto& slotSetting = e.toMap();
+            QDomElement actionSlotElem = doc.createElement("actionslot");
+            {
+                int x = slotSetting["x"].toInt();
+                actionSlotElem.setAttribute("x", x);
+                int y = slotSetting["y"].toInt();
+                actionSlotElem.setAttribute("y", y);
+                QString id = slotSetting["actionId"].toString();
+                actionSlotElem.setAttribute("actionid", id);
+            }
+            actionSlotsElem.appendChild(actionSlotElem);
         }
-        actionSlotsElem.appendChild(actionSlotElem);
+        root.replaceChild(actionSlotsElem, root.firstChildElement("actionslots"));
     }
-    root.replaceChild(actionSlotsElem, root.firstChildElement("actionslots"));
 
     // save
     settingFile.seek(0);
@@ -150,7 +153,6 @@ void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)
     settingFile.close();
 
     loadConfig();
-
 }
 
 const ConfigManager::AccountInfo& ConfigManager::getAccountInfo() const
