@@ -13,11 +13,7 @@ TabView {
 
         onLoaded: {
             var configs = controller.getConfigs();
-            if (configs.isStartupApp) {
-                var cb = item.children[0];
-                cb.ignoreCheckedChangedFlag = true;
-                cb.checked = configs.isStartupApp;
-            }
+            item.load(configs);
         }
     }
     Tab {

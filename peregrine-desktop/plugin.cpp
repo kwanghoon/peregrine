@@ -36,6 +36,7 @@ namespace
     }
 
     PG_FUNC_TABLE funcTable;
+    PG_PLUGIN_CONFIGS pluginConfigs;
 }
 
 PluginModule::PluginModule(QDir dir, const QString& name)
@@ -50,11 +51,11 @@ PluginModule::PluginModule(QDir dir, const QString& name)
         throw std::runtime_error(messae.toStdString());
     }
 
-    typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*);
+    typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*, const PG_PLUGIN_CONFIGS*);
     auto initPluginFunc = (fpInitializePlugin)lib->resolve("InitializePlugin");
     g_pluginContext.currPlugin = this;
     assert(!!funcTable.fpSetHeaderText);
-    int ret = initPluginFunc(&funcTable);
+    int ret = initPluginFunc(&funcTable, &pluginConfigs);
     g_pluginContext.currPlugin = nullptr;
     if (ret < 0)
     {
@@ -179,6 +180,11 @@ void PluginManager::setCallbacks(std::function<int(const QString&)> setHeaderTex
         s_invokeQmlFuncFunc(funcName, jsonArg);
         return 0;
     };
+}
+
+void PluginManager::setConfigs(int maxSuggestions)
+{
+    pluginConfigs.maxSuggestions = maxSuggestions;
 }
 
 QString PluginManager::getPluginNameFromDir(const QDir& dir)

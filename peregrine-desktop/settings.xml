@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
 	<plugin plugindir="plugins"/>
+	<maxSuggestions>7</maxSuggestions>
 	<actionslots>
 		<actionslot x='1' y='0' actionid='website-google'/>
 		<actionslot x='-1' y='0' actionid='website-bing'/>

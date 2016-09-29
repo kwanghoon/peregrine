@@ -291,6 +291,8 @@ void LauncherWindow::loadPlugins()
         QMetaObject::invokeMethod(userUi, functionName, Q_ARG(QVariant, jsonArgument));
         return 0;
     });
+    PluginManager::getInstance().setConfigs(
+        global::GetConfigManager().getMaxSuggestions());
 
     // 
     QDir pluginDir(global::userConfig.pluginDir);

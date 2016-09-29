@@ -58,9 +58,13 @@ QVariantMap ConfigurationController::getConfigs()
 {
     QVariantMap configs;
     {
-        bool registered = utils::isRegisteredAsStartupApp(QCoreApplication::applicationFilePath(), kPeregrineTaskName);
+        // General
+        bool registered = utils::isRegisteredAsStartupApp(
+            QCoreApplication::applicationFilePath(), kPeregrineTaskName);
         configs.insert("isStartupApp", registered);
+        configs.insert("maxSuggestions", global::GetConfigManager().getMaxSuggestions());
 
+        // Actions
         {
             QVariantList actionList;
             auto& al = ActionManager::getInstance().getActionList();

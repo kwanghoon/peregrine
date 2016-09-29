@@ -9,7 +9,7 @@ extern "C"
 #endif
 
 ECHOSHARED_EXPORT
-int InitializePlugin(const struct PG_FUNC_TABLE* funcTable);
+int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS* pluginConfigs);
 
 ECHOSHARED_EXPORT
 int RunAction(const char* actionId, const char* data);

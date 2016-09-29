@@ -47,6 +47,7 @@ public:
     PluginModule* loadPluginModule(const QDir& dir, const QString& name);
     void setCallbacks(std::function<int(const QString&)> setHeaderTextFunc, 
         std::function<int(const char*, const char*)> invokeQmlFuncFunc);
+    void setConfigs(int maxSuggestions);
     static PluginManager& getInstance() { return instance_; }
     static QString getPluginNameFromDir(const QDir& dir);
 

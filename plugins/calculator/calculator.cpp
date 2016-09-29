@@ -6,7 +6,7 @@
 
 const struct PG_FUNC_TABLE* g_funcTable;
 
-int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
+int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS* pluginConfigs)
 {
     g_funcTable = funcTable;
     return 0;

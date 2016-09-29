@@ -15,8 +15,7 @@ using namespace std;
 const uint64_t kAccountCryptKey = (0x20de01f4ec48a1b8 ^ 0x9a70877ba78acb38 + 0x40edfedc7e70bb1a ^ 0x54c13e537e530ce4);
 
 ConfigManager::ConfigManager()
-{
-}
+{}
 
 void ConfigManager::loadConfig()
 {
@@ -28,9 +27,16 @@ void ConfigManager::loadConfig()
     }
     auto root = doc.documentElement();
 
+
     auto pluginElem = root.firstChildElement("plugin");
     global::userConfig.pluginDir = pluginElem.attribute("plugindir");
 
+
+    auto elem = root.firstChildElement("maxSuggestions");
+    Q_ASSERT(!elem.isNull());
+    maxSuggestions_ = elem.text().toInt();
+
+    
     auto actionSlotElem = root.firstChildElement("actionslots");
     auto child = actionSlotElem.firstChildElement("actionslot");
     global::userConfig.actionSlotAssignData.clear();
@@ -104,6 +110,13 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
             actionSlotsElem.appendChild(actionSlotElem);
         }
         root.replaceChild(actionSlotsElem, root.firstChildElement("actionslots"));
+    }
+    else if (config.contains("maxSuggestions"))
+    {
+        auto elem = root.firstChildElement("maxSuggestions");
+        Q_ASSERT(!elem.isNull());
+        QDomText text = elem.firstChild().toText();
+        text.setNodeValue(config["maxSuggestions"].toString());
     }
 
     // save

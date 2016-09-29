@@ -41,7 +41,7 @@ namespace
     }
 }
 
-int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
+int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS* pluginConfigs)
 {
     qDebug() << "Initialize website plugin";
     ::funcTable = funcTable;

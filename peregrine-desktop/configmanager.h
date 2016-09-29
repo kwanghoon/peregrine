@@ -23,6 +23,7 @@ public:
         int passwordLength;
     };
     const AccountInfo& getAccountInfo() const;
+    int getMaxSuggestions() const { return maxSuggestions_; }
 
     int getSlots() const
     {
@@ -35,6 +36,7 @@ signals:
 
 private:
     AccountInfo account_;
+    int maxSuggestions_;
 };
 
 #endif // CONFIGMANAGER_H

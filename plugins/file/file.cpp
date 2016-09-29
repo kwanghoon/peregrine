@@ -30,11 +30,14 @@ namespace
         wstring_convert<codecvt_utf8<wchar_t>> myconv;
         return myconv.from_bytes(s);
     }
+
+    int maxSuggestions;
 }
 
-int InitializePlugin(const struct PG_FUNC_TABLE* funcTable)
+int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS* pluginConfigs)
 {
     qDebug() << "Initialize file plugin";
+    maxSuggestions = pluginConfigs->maxSuggestions;
     return 0;
 }
 
@@ -149,9 +152,8 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     {
         filenameFrontPart.clear();
     }
-    const int kMaxItems = 10;
-    *items = (PG_SUGGESTION_ITEM*)malloc(sizeof(PG_SUGGESTION_ITEM) * kMaxItems);
-    memset(*items, 0, sizeof(PG_SUGGESTION_ITEM) * kMaxItems);
+    *items = (PG_SUGGESTION_ITEM*)malloc(sizeof(PG_SUGGESTION_ITEM) * maxSuggestions);
+    memset(*items, 0, sizeof(PG_SUGGESTION_ITEM) * maxSuggestions);
     for (auto it = filesystem::directory_iterator(parentDir); it != filesystem::directory_iterator(); it++)
     {
         string childFilename = convertWstrToUtf8(it->path().filename().wstring());
@@ -166,7 +168,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
         (*items)[*n].imagePath = GetFileIconPath(it->path());
         (*items)[*n].completeText = strdup(filesystem::system_complete(it->path()).string().c_str());
         (*n)++;
-        if (*n >= kMaxItems)
+        if (*n >= maxSuggestions)
         {
             break;
         }

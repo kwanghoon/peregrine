@@ -41,5 +41,21 @@ Item {
         x: 170; y: 30
         width: 85; height: 20
         placeholderText: "Enter a number"
+        inputMask: 'D0'
+    }
+
+    function load(configs) {
+        if (configs.isStartupApp) {
+            var cb = item.children[0];
+            cb.ignoreCheckedChangedFlag = true;
+            cb.checked = configs.isStartupApp;
+        }
+        maxSuggestions.text = configs.maxSuggestions;
+    }
+    Component.onDestruction: {
+        var settings = {
+            maxSuggestions: parseInt(maxSuggestions.text)
+        };
+        controller.saveActionSlotSettings(settings);
     }
 }

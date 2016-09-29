@@ -9,6 +9,11 @@ struct PG_FUNC_TABLE
     InvokeQmlFunc fpInvokeQmlFunc;
 };
 
+struct PG_PLUGIN_CONFIGS
+{
+    int maxSuggestions;
+};
+
 struct PG_SUGGESTION_ITEM
 {
     char* displayText;
