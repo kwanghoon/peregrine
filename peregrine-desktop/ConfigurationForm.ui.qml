@@ -10,6 +10,7 @@ TabView {
         title: "General"
 
         Item {
+            x: 10; y: 10
             MessageDialog {
                 id: privilegeFailMessage
                 title: "Peregrine"
@@ -38,6 +39,16 @@ TabView {
                     }
                 }
             }
+            Label {
+                x: 0; y: 30
+                text: "Maximum number of suggestions:"
+            }
+            TextField {
+                id: maxSuggestions
+                x: 170; y: 30
+                width: 85; height: 20
+                placeholderText: "Enter a number"
+            }
         }
 
         onLoaded: {
@@ -53,34 +64,34 @@ TabView {
         title: "Action"
         ActionSlotConfig {}
 
-		onLoaded: {
-			var configs = controller.getConfigs();
-			var actionListView = item.children[0];
-			for (var i = 0; i < configs.actionList.length; i++) {
-				var action = configs.actionList[i];
-				actionListView.model.append({
-					actionid: action.actionid,
-					imagePath: action.imagePath});
-			}
+        onLoaded: {
+            var configs = controller.getConfigs();
+            var actionListView = item.children[0];
+            for (var i = 0; i < configs.actionList.length; i++) {
+                var action = configs.actionList[i];
+                actionListView.model.append({
+                    actionid: action.actionid,
+                    imagePath: action.imagePath});
+            }
 
-			// load action slot settings
-			function findAction(actionId) {
-				for (var i = 0; i < configs.actionList.length; i++) {
-					if (configs.actionList[i].actionid == actionId) {
-						return configs.actionList[i];
-					}
-				}
-				return null;
-			}
+            // load action slot settings
+            function findAction(actionId) {
+                for (var i = 0; i < configs.actionList.length; i++) {
+                    if (configs.actionList[i].actionid == actionId) {
+                        return configs.actionList[i];
+                    }
+                }
+                return null;
+            }
 
-			for (var i = 0; i < configs.slots.length; i++) {
-				var slotPanel = item.children[1];
-				slotPanel.allocActionOnSlot(
-					{x: configs.slots[i].x, y: configs.slots[i].y},
-					configs.slots[i].actionid,
-					findAction(configs.slots[i].actionid).imagePath);
-			}
-		}
+            for (var i = 0; i < configs.slots.length; i++) {
+                var slotPanel = item.children[1];
+                slotPanel.allocActionOnSlot(
+                    {x: configs.slots[i].x, y: configs.slots[i].y},
+                    configs.slots[i].actionid,
+                    findAction(configs.slots[i].actionid).imagePath);
+            }
+        }
     }
     Tab {
         title: "Plugins"
@@ -111,6 +122,6 @@ TabView {
     }
     Tab {
         title: "Account"
-		AccountConfig {}
+        AccountConfig {}
     }
 }
