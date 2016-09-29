@@ -17,8 +17,8 @@ public:
     // #HACK: QT documents instructed to specify a NOTIFY signal for QML use.
     //        but, it seems to work despite of the lack of it.
     Q_PROPERTY(qreal initialTabIndex MEMBER initialTabIndex);
-    Q_INVOKABLE bool registerAsStarupApp();
-    Q_INVOKABLE bool deregisterAsStarupApp();
+    Q_INVOKABLE bool registerAsStartupApp();
+    Q_INVOKABLE bool deregisterAsStartupApp();
     Q_INVOKABLE QVariantMap getConfigs();
     Q_INVOKABLE void setFieldByLocalPath(QObject* target, QString field, QString localPath);
     Q_INVOKABLE void saveActionSlotSettings(const QVariantMap& slotSettings);

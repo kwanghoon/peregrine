@@ -10,6 +10,11 @@ TabView {
         title: "General"
 
         Item {
+            MessageDialog {
+                id: privilegeFailMessage
+                title: "Peregrine"
+                text: "Failed. Try again with higher privilege."
+            }
             CheckBox {
                 text: "Register As Startup Program"
 
@@ -22,13 +27,14 @@ TabView {
 
                     var success;
                     if (checked) {
-                        success = controller.registerAsStarupApp();
+                        success = controller.registerAsStartupApp();
                     } else {
-                        success = controller.deregisterAsStarupApp();
+                        success = controller.deregisterAsStartupApp();
                     }
                     if (!success) {
                         ignoreCheckedChangedFlag = true;
                         checked = !checked;
+                        privilegeFailMessage.visible = true;
                     }
                 }
             }
@@ -150,7 +156,7 @@ TabView {
                         y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
                         width: parent.actionWidth; height: parent.actionHeight
                         Rectangle {
-                            color: !parent.containsDrag ? "	darkgray" : "cornflowerblue"
+                            color: !parent.containsDrag ? "    darkgray" : "cornflowerblue"
                             anchors.fill: parent
 
                             MouseArea {

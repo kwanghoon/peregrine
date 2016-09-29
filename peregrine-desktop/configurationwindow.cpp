@@ -42,13 +42,13 @@ ConfigurationWindow::~ConfigurationWindow()
     delete ui;
 }
 
-bool ConfigurationController::registerAsStarupApp()
+bool ConfigurationController::registerAsStartupApp()
 {
     bool ret = utils::registerAsStartupApp(QCoreApplication::applicationFilePath(), kPeregrineTaskName);
     return ret;
 }
 
-bool ConfigurationController::deregisterAsStarupApp()
+bool ConfigurationController::deregisterAsStartupApp()
 {
     bool ret = utils::deregisterAsStartupApp(kPeregrineTaskName);
     return ret;
