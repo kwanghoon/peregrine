@@ -58,7 +58,9 @@ DISTFILES += \
     inputcontainer.qml \
     SuggestionListView.qml \
     ConfigurationForm.ui.qml \
-    CustomUi.qml
+    CustomUi.qml \
+    ActionSlotConfig.qml \
+    AccountConfig.qml
 
 # boost
 INCLUDEPATH += $$(BOOST_ROOT)
