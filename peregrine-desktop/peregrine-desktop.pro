@@ -60,7 +60,8 @@ DISTFILES += \
     ConfigurationForm.ui.qml \
     CustomUi.qml \
     ActionSlotConfig.qml \
-    AccountConfig.qml
+    AccountConfig.qml \
+    GeneralConfig.qml
 
 # boost
 INCLUDEPATH += $$(BOOST_ROOT)
