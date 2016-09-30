@@ -31,6 +31,7 @@ private:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
 
+    void initializeUI();
     void initSuggestionListController();
     void updateSuggestionListPosition();
     void loadPlugins();

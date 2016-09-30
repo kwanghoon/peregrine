@@ -27,6 +27,7 @@
 #include <QMenu>
 #include <QTimer>
 #include <QClipboard>
+#include <QSizeGrip>
 
 // boost
 #include <boost/range.hpp>
@@ -48,18 +49,8 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     ui(new Ui::LauncherWindow)
 {
     // initialize UI
-    //setWindowFlags(Qt::FramelessWindowHint);
-    ui->setupUi(this);
-    ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
-    ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
-    ui->customUi->hide();
-    ui->inputHistoryShowButton->setEnabled(false);
-    resize(width(), ui->inputContainer->height());
+    initializeUI();
 
-    QIcon appIcon("heart.png");
-    setWindowIcon(appIcon);
-
-    setupTrayIcon();
     setFocus();
 
     // prepare communication with QML
@@ -132,6 +123,34 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     {}
 #   endif // NDEBUG
 #   endif // Q_OS_WIN
+}
+
+void LauncherWindow::initializeUI()
+{
+    ui->setupUi(this);
+
+    QIcon appIcon("heart.png");
+    setWindowIcon(appIcon);
+
+    setupTrayIcon();
+
+    // to support resizing frameless window
+    ui->verticalLayout->addWidget(new QSizeGrip(ui->frame), 0, Qt::AlignBottom | Qt::AlignRight);
+
+    // widget styling
+    setWindowFlags(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    ui->frame->setStyleSheet(
+        ".QFrame{ background-color: lightblue; border: 3px solid CornflowerBlue; border-radius: 10px; }");
+    QFont headerFont("Optima", 10, QFont::Bold);
+    ui->headerTextLabel->setFont(headerFont);
+    ui->headerTextLabel->setStyleSheet("QLabel { color: Black }");
+
+    ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
+    ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
+    ui->customUi->hide();
+    ui->inputHistoryShowButton->setEnabled(false);
+    resize(width(), ui->inputContainer->height());
 }
 
 void LauncherWindow::onConfigUpdated()
