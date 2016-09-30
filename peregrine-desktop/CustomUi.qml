@@ -9,7 +9,6 @@ Item {
             var created = Qt.createQmlObject(qmlObjStr, customUiRoot);
             created.onActivated(argsForActivatedEvent);
         } catch(err) {
-            console.log(created.message);
         }
     }
 

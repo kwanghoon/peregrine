@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="peregrine">
+	<actions>
+		<action name="peregrine" id="peregrine" ui="peregrine.qml" 
+			ui_width="600" ui_height="550"/>	
+	</actions>
+</plugin>
