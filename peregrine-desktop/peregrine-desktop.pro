@@ -94,6 +94,8 @@ INCLUDEPATH += ../thirdparty/zlib \
     ../thirdparty/zlib-build
 win32-msvc* {
     LIBS += -l$$absolute_path(../thirdparty/zlib-build/$$OPTIM_MODE/zlibstatic$$OPTIM_SUFFIX)
+} else {
+    LIBS += -L$$absolute_path(../thirdparty/zlib-build) -lz
 }
 
 # SimpleCrypt
