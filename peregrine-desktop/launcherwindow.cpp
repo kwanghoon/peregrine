@@ -320,6 +320,11 @@ void LauncherWindow::tryLoadPlugin(QString path)
 
 void LauncherWindow::changeAction(QString actionId, QString inputText)
 {
+    if (actionId.isEmpty())
+    {
+        return;
+    }
+
     currentAction_ = actionId;
 
     QQuickItem* customUiItem = ui->customUi->rootObject();
@@ -328,13 +333,6 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
     global::suggestionListController->setVisible(false);
 
     QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
-
-    if (currentAction_.isEmpty())
-    {
-        ui->headerTextLabel->setText(QString());
-        actionDisplay->clear();
-        return;
-    }
 
     // set header text
     auto action = ActionManager::getInstance().getActionById(actionId);
