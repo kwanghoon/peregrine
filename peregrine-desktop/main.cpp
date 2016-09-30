@@ -5,7 +5,9 @@
 #include <QDebug>
 #include <QDir>
 #include <QMessageBox>
-#include <QtWebView/QtWebView>
+#ifdef WEBVIEW_SUPPORT
+#   include <QtWebView/QtWebView>
+#endif
 #include <algorithm>
 #include <memory>
 
@@ -48,7 +50,9 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QApplication::applicationDirPath());
 
     LauncherWindow w;
+#   if defined(WEBVIEW_SUPPORT)
     QtWebView::initialize();
+#   endif
     w.show();
 
     return a.exec();

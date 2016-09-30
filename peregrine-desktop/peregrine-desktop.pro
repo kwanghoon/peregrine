@@ -2,8 +2,12 @@
 QT += core gui \
     xml \
     quickwidgets \
-    webview \
     network
+
+!win32-g++ {
+    QT += webview
+    DEFINES += WEBVIEW_SUPPORT
+}
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -81,7 +85,7 @@ equals(TEMPLATE, "vcapp") {
 }
 
 # quazip
-DEFINES +=  QUAZIP_STATIC
+DEFINES += QUAZIP_STATIC
 QUAZIP_DIR = ../thirdparty/quazip/quazip
 include($$QUAZIP_DIR/quazip.pri)
 
