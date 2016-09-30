@@ -27,6 +27,7 @@ void ConfigManager::loadConfig()
     }
     auto root = doc.documentElement();
 
+    startAction_ = root.attribute("startAction");
 
     auto pluginElem = root.firstChildElement("plugin");
     global::userConfig.pluginDir = pluginElem.attribute("plugindir");

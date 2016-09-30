@@ -24,6 +24,7 @@ public:
     };
     const AccountInfo& getAccountInfo() const;
     int getMaxSuggestions() const { return maxSuggestions_; }
+    const QString& getStartAction() const { return startAction_; }
 
     int getSlots() const
     {
@@ -37,6 +38,7 @@ signals:
 private:
     AccountInfo account_;
     int maxSuggestions_;
+    QString startAction_;
 };
 
 #endif // CONFIGMANAGER_H

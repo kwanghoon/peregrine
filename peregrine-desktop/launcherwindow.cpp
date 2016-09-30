@@ -88,6 +88,11 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 
     initHistory();
 
+    if (!global::GetConfigManager().getStartAction().isEmpty())
+    {
+        changeAction(global::GetConfigManager().getStartAction());
+    }
+
 #   ifdef Q_OS_WIN
     if (::RegisterHotKey((HWND)winId(), kHotKey_PopUpId_, MOD_ALT | MOD_CONTROL | MOD_NOREPEAT,
         VK_OEM_2)) // VK_OEM_2 is '/'
