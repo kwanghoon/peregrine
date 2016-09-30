@@ -59,8 +59,8 @@ Rectangle {
 				GroupBox {
 					title: index == 0 ? "From" : "To"
 					width: parent.width / 2 - 10
-					anchors.left: index == 0 ? parent.left : null
-					anchors.right: index == 1? parent.right : null
+					anchors.left: index == 0 ? parent.left : undefined
+					anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
 					Column {
@@ -127,8 +127,8 @@ Rectangle {
 				GroupBox {
 					title: index == 0 ? "From" : "To"
 					width: parent.width / 2 - 10
-					anchors.left: index == 0 ? parent.left : null
-					anchors.right: index == 1? parent.right : null
+					anchors.left: index == 0 ? parent.left : undefined
+					anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
 					Column {
@@ -185,8 +185,8 @@ Rectangle {
 				GroupBox {
 					title: index == 0 ? "From" : "To"
 					width: parent.width / 2 - 10
-					anchors.left: index == 0 ? parent.left : null
-					anchors.right: index == 1? parent.right : null
+					anchors.left: index == 0 ? parent.left : undefined
+					anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
 					Column {
