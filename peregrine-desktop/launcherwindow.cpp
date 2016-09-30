@@ -66,26 +66,6 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
 
     initSuggestionListController();
 
-    // input history show button
-    connect(ui->inputHistoryShowButton, &QPushButton::pressed, [this]() {
-        global::suggestionListController->clearList();
-        for (auto it = inputHistory_.crbegin(); it != inputHistory_.crend(); it++)
-        {
-            auto handler = [this](SuggestionListController::SuggestionRunType type, boost::any data) {
-                QString pastInputText = boost::any_cast<QString>(data);
-
-                auto* textInput = ui->inputContainer->rootObject();
-                textInput->setProperty("text", pastInputText);
-
-                return PG_BEHAVIOR_ON_RETURN::PG_REMAIN; 
-            };
-            global::suggestionListController->addItem(*it, QString(), handler, *it);
-        }
-        global::suggestionListController->setVisible(true);
-    });
-    connect(ui->inputHistoryShowButton, &QPushButton::released, []() {
-    });
-
     // load configs
     global::GetConfigManager().loadConfig();
     loadPlugins();
@@ -701,7 +681,38 @@ bool LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
 
 void LauncherWindow::initHistory()
 {
+    lastInputHistoryUnrolledTimer_.start();
     actionHistoryPointer_ = actionHistory_.end();
+
+    // input history show button
+    connect(ui->inputHistoryShowButton, &QPushButton::pressed, [this]() {
+
+        // toggle input histroy.
+        const int kTimeInMs = 10000; // #HACK
+        if (global::suggestionListController->isVisible() &&
+            lastInputHistoryUnrolledTimer_.elapsed() < kTimeInMs)
+        {
+            global::suggestionListController->setVisible(false);
+            return;
+        }
+        lastInputHistoryUnrolledTimer_.restart();
+        global::suggestionListController->clearList();
+        for (auto it = inputHistory_.crbegin(); it != inputHistory_.crend(); it++)
+        {
+            auto handler = [this](SuggestionListController::SuggestionRunType type, boost::any data) {
+                QString pastInputText = boost::any_cast<QString>(data);
+
+                auto* textInput = ui->inputContainer->rootObject();
+                textInput->setProperty("text", pastInputText);
+
+                return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
+            };
+            global::suggestionListController->addItem(*it, QString(), handler, *it);
+        }
+        global::suggestionListController->setVisible(true);
+    });
+    connect(ui->inputHistoryShowButton, &QPushButton::released, []() {
+    });
 }
 
 void LauncherWindow::saveHistory()

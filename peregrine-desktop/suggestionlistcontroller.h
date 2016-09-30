@@ -29,6 +29,7 @@ public:
     void selectDown();
     int getCurrentIndex() const;
     int runSelected(SuggestionListController::SuggestionRunType type);
+    bool isVisible() const;
     void setVisible(bool visible);
     int getCount() const { return suggestingItems_.size(); }
     

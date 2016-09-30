@@ -76,6 +76,11 @@ int SuggestionListController::runSelected(SuggestionListController::SuggestionRu
     return ret.toInt();
 }
 
+bool SuggestionListController::isVisible() const
+{
+    return suggestionBox_->isVisible();
+}
+
 void SuggestionListController::setVisible(bool visible)
 {
     suggestionBox_->setVisible(visible);

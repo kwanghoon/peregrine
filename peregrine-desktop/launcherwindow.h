@@ -3,6 +3,7 @@
 
 #include "actionselectdialog.h"
 #include <QMainWindow>
+#include <QTime>
 
 namespace Ui {
     class LauncherWindow;
@@ -70,6 +71,7 @@ private:
     decltype(actionHistory_)::iterator actionHistoryPointer_;
     std::list<QString> inputHistory_;
     std::list<QString>::const_iterator inputHistoryIterator_;
+    QTime lastInputHistoryUnrolledTimer_;
 
     bool appExit_ = false;
     bool holdingWindow_ = false;
