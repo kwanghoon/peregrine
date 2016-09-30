@@ -1,17 +1,17 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.4
 
-Row {
+Item {
     id: actionTab
     property var dropSlot
-    layoutDirection: Qt.RightToLeft
     anchors.fill: parent
     ListView {
         id: actionList
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+        anchors.right: parent.right
         z: 1
-        width: 180; height: 240
+        width: 180
 
         model: ListModel {}
 
@@ -26,6 +26,7 @@ Row {
                 id: img
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
+                smooth: true
                 Component.onCompleted: {
                     if (imagePath != "") {
                         controller.setFieldByLocalPath(img, "source", imagePath);
@@ -107,7 +108,7 @@ Row {
                 y: parent.originY + modelData.y * (parent.actionHeight + parent.vertiGap) - parent.actionHeight / 2
                 width: parent.actionWidth; height: parent.actionHeight
                 Rectangle {
-                    color: !parent.containsDrag ? "    darkgray" : "cornflowerblue"
+                    color: !parent.containsDrag ? "darkgray" : "cornflowerblue"
                     anchors.fill: parent
 
                     MouseArea {
@@ -134,6 +135,7 @@ Row {
                 Image {
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
+                    smooth: true
                     visible: false
                 }
                 onEntered: {
