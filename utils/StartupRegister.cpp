@@ -43,18 +43,21 @@ bool utils::deregisterAsStartupApp(QString taskName)
 }
 
 #else
-bool utils::isRegisteredAsStartupApp(QFileInfo execFile)
+namespace utils
 {
-    return false;
-}
+    bool isRegisteredAsStartupApp(QFileInfo execFile)
+    {
+        return false;
+    }
 
-bool utils::registerAsStartupApp(QFileInfo execFile)
-{
-    return false;
-}
+    bool registerAsStartupApp(QFileInfo execFile)
+    {
+        return false;
+    }
 
-bool utils::deregisterAsStartupApp(QString taskName)
-{
-    return false;
+    bool deregisterAsStartupApp(QString taskName)
+    {
+        return false;
+    }
 }
 #endif

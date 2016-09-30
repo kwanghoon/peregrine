@@ -45,10 +45,9 @@ PluginModule::PluginModule(QDir dir, const QString& name)
     unique_ptr<QLibrary> lib(new QLibrary);
     lib->setFileName(dir.absoluteFilePath(name));
     if (!lib->load() || !lib->isLoaded())
-    {
-        QString messae;
-        messae.sprintf("plugin library load failed. (%s)", lib->errorString());
-        throw std::runtime_error(messae.toStdString());
+    {        
+        QString message = QString("plugin library load failed. (%1)").arg(lib->errorString());
+        throw std::runtime_error(message.toStdString());
     }
 
     typedef int(*fpInitializePlugin)(const PG_FUNC_TABLE*, const PG_PLUGIN_CONFIGS*);

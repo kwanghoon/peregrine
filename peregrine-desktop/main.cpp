@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     if (argc > 1)
     {
         auto isVersionArgument = [](const char* arg) {
-            return (strcmp(arg, "--version") == 0 || stricmp(arg, "-v") == 0);
+            return (strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0);
         };
         if (std::any_of(argv + 1, argv + argc, isVersionArgument))
         {

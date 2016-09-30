@@ -97,7 +97,7 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
         const QVariantList& actionSlots = config["actionslots"].toList();
         for (const auto& e : actionSlots)
         {
-            auto& slotSetting = e.toMap();
+            auto slotSetting = e.toMap();
             QDomElement actionSlotElem = doc.createElement("actionslot");
             {
                 int x = slotSetting["x"].toInt();
