@@ -42,7 +42,7 @@ private:
     const QString& getActionIdByPos(const QPoint& pos) const;
 
     const QSize kActionImageSize{ 120, 60 };
-    const QPoint kOrigin;
+    QPoint origin;
     const int kGapHori = 10;
     const int kGapVert = 10;
     Ui::ActionSelectDialog *ui;

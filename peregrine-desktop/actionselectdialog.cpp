@@ -10,16 +10,23 @@ using namespace std;
 
 ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ActionSelectDialog),
-    kOrigin{this->size().width() / 2 - kActionImageSize.width() / 2, this->size().height() / 2 - kActionImageSize.height() / 2 }
+    ui(new Ui::ActionSelectDialog)
 {
     selectionPosUpperLimit_ = { 1, 1 };
     selectionPosLowerLimit_ = { -1, -1 };
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    ui->frame->setStyleSheet(
+        ".QFrame{ background-color: LightGreen; border: 1px solid Green; border-radius: 60px; }");
+    ui->frame->resize((kActionImageSize.width() + kGapHori) * 5 + 40,
+        (kActionImageSize.height() + kGapVert) * 5 + 40);
+    this->resize(ui->frame->width() + 20, ui->frame->height() + 20);
+    origin = { ui->frame->size().width() / 2 - kActionImageSize.width() / 2,
+        ui->frame->size().height() / 2 - kActionImageSize.height() / 2 };
     selectedActionImage_ = new QLabel(this);
     {
-        selectedActionImage_->move(kOrigin.x(), kOrigin.y());
+        selectedActionImage_->move(origin.x(), origin.y());
         selectedActionImage_->resize(kActionImageSize);
         selectedActionImage_->setAlignment(Qt::AlignCenter);
     }
@@ -32,7 +39,7 @@ ActionSelectDialog::~ActionSelectDialog()
 
 void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
 {
-    this->move(pos - kOrigin);
+    this->move(pos - origin);
 }
 
 void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo)
@@ -56,8 +63,8 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
         selectionPosUpperLimit_.ry() = max(selectionPosUpperLimit_.y(), e.pos.y());
 
         QLabel* label = new QLabel(this);
-        label->move(kOrigin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
-            kOrigin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
+        label->move(origin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
+            origin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
         ActionUIHelper::loadActionImage(label, e.imagePath, e.id);
         data_[e.id].imageLabel = label;
     }
@@ -105,8 +112,8 @@ void ActionSelectDialog::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.drawRect(
-        kOrigin.x() + kActionImageSize.width() * selectedPos_.x() + kGapHori * selectedPos_.x(),
-        kOrigin.y() + kActionImageSize.height() * selectedPos_.y() + kGapVert * selectedPos_.y(),
+        origin.x() + kActionImageSize.width() * selectedPos_.x() + kGapHori * selectedPos_.x(),
+        origin.y() + kActionImageSize.height() * selectedPos_.y() + kGapVert * selectedPos_.y(),
         kActionImageSize.width(), kActionImageSize.height());
 }
 
