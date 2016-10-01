@@ -4,8 +4,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
+#include <boost/locale.hpp>
 #include <string>
-#include <codecvt>
 
 #ifdef Q_OS_WIN
 #   include <windows.h>
@@ -19,18 +19,6 @@ using namespace boost;
 namespace
 {
     size_t nextToken = 1000;
-
-    string convertWstrToUtf8(const wstring& ucs2)
-    {
-        wstring_convert<codecvt_utf8<wchar_t>> myconv;
-        return myconv.to_bytes(ucs2);
-    }
-    wstring convertUtf8ToWstr(const char* s)
-    {
-        wstring_convert<codecvt_utf8<wchar_t>> myconv;
-        return myconv.from_bytes(s);
-    }
-
     int maxSuggestions;
 }
 
@@ -119,7 +107,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
         return -1;
     }
 
-    // 1. input이 valid한 패쓰인지 확인
+    // check if |input| is valid path
     string s = input;
     while (!s.empty() && s.back() == ' ')
     { // remove trailig spaces
@@ -131,7 +119,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     }
 
     // 3. valid 하면 parent 디렉토리를 구함 = p
-    filesystem::path path = convertUtf8ToWstr(input);
+    filesystem::path path = boost::locale::conv::utf_to_utf<wchar_t>(input);
     filesystem::path parentDir;
     if (path.root_path() == path)
     {
@@ -147,7 +135,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     }
     
     // p 아래 'filename*' 조건으로 모든 파일을 검색
-    string filenameFrontPart = convertWstrToUtf8(path.filename().wstring());
+    string filenameFrontPart = boost::locale::conv::utf_to_utf<char>(path.filename().wstring());
     if (filenameFrontPart == "." || filenameFrontPart == "/")
     {
         filenameFrontPart.clear();
@@ -156,7 +144,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
     memset(*items, 0, sizeof(PG_SUGGESTION_ITEM) * maxSuggestions);
     for (auto it = filesystem::directory_iterator(parentDir); it != filesystem::directory_iterator(); it++)
     {
-        string childFilename = convertWstrToUtf8(it->path().filename().wstring());
+        string childFilename = boost::locale::conv::utf_to_utf<char>(it->path().filename().wstring());
         if (!istarts_with(childFilename, filenameFrontPart))
         {
             continue;
