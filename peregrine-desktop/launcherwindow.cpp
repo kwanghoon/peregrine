@@ -787,6 +787,7 @@ void LauncherWindow::closeEvent(QCloseEvent *event)
 {
     if (appExit_)
     {
+        global::suggestionListController->setVisible(false);
         event->accept();
     }
     else
