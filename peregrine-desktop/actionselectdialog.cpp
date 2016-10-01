@@ -12,21 +12,13 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ActionSelectDialog)
 {
-    selectionPosUpperLimit_ = { 1, 1 };
-    selectionPosLowerLimit_ = { -1, -1 };
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
     ui->frame->setStyleSheet(
         ".QFrame{ background-color: LightGreen; border: 1px solid Green; border-radius: 60px; }");
-    ui->frame->resize((kActionImageSize.width() + kGapHori) * 5 + 40,
-        (kActionImageSize.height() + kGapVert) * 5 + 40);
-    this->resize(ui->frame->width() + 20, ui->frame->height() + 20);
-    origin = { ui->frame->size().width() / 2 - kActionImageSize.width() / 2,
-        ui->frame->size().height() / 2 - kActionImageSize.height() / 2 };
     selectedActionImage_ = new QLabel(this);
     {
-        selectedActionImage_->move(origin.x(), origin.y());
         selectedActionImage_->resize(kActionImageSize);
         selectedActionImage_->setAlignment(Qt::AlignCenter);
     }
@@ -45,17 +37,21 @@ void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
 void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo)
 {
     // clear
-    slotMap_ = {};
-    for (auto p : data_)
+    for (auto& row : slotMap_)
     {
-        delete p.second.imageLabel;
+        for (auto& e : row)
+        {
+            delete e.imageLabel;
+        }
     }
-    data_.clear();
+    slotMap_ = {};
 
+    selectionPosUpperLimit_ = { 1, 1 };
+    selectionPosLowerLimit_ = { -1, -1 };
     for (auto& e : assignInfo)
     {
-        getActionIdByPos(e.pos) = e.id;
-        data_[e.id].actionId = e.id;
+        auto& slot = getActionSlotByPos(e.pos);
+        slot.actionId = e.id;
 
         selectionPosLowerLimit_.rx() = min(selectionPosLowerLimit_.x(), e.pos.x());
         selectionPosLowerLimit_.ry() = min(selectionPosLowerLimit_.y(), e.pos.y());
@@ -63,16 +59,17 @@ void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>
         selectionPosUpperLimit_.ry() = max(selectionPosUpperLimit_.y(), e.pos.y());
 
         QLabel* label = new QLabel(this);
-        label->move(origin.x() + kActionImageSize.width() * e.pos.x() + kGapHori * e.pos.x(),
-            origin.y() + kActionImageSize.height() * e.pos.y() + kGapVert * e.pos.y());
         ActionUIHelper::loadActionImage(label, e.imagePath, e.id);
-        data_[e.id].imageLabel = label;
+        slot.imageLabel = label;
     }
+    selectionPosLowerLimit_.rx() = min(selectionPosLowerLimit_.rx(), 0);
+    selectionPosLowerLimit_.ry() = min(selectionPosLowerLimit_.ry(), 0);
+    updateLayout();
 }
 
 QString ActionSelectDialog::getSelectedActionId() const
 {
-    return getActionIdByPos(selectedPos_);
+    return getActionSlotByPos(selectedPos_).actionId;
 }
 
 void ActionSelectDialog::showEvent(QShowEvent*)
@@ -151,16 +148,15 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
             selectedPos_.ry() = selectionPosUpperLimit_.y();
         }
     }
-    QString selectedId;
     if (selectedPos_ != QPoint(0, 0))
     {
-        selectedId = getSelectedActionId();
-        if (!selectedId.isEmpty())
+        auto& selectedSlot = getActionSlotByPos(selectedPos_);
+        if (!selectedSlot.actionId.isEmpty())
         {
-            auto* label = data_[selectedId].imageLabel;
+            auto* label = selectedSlot.imageLabel;
             if (label->pixmap())
             {
-                auto pixmap = *data_[selectedId].imageLabel->pixmap();
+                auto pixmap = *label->pixmap();
                 selectedActionImage_->setPixmap(std::move(pixmap));
             }
             else
@@ -172,12 +168,41 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
     this->update();
 }
 
-QString& ActionSelectDialog::getActionIdByPos(const QPoint& pos)
+ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos)
 {
     return slotMap_[5 + pos.y()][5 + pos.x()];
 }
 
-const QString& ActionSelectDialog::getActionIdByPos(const QPoint& pos) const
+const ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos) const
 {
     return slotMap_[5 + pos.y()][5 + pos.x()];
+}
+
+void ActionSelectDialog::updateLayout()
+{
+    // set dialog size to be able to contain all action slots.
+    int horiCount = selectionPosUpperLimit_.rx() - selectionPosLowerLimit_.rx() + 1;
+    int vertiCount = selectionPosUpperLimit_.ry() - selectionPosLowerLimit_.ry() + 1;
+    ui->frame->resize((kActionImageSize.width() + kGapHori) * horiCount + 40,
+        (kActionImageSize.height() + kGapVert) * vertiCount + 40);
+    this->resize(ui->frame->width() + 20, ui->frame->height() + 20);
+    ui->frame->move(10, 10);
+
+    // set position
+    origin = { (kActionImageSize.width() + kGapHori) * -selectionPosLowerLimit_.rx() + 20,
+        (kActionImageSize.height() + kGapVert) * -selectionPosLowerLimit_.ry() + 20 };
+    selectedActionImage_->move(origin.x(), origin.y());    
+    for (int y = -5; y <= 4; y++)
+    {
+        for (int x = -5; x <= 4; x++)
+        {
+            auto& slot = getActionSlotByPos({ x, y });
+            if (slot.actionId.isEmpty())
+            {
+                continue;
+            }
+            slot.imageLabel->move(origin.x() + kActionImageSize.width() * x + kGapHori * x,
+                origin.y() + kActionImageSize.height() * y + kGapVert * y);
+        }
+    }
 }

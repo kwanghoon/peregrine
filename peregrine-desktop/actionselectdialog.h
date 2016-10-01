@@ -31,15 +31,16 @@ private:
     struct Slot
     {
         QString actionId;
-        QLabel* imageLabel;
+        QLabel* imageLabel = nullptr;
     };
     virtual void showEvent(QShowEvent *event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
     virtual void paintEvent(QPaintEvent *event) override;
     void handleArrowKeyPressed(int key);
-    QString& getActionIdByPos(const QPoint& pos);
-    const QString& getActionIdByPos(const QPoint& pos) const;
+    Slot& getActionSlotByPos(const QPoint& pos);
+    const Slot& getActionSlotByPos(const QPoint& pos) const;
+    void updateLayout();
 
     const QSize kActionImageSize{ 120, 60 };
     QPoint origin;
@@ -50,8 +51,7 @@ private:
     QPoint selectedPos_;
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;
-    std::array<std::array<QString, 10>, 10> slotMap_; // in row-major order
-    std::map<QString, Slot> data_;
+    std::array<std::array<Slot, 10>, 10> slotMap_; // in row-major order
 };
 
 #endif // ACTIONSELECTDIALOG_H
