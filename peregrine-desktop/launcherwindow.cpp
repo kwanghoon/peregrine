@@ -264,9 +264,7 @@ void LauncherWindow::resizeEvent(QResizeEvent *event)
 
 void LauncherWindow::showActionSelectDialog()
 {
-    QWidget* actionDisplay = ui->centralWidget->findChild<QWidget*>("actionDisplay");
-
-    actionSelectDlg_.moveForSelectionDisplay(this->mapToGlobal(actionDisplay->pos()));
+    actionSelectDlg_.moveForSelectionDisplay(ui->actionDisplay->mapToGlobal(QPoint()));
     actionSelectDlg_.exec();
 
     QString actionId = actionSelectDlg_.getSelectedActionId();
@@ -332,11 +330,9 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
 
     global::suggestionListController->setVisible(false);
 
-    QLabel* actionDisplay = ui->centralWidget->findChild<QLabel*>("actionDisplay");
-
     // set header text
     auto action = ActionManager::getInstance().getActionById(actionId);
-    ActionUIHelper::loadActionImage(actionDisplay, action->imagePath, action->name);
+    ActionUIHelper::loadActionImage(ui->actionDisplay, action->imagePath, action->name);
     if (action->headerText.isEmpty())
     {
         ui->headerTextLabel->setText(QString("Type terms for '%1' action").arg(actionId));

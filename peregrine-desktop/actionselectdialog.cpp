@@ -31,7 +31,8 @@ ActionSelectDialog::~ActionSelectDialog()
 
 void ActionSelectDialog::moveForSelectionDisplay(QPoint pos)
 {
-    this->move(pos - origin);
+    QPoint p = selectedActionImage_->mapTo(this, QPoint());
+    this->move(pos - p);
 }
 
 void ActionSelectDialog::setActionAssignInfo(const std::vector<ActionAssignInfo>& assignInfo)
