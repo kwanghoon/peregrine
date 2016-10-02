@@ -25,7 +25,7 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     }
     selectedActionCursor_ = new QLabel(this);
     {
-        const QSize kSize{ 200, 100 };
+        const QSize kSize{ 80, 45 };
 
         QImageReader reader("peregrine.svg");
         reader.setAutoTransform(true);
@@ -34,7 +34,13 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
         selectedActionCursor_->resize(kSize);
         selectedActionCursor_->setAlignment(Qt::AlignCenter);
         selectedActionCursor_->setPixmap(pixmap.scaled(kSize, 
-            Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    }
+    selectedActionCursorBackground_ = new QFrame(this);
+    {
+        selectedActionCursorBackground_->resize(kActionImageSize);
+        selectedActionCursorBackground_->setStyleSheet(
+            ".QFrame{ background-color: LightSeaGreen; border-radius: 10px; }");
     }
 }
 
@@ -91,6 +97,7 @@ void ActionSelectDialog::showEvent(QShowEvent*)
 {
     selectedPos_ = { 0, 0 };
     moveCursor();
+    selectedActionCursor_->raise();
 }
 
 void ActionSelectDialog::keyPressEvent(QKeyEvent* event)
@@ -185,12 +192,22 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
 
 void ActionSelectDialog::moveCursor()
 {
-    int centerX = origin.x() + (kActionImageSize.width() + kGapHori) * selectedPos_.x() + 
-        kActionImageSize.width() / 2;
-    int centerY = origin.y() + (kActionImageSize.height() + kGapVert) * selectedPos_.y() + 
-        kActionImageSize.height() / 2;
-    selectedActionCursor_->move(centerX - selectedActionCursor_->width() / 2, 
-        centerY - selectedActionCursor_->height() / 2);
+    // move background panel
+    int x = origin.x() + (kActionImageSize.width() + kGapHori) * selectedPos_.x();
+    int y = origin.y() + (kActionImageSize.height() + kGapVert) * selectedPos_.y();
+    selectedActionCursorBackground_->move(x, y);
+
+    // move cursor
+    int centerX = x + kActionImageSize.width() / 2;
+    int centerY = y + kActionImageSize.height() / 2;
+
+    int xOffset = 0;
+    auto& slot = getActionSlotByPos(selectedPos_);
+    if (slot.imageLabel && slot.imageLabel->pixmap() != nullptr)
+    {
+        xOffset = -(slot.imageLabel->width() - slot.imageLabel->pixmap()->width()) / 2;
+    }
+    selectedActionCursor_->move(centerX + 15 + xOffset, centerY - 50);
 }
 
 ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos)

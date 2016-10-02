@@ -9,6 +9,7 @@ namespace Ui
     class ActionSelectDialog;
 }
 class QLabel;
+class QFrame;
 
 class ActionSelectDialog : public QDialog
 {
@@ -50,6 +51,7 @@ private:
     Ui::ActionSelectDialog *ui;
     QLabel* selectedActionImage_;
     QLabel* selectedActionCursor_;
+    QFrame* selectedActionCursorBackground_;
     QPoint selectedPos_;
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;
