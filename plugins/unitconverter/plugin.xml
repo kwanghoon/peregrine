@@ -2,6 +2,6 @@
 <plugin name="unit-converter">
 	<actions>
 		<action name="unit-converter" id="unit-converter" ui="unitconverterui.qml" 
-			ui_width="800" ui_height="350"/>		
+			ui_width="800" ui_height="350" image="exchange.svg"/>	
 	</actions>
 </plugin>

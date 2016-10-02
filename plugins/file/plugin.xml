@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="file">
 	<actions>
-		<action name="file" id="file" controller="file" />
+		<action name="file" id="file" controller="file" image="folder.svg"/>
 	</actions>
 </plugin>

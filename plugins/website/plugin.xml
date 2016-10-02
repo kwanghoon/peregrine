@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="website">
 	<actions>
-		<action name="website" id="website" controller="website" />
+		<action name="website" id="website" controller="website" image="planet-earth.svg"/>
 	</actions>
 
 	<actionfiles>

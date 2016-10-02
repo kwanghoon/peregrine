@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="calculator">
 	<actions>
-		<action name="calculator" id="calculator" ui="calculatorui.qml" controller="calculator"/>		
+		<action name="calculator" id="calculator" ui="calculatorui.qml" controller="calculator"
+			image="calculator.svg"/>
 	</actions>
 </plugin>

@@ -2,6 +2,6 @@
 <plugin name="manview">
 	<actions>
 		<action name="manview" id="manview" ui="manviewui.qml" controller="manview"
-			ui_width="800" ui_height="800"/>
+			ui_width="800" ui_height="800" image="information.svg"/>
 	</actions>
 </plugin>
