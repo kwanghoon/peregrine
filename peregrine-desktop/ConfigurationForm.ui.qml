@@ -9,7 +9,9 @@ TabView {
     Tab {
         title: "General"
 
-		GeneralConfig {}
+        GeneralConfig {
+            x: 10; y: 10
+        }
 
         onLoaded: {
             var configs = controller.getConfigs();
@@ -52,6 +54,7 @@ TabView {
     Tab {
         title: "Plugins"
         Item {
+            x: 10; y: 10
             Button {
                 text: "Install Plugin"
                 onClicked: {

@@ -26,7 +26,7 @@ Item {
                 id: img
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
-                smooth: true
+                mipmap: true
                 Component.onCompleted: {
                     if (imagePath != "") {
                         controller.setFieldByLocalPath(img, "source", imagePath);
@@ -135,7 +135,7 @@ Item {
                 Image {
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
-                    smooth: true
+                    mipmap: true
                     visible: false
                 }
                 onEntered: {

@@ -3,7 +3,6 @@ import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 
 Item {
-    x: 10; y: 10
     MessageDialog {
         id: privilegeFailMessage
         title: "Peregrine"
