@@ -1,10 +1,12 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.3
 
 Rectangle {
 	id: root
-	anchors.fill: parent
-	height: 30
+	width: parent.width - 20
+	height: parent.height
+	x: 10
 	property real fromFactor: 1
 	property real toFactor: 1
 	property string fromUnit: 'm'
@@ -58,63 +60,59 @@ Rectangle {
 				model: [{}, {}]
 				GroupBox {
 					title: index == 0 ? "From" : "To"
-					width: parent.width / 2 - 10
-					anchors.left: index == 0 ? parent.left : undefined
-					anchors.right: index == 1? parent.right : undefined
+					x: index == 0 ? 5 : parent.width / 2 + 15
+					width: parent.width / 2 - 20
+					//anchors.left: index == 0 ? parent.left : undefined
+					//anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
-					Column {
-						Row {
-							RadioButton {
-								text: "m"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								checked: true
-								onClicked: root.updateResult(1, text, index == 0)
-							}
-							RadioButton {
-								text: "cm"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.01, text , index == 0)
-							}
-							RadioButton {
-								text: "mm"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.001, text , index == 0)
-							}
+					GridLayout {
+						columns: 3
+						RadioButton {
+							text: "<font size='20'>m</font>"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							checked: true
+							onClicked: root.updateResult(1, text, index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "inches"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.0254, text , index == 0)
-							}
-							RadioButton {
-								text: "FT"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.3048, text , index == 0)
-							}
-							RadioButton {
-								text: "km"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1000, text , index == 0)
-							}
+						RadioButton {
+							text: "cm"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.01, text , index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "mile"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1609.344, text , index == 0)
-							}
-							RadioButton {
-								text: "NM"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1852, text , index == 0)
-							}
-							RadioButton {
-								text: "au"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1.4959787e+11, text , index == 0)
-							}
+						RadioButton {
+							text: "mm"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.001, text , index == 0)
+						}
+						RadioButton {
+							text: "inches"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.0254, text , index == 0)
+						}
+						RadioButton {
+							text: "FT"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.3048, text , index == 0)
+						}
+						RadioButton {
+							text: "km"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1000, text , index == 0)
+						}
+						RadioButton {
+							text: "mile"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1609.344, text , index == 0)
+						}
+						RadioButton {
+							text: "NM"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1852, text , index == 0)
+						}
+						RadioButton {
+							text: "au"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1.4959787e+11, text , index == 0)
 						}
 					}
 				}
@@ -131,48 +129,43 @@ Rectangle {
 					anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
-					Column {
-						Row {
-							RadioButton {
-								text: "m^2"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								checked: true
-								onClicked: root.updateResult(1, text, index == 0)
-							}
-							RadioButton {
-								text: "ha"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e4, text , index == 0)
-							}
-							RadioButton {
-								text: "km^2"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e6, text , index == 0)
-							}
+					GridLayout {
+						columns: 3
+						RadioButton {
+							text: "m^2"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							checked: true
+							onClicked: root.updateResult(1, text, index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "ft^2"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(9.2903e-2, text , index == 0)
-							}
-							RadioButton {
-								text: "yd^2"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.836127, text , index == 0)
-							}
-							RadioButton {
-								text: "ac"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(4046.85642, text , index == 0)
-							}
+						RadioButton {
+							text: "ha"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e4, text , index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "평"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(3.305785, text , index == 0)
-							}
+						RadioButton {
+							text: "km^2"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e6, text , index == 0)
+						}
+						RadioButton {
+							text: "ft^2"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(9.2903e-2, text , index == 0)
+						}
+						RadioButton {
+							text: "yd^2"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.836127, text , index == 0)
+						}
+						RadioButton {
+							text: "ac"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(4046.85642, text , index == 0)
+						}
+						RadioButton {
+							text: "평"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(3.305785, text , index == 0)
 						}
 					}
 				}
@@ -189,58 +182,53 @@ Rectangle {
 					anchors.right: index == 1? parent.right : undefined
 					ExclusiveGroup { id: unitGroupFrom }
 					ExclusiveGroup { id: unitGroupTo }
-					Column {
-						Row {
-							RadioButton {
-								text: "l"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								checked: true
-								onClicked: root.updateResult(1, text, index == 0)
-							}
-							RadioButton {
-								text: "ml"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e-3, text , index == 0)
-							}
-							RadioButton {
-								text: "cc"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e-3, text , index == 0)
-							}
+					GridLayout {
+						columns: 3
+						RadioButton {
+							text: "l"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							checked: true
+							onClicked: root.updateResult(1, text, index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "dl"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(0.0, text , index == 0)
-							}
-							RadioButton {
-								text: "cm^3"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e-3, text , index == 0)
-							}
-							RadioButton {
-								text: "m^3"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(1e3, text , index == 0)
-							}
+						RadioButton {
+							text: "ml"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e-3, text , index == 0)
 						}
-						Row {
-							RadioButton {
-								text: "gal"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(3.785412, text , index == 0)
-							}
-							RadioButton {
-								text: "bbl"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(158.9, text , index == 0)
-							}
-							RadioButton {
-								text: "oz"
-								exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
-								onClicked: root.updateResult(2.957353e-2, text , index == 0)
-							}
+						RadioButton {
+							text: "cc"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e-3, text , index == 0)
+						}
+						RadioButton {
+							text: "dl"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(0.0, text , index == 0)
+						}
+						RadioButton {
+							text: "cm^3"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e-3, text , index == 0)
+						}
+						RadioButton {
+							text: "m^3"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(1e3, text , index == 0)
+						}
+						RadioButton {
+							text: "gal"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(3.785412, text , index == 0)
+						}
+						RadioButton {
+							text: "bbl"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(158.9, text , index == 0)
+						}
+						RadioButton {
+							text: "oz"
+							exclusiveGroup: index == 0 ? unitGroupFrom : unitGroupTo
+							onClicked: root.updateResult(2.957353e-2, text , index == 0)
 						}
 					}
 				}
