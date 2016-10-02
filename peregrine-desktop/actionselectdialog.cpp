@@ -171,6 +171,14 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
                 selectedActionImage_->setText(label->text());
             }
         }
+        else
+        {
+            selectedActionImage_->clear();
+        }
+    }
+    else
+    {
+        selectedActionImage_->clear();
     }
     moveCursor();
 }
