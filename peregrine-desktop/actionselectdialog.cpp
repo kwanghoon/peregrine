@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QPainter>
+#include <QImageReader>
 
 using namespace std;
 
@@ -21,6 +22,19 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     {
         selectedActionImage_->resize(kActionImageSize);
         selectedActionImage_->setAlignment(Qt::AlignCenter);
+    }
+    selectedActionCursor_ = new QLabel(this);
+    {
+        const QSize kSize{ 200, 100 };
+
+        QImageReader reader("peregrine.svg");
+        reader.setAutoTransform(true);
+        auto pixmap = QPixmap::fromImage(reader.read());
+        
+        selectedActionCursor_->resize(kSize);
+        selectedActionCursor_->setAlignment(Qt::AlignCenter);
+        selectedActionCursor_->setPixmap(pixmap.scaled(kSize, 
+            Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 }
 
@@ -76,6 +90,7 @@ QString ActionSelectDialog::getSelectedActionId() const
 void ActionSelectDialog::showEvent(QShowEvent*)
 {
     selectedPos_ = { 0, 0 };
+    moveCursor();
 }
 
 void ActionSelectDialog::keyPressEvent(QKeyEvent* event)
@@ -104,15 +119,6 @@ void ActionSelectDialog::keyReleaseEvent(QKeyEvent* event)
     {
         this->hide();
     }
-}
-
-void ActionSelectDialog::paintEvent(QPaintEvent*)
-{
-    QPainter painter(this);
-    painter.drawRect(
-        origin.x() + kActionImageSize.width() * selectedPos_.x() + kGapHori * selectedPos_.x(),
-        origin.y() + kActionImageSize.height() * selectedPos_.y() + kGapVert * selectedPos_.y(),
-        kActionImageSize.width(), kActionImageSize.height());
 }
 
 void ActionSelectDialog::handleArrowKeyPressed(int key)
@@ -166,7 +172,17 @@ void ActionSelectDialog::handleArrowKeyPressed(int key)
             }
         }
     }
-    this->update();
+    moveCursor();
+}
+
+void ActionSelectDialog::moveCursor()
+{
+    int centerX = origin.x() + (kActionImageSize.width() + kGapHori) * selectedPos_.x() + 
+        kActionImageSize.width() / 2;
+    int centerY = origin.y() + (kActionImageSize.height() + kGapVert) * selectedPos_.y() + 
+        kActionImageSize.height() / 2;
+    selectedActionCursor_->move(centerX - selectedActionCursor_->width() / 2, 
+        centerY - selectedActionCursor_->height() / 2);
 }
 
 ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos)

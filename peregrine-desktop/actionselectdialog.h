@@ -36,11 +36,12 @@ private:
     virtual void showEvent(QShowEvent *event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
-    virtual void paintEvent(QPaintEvent *event) override;
     void handleArrowKeyPressed(int key);
+
     Slot& getActionSlotByPos(const QPoint& pos);
     const Slot& getActionSlotByPos(const QPoint& pos) const;
     void updateLayout();
+    void moveCursor();
 
     const QSize kActionImageSize{ 120, 60 };
     QPoint origin;
@@ -48,6 +49,7 @@ private:
     const int kGapVert = 10;
     Ui::ActionSelectDialog *ui;
     QLabel* selectedActionImage_;
+    QLabel* selectedActionCursor_;
     QPoint selectedPos_;
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;

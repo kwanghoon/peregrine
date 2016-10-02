@@ -62,7 +62,7 @@ for %%m in %qml_modules% do (
 
 :: app resources
 echo copy app resources..
-robocopy %project_root_dir%\peregrine-desktop %output_dir% *.xml *.qml *.png
+robocopy %project_root_dir%\peregrine-desktop %output_dir% *.xml *.qml *.png *.svg
 
 :: plugin binaries & resources
 echo copy plugin binaries..
