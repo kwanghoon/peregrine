@@ -50,7 +50,6 @@ void ActionSelectDialog::initActionCursorUI()
     }
     selectedActionNameBackground_ = new QFrame(this);
     {
-        selectedActionNameBackground_->resize(200, 30);
         selectedActionNameBackground_->setStyleSheet(
             ".QFrame{ background-color: LightSeaGreen; border-radius: 10px; }");
     }
@@ -229,8 +228,11 @@ void ActionSelectDialog::moveCursor()
     selectedActionCursor_->move(centerX + 15 + xOffset, centerY - 50);
 
     // display name of the selected action
-    selectedActionName_->setText(
-        ActionManager::getInstance().getActionById(getSelectedActionId())->name);
+    if (!slot.actionId.isEmpty())
+    {
+        selectedActionName_->setText(
+            ActionManager::getInstance().getActionById(getSelectedActionId())->name);
+    }
 }
 
 ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos)
@@ -275,5 +277,6 @@ void ActionSelectDialog::updateLayout()
     selectedActionName_->move(origin.x() + kActionImageSize.width() / 2 - selectedActionName_->width() / 2,
         ui->frame->height() - 25);
 
+    selectedActionNameBackground_->resize(selectedActionName_->width(), 30);
     selectedActionNameBackground_->move(selectedActionName_->x(), selectedActionName_->y() - 2);
 }
