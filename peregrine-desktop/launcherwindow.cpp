@@ -117,7 +117,7 @@ void LauncherWindow::initializeUI()
 {
     ui->setupUi(this);
 
-    QIcon appIcon("heart.png");
+    QIcon appIcon("appicon.svg");
     setWindowIcon(appIcon);
 
     setupTrayIcon();
@@ -383,7 +383,7 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
 
 void LauncherWindow::setupTrayIcon()
 {
-    QIcon trayIcon("heart.png");
+    QIcon trayIcon("appicon.svg");
 
     tray_ = new QSystemTrayIcon(this);
     tray_->setIcon(trayIcon);
