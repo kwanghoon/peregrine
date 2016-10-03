@@ -4,10 +4,12 @@
 #include "actionselectdialog.h"
 #include <QMainWindow>
 #include <QTime>
+#include <memory>
 
 namespace Ui {
     class LauncherWindow;
 }
+class ConfigurationWindow;
 class InputHandlerDelegate;
 class SuggestionListController;
 class QSystemTrayIcon;
@@ -64,6 +66,7 @@ private:
 
     Ui::LauncherWindow *ui;
     ActionSelectDialog actionSelectDlg_;
+    std::unique_ptr<ConfigurationWindow> configDlg_;
     class QQuickWidget* suggestionBox_ = nullptr;
     InputHandlerDelegate* inputHandlerDelegate_;
     QString currentAction_;

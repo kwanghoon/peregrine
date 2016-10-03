@@ -418,8 +418,11 @@ void LauncherWindow::setupTrayIcon()
 
         // Configuration Action
         auto configAction = [this]() {
-            ConfigurationWindow config;
-            config.exec();
+            if (!configDlg_)
+            {
+                configDlg_.reset(new ConfigurationWindow());
+            }
+            configDlg_->show();
         };
         menu->addAction("Configuration", configAction);
         menu->addSeparator();
@@ -788,6 +791,10 @@ void LauncherWindow::closeEvent(QCloseEvent *event)
     if (appExit_)
     {
         global::suggestionListController->setVisible(false);
+        if (configDlg_)
+        {
+            configDlg_->setVisible(false);
+        }
         event->accept();
     }
     else
@@ -819,8 +826,11 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
         }
         else if (pMsg->wParam == kHotKey_ConfigId_)
         {
-            ConfigurationWindow config;
-            config.exec();
+            if (!configDlg_)
+            {
+                configDlg_.reset(new ConfigurationWindow());
+            }
+            configDlg_->show();
         }
 #   endif // NDEBUG
     }
