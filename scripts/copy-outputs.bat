@@ -50,8 +50,27 @@ pushd %output_dir%
 	windeployqt .
 popd
 
-:: qt qml dlls
+:: 
+if "%optim_mode%" == "debug" (
+	set d_suffix=d
+)
+
 SET TEMPFILE=%TEMP%\TEMP-%DATE%-%RANDOM%.txt
+
+:: dlls not copied by windeployqt
+qmake -query QT_INSTALL_BINS>%TEMPFILE%
+set /p qt_install_bins=<%TEMPFILE%
+set qt_modules=(QuickTemplates2   QuickControls2)
+if "%optim_mode%" == "debug" (
+	set d_suffix=d
+)
+@echo on
+for %%m in %qt_modules% do (
+	copy "%qt_install_bins%\Qt5%%m%d_suffix%.dll" %output_dir%
+)
+@echo off
+
+:: qt qml dlls
 qmake -query QT_INSTALL_QML>%TEMPFILE%
 set /p qt_install_qml=<%TEMPFILE%
 del %TEMPFILE%
