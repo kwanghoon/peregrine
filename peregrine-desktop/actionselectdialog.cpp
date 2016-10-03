@@ -1,6 +1,7 @@
 #include "actionselectdialog.h"
 #include "ui_actionselectdialog.h"
 #include "actionuihelper.h"
+#include "action.h"
 #include <QKeyEvent>
 #include <QDebug>
 #include <QLabel>
@@ -18,6 +19,11 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     ui->frame->setStyleSheet(
         ".QFrame{ background-color: LightGreen; border: 1px solid Green; border-radius: 60px; }");
+    initActionCursorUI();
+}
+
+void ActionSelectDialog::initActionCursorUI()
+{
     selectedActionImage_ = new QLabel(this);
     {
         selectedActionImage_->resize(kActionImageSize);
@@ -30,10 +36,10 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
         QImageReader reader("peregrine.svg");
         reader.setAutoTransform(true);
         auto pixmap = QPixmap::fromImage(reader.read());
-        
+
         selectedActionCursor_->resize(kSize);
         selectedActionCursor_->setAlignment(Qt::AlignCenter);
-        selectedActionCursor_->setPixmap(pixmap.scaled(kSize, 
+        selectedActionCursor_->setPixmap(pixmap.scaled(kSize,
             Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
     selectedActionCursorBackground_ = new QFrame(this);
@@ -41,6 +47,19 @@ ActionSelectDialog::ActionSelectDialog(QWidget *parent) :
         selectedActionCursorBackground_->resize(kActionImageSize);
         selectedActionCursorBackground_->setStyleSheet(
             ".QFrame{ background-color: LightSeaGreen; border-radius: 10px; }");
+    }
+    selectedActionNameBackground_ = new QFrame(this);
+    {
+        selectedActionNameBackground_->resize(200, 30);
+        selectedActionNameBackground_->setStyleSheet(
+            ".QFrame{ background-color: LightSeaGreen; border-radius: 10px; }");
+    }
+    selectedActionName_ = new QLabel(this);
+    {
+        QFont font("Optima", 14, QFont::Bold);
+        selectedActionName_->setFont(font);
+        selectedActionName_->setStyleSheet("QLabel { color: Indigo }");
+        selectedActionName_->setAlignment(Qt::AlignHCenter);
     }
 }
 
@@ -208,6 +227,10 @@ void ActionSelectDialog::moveCursor()
         xOffset = -(slot.imageLabel->width() - slot.imageLabel->pixmap()->width()) / 2;
     }
     selectedActionCursor_->move(centerX + 15 + xOffset, centerY - 50);
+
+    // display name of the selected action
+    selectedActionName_->setText(
+        ActionManager::getInstance().getActionById(getSelectedActionId())->name);
 }
 
 ActionSelectDialog::Slot& ActionSelectDialog::getActionSlotByPos(const QPoint& pos)
@@ -226,7 +249,7 @@ void ActionSelectDialog::updateLayout()
     int horiCount = selectionPosUpperLimit_.rx() - selectionPosLowerLimit_.rx() + 1;
     int vertiCount = selectionPosUpperLimit_.ry() - selectionPosLowerLimit_.ry() + 1;
     ui->frame->resize((kActionImageSize.width() + kGapHori) * horiCount + 40,
-        (kActionImageSize.height() + kGapVert) * vertiCount + 40);
+        (kActionImageSize.height() + kGapVert) * vertiCount + 60);
     this->resize(ui->frame->width() + 20, ui->frame->height() + 20);
     ui->frame->move(10, 10);
 
@@ -247,4 +270,10 @@ void ActionSelectDialog::updateLayout()
                 origin.y() + kActionImageSize.height() * y + kGapVert * y);
         }
     }
+
+    selectedActionName_->setFixedWidth(250);
+    selectedActionName_->move(origin.x() + kActionImageSize.width() / 2 - selectedActionName_->width() / 2,
+        ui->frame->height() - 25);
+
+    selectedActionNameBackground_->move(selectedActionName_->x(), selectedActionName_->y() - 2);
 }

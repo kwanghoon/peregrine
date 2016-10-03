@@ -34,6 +34,7 @@ private:
         QString actionId;
         QLabel* imageLabel = nullptr;
     };
+    void initActionCursorUI();
     virtual void showEvent(QShowEvent *event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
@@ -51,7 +52,9 @@ private:
     Ui::ActionSelectDialog *ui;
     QLabel* selectedActionImage_;
     QLabel* selectedActionCursor_;
+    QLabel* selectedActionName_;
     QFrame* selectedActionCursorBackground_;
+    QFrame* selectedActionNameBackground_;
     QPoint selectedPos_;
     QPoint selectionPosUpperLimit_;
     QPoint selectionPosLowerLimit_;
