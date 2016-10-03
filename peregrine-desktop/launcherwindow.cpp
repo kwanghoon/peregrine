@@ -75,15 +75,18 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     });
 
     // prepare config synchronization
-    auto thenFunc = [](const QJsonObject& configs) {
-        global::GetConfigManager().updateConfig(configs.toVariantMap(), "sync");
-    };
-    auto catchFunc = []() {};
-    auto& accountInfo = global::GetConfigManager().getAccountInfo();
-    if (accountInfo.filled)
+    if (!global::GetConfigManager().getSyncServerUrl().isEmpty())
     {
-        global::GetSyncManager().login(accountInfo.email, accountInfo.passwordHash,
-            thenFunc, catchFunc);
+        auto thenFunc = [](const QJsonObject& configs) {
+            global::GetConfigManager().updateConfig(configs.toVariantMap(), "sync");
+        };
+        auto catchFunc = []() {};
+        auto& accountInfo = global::GetConfigManager().getAccountInfo();
+        if (accountInfo.filled)
+        {
+            global::GetSyncManager().login(accountInfo.email, accountInfo.passwordHash,
+                thenFunc, catchFunc);
+        }
     }
 
     initHistory();

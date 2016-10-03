@@ -64,8 +64,25 @@ void ConfigManager::loadConfig()
         }
     }
 
-    // read account
-    auto accountElem = root.firstChildElement("account");
+    auto syncElem = root.firstChildElement("sync");
+    if (!syncElem.isNull())
+    {
+        readSyncSettings(syncElem);
+    }
+}
+
+void ConfigManager::readSyncSettings(QDomElement& syncElem)
+{
+    auto serverUrl = syncElem.firstChildElement("serverUrl");
+    if (!serverUrl.isNull())
+    {
+        QString ip = serverUrl.attribute("ip");
+        QString port = serverUrl.attribute("port");
+        syncServerUrl_.setHost(ip);
+        syncServerUrl_.setPort(port.toInt());
+    }
+
+    auto accountElem = syncElem.firstChildElement("account");
     if (!accountElem.isNull())
     {
         SimpleCrypt crypter;

@@ -71,8 +71,7 @@ void SyncManager::getConfigs(function<void(const QJsonObject& json)> thenFunc, f
 void SyncManager::sendGetRequest(const QString& path,
     function<void(const QJsonObject& json)> thenFunc, function<void()> catchFunc)
 {
-    QUrl serverUrl("http://127.0.0.1");
-    serverUrl.setPort(1337);
+    QUrl serverUrl = global::GetConfigManager().getSyncServerUrl();
     serverUrl.setPath(path);
 
     QUrlQuery query;
@@ -115,8 +114,7 @@ void SyncManager::sendGetRequest(const QString& path,
 void SyncManager::sendPostRequest(const QString& path, const QVariantMap& formData,
     function<void()> thenFunc, function<void()> catchFunc)
 {
-    QUrl serverUrl("http://127.0.0.1");
-    serverUrl.setPort(1337);
+    QUrl serverUrl = global::GetConfigManager().getSyncServerUrl();
     serverUrl.setPath(path);
 
     QNetworkRequest req(serverUrl);
