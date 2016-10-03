@@ -21,6 +21,8 @@ CONFIG(release, debug|release):OPTIM_MODE=release
 CONFIG(debug, debug|release):OPTIM_MODE=debug
 CONFIG(debug, debug|release):OPTIM_SUFFIX=d
 
+RC_ICONS = appicon.ico
+
 INCLUDEPATH += ../plugin-sdk \
     ../thirdparty \
     ..
