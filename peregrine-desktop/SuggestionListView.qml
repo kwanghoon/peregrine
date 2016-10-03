@@ -18,9 +18,19 @@ ListView {
         width: parent.width
         height: 40
         Image {
+            visible: image.length != 1
             x: 0; y: 0
             width: 40; height: 40
-            source: image
+            source: image.length != 1 ? image : undefined
+        }
+        Text {
+            visible: image.length == 1
+            x: 0; y: 0
+            width: 40; height: 40
+            text: image
+            font.pixelSize: 30
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignTop
         }
         Text {
             x: 40; y: 0

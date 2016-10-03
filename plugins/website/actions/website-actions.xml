@@ -56,52 +56,52 @@
 			<link actionid="website-reddit-sports" keyword="sports"/>
 		</links>
 	</action>
-	<action name="reddit/food" id="website-reddit-food">
+	<action name="reddit/food" id="website-reddit-food"  image="images/reddit-food.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/food"/>
 		</do>
 	</action>
-	<action name="reddit/funny" id="website-reddit-funny">
+	<action name="reddit/funny" id="website-reddit-funny"  image="images/reddit-funny.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/funny"/>
 		</do>
 	</action>
-	<action name="reddit/gaming" id="website-reddit-gaming">
+	<action name="reddit/gaming" id="website-reddit-gaming"  image="images/reddit-gaming.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/gaming"/>
 		</do>
 	</action>
-	<action name="reddit/videos" id="website-reddit-videos">
+	<action name="reddit/videos" id="website-reddit-videos"  image="images/reddit-videos.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/videos"/>
 		</do>
 	</action>
-	<action name="reddit/movies" id="website-reddit-movies">
+	<action name="reddit/movies" id="website-reddit-movies"  image="images/reddit-movies.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/movies"/>
 		</do>
 	</action>
-	<action name="reddit/music" id="website-reddit-music">
+	<action name="reddit/music" id="website-reddit-music"  image="images/reddit-music.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/music"/>
 		</do>
 	</action>
-	<action name="reddit/news" id="website-reddit-news">
+	<action name="reddit/news" id="website-reddit-news"  image="images/reddit-news.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/news"/>
 		</do>
 	</action>
-	<action name="reddit/science" id="website-reddit-science">
+	<action name="reddit/science" id="website-reddit-science" image="images/reddit-science.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/science"/>
 		</do>
 	</action>
-	<action name="reddit/space" id="website-reddit-space">
+	<action name="reddit/space" id="website-reddit-space" image="images/reddit-space.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/space"/>
 		</do>
 	</action>
-	<action name="reddit/sports" id="website-reddit-sports">
+	<action name="reddit/sports" id="website-reddit-sports" image="images/reddit-sports.png">
 		<do>
 			<runaction id="website" input="https://www.reddit.com/r/sports"/>
 		</do>

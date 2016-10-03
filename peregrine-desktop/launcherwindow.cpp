@@ -594,7 +594,15 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 }
                 return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
             };
-            global::suggestionListController->addItem(s, QString("heart.png"), handler, nullptr);
+            if (!linkedAction->imagePath.isEmpty())
+            {
+                global::suggestionListController->addItem(
+                    s, QDir().relativeFilePath(linkedAction->imagePath), handler, nullptr);
+            }
+            else
+            {
+                global::suggestionListController->addItem(s, "heart.png", handler, nullptr);
+            }
         }
     }
 }
