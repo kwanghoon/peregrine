@@ -5,6 +5,8 @@
 #   include <windows.h>
 #   include <shellapi.h>
 #   pragma comment(lib, "shell32.lib")
+#else
+#   include <stdlib.h>
 #endif
 
 #include <algorithm>
@@ -41,7 +43,7 @@ namespace
     }
 }
 
-int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS* pluginConfigs)
+int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONFIGS*)
 {
     qDebug() << "Initialize website plugin";
     ::funcTable = funcTable;
@@ -64,7 +66,7 @@ int RunAction(const char* actionId, const char* data)
         url += urlEncoded;
         int ret = (int)::ShellExecuteA(0, NULL, urlEncoded.c_str(), NULL, NULL, SW_NORMAL);
 #       else
-        qDebug() << "Not implemented";
+        system(QString("firefox %1").arg(data).toStdString().c_str());
 #       endif
 
         return 0;
