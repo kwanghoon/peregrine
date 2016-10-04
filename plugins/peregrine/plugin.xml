@@ -2,6 +2,6 @@
 <plugin name="peregrine">
 	<actions>
 		<action name="peregrine" id="peregrine" ui="peregrine.qml" 
-			ui_width="600" ui_height="550"/>	
+			ui_width="600" ui_height="550" image="peregrine.svg"/>	
 	</actions>
 </plugin>
