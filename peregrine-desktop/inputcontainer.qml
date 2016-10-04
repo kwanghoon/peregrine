@@ -3,7 +3,6 @@ import QtQuick.Controls 2.0
 
 TextField {
     id: inputText
-    x: 10; y: 0
     background: null
 
     text: ""
@@ -15,4 +14,11 @@ TextField {
             event.accepted = true;
         }
     }
+
+	Image {
+		anchors.right: parent.right
+		anchors.verticalCenter: parent.verticalCenter
+		anchors.rightMargin: 10
+		source: "magnifying-glass.svg"
+	}
 }
