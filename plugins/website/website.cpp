@@ -59,14 +59,14 @@ int RunAction(const char* actionId, const char* data)
         sprintf(headerText, "visit '%s'", data);
         ::funcTable->fpSetHeaderText(headerText);
 
-#       ifdef Q_OS_WIN
         const char* p = strstr(data, "://");
-        string url(data, p);
+        string url(data, p + 3);
         string urlEncoded = url_encode(reinterpret_cast<const unsigned char*>(p + 3));
         url += urlEncoded;
-        int ret = (int)::ShellExecuteA(0, NULL, urlEncoded.c_str(), NULL, NULL, SW_NORMAL);
+#       ifdef Q_OS_WIN
+        int ret = (int)::ShellExecuteA(0, NULL, url.c_str(), NULL, NULL, SW_NORMAL);
 #       else
-        system(QString("firefox \"%1\" &").arg(data).toStdString().c_str());
+        system(QString("firefox \"%1\" &").arg(url.c_str()).toStdString().c_str());
 #       endif
 
         return 0;
