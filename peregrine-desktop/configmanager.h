@@ -15,7 +15,6 @@ public:
 
     void loadConfig();
     void updateConfig(const QVariantMap& config, const QString& reason);
-    void updateAccountConfig(const QVariantMap& accountConfig);
 
     struct AccountInfo
     {

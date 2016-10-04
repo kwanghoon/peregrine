@@ -198,7 +198,11 @@ bool ConfigurationController::login(const QString& email, const QString& passwor
         accountInfo["salt"] = "peregrine-the-crossplatform-launcher";
         accountInfo["passwordLength"] = password.length();
     }
+    QVariantMap config;
+    {
+        config.insert("sync", QVariantMap { { "account", accountInfo } });
+    }
     global::GetSyncManager().login(email, passwordHash);
-    global::GetConfigManager().updateAccountConfig(accountInfo);
+    global::GetConfigManager().updateConfig(config, "modify");
     return true;
 }

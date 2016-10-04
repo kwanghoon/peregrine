@@ -78,6 +78,7 @@ void ConfigManager::readSyncSettings(QDomElement& syncElem)
     {
         QString ip = serverUrl.attribute("ip");
         QString port = serverUrl.attribute("port");
+        syncServerUrl_.setScheme("http");
         syncServerUrl_.setHost(ip);
         syncServerUrl_.setPort(port.toInt());
     }
@@ -136,6 +137,33 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
         QDomText text = elem.firstChild().toText();
         text.setNodeValue(config["maxSuggestions"].toString());
     }
+    // account information is stored with encryption for security.
+    else if (config.contains("sync"))
+    {
+        // ensure 'sync' element exists
+        auto syncElem = root.firstChildElement("sync");
+        if (syncElem.isNull())
+        {
+            syncElem = doc.createElement("sync");
+            root.appendChild(syncElem);
+        }
+        
+        // create a new account element using config
+        auto accountElem = doc.createElement("account");
+        QString json = QJsonDocument::fromVariant(config["sync"].toMap()["account"]).toJson();
+        SimpleCrypt crypter;
+        crypter.setKey(kAccountCryptKey);
+        auto textNode = doc.createTextNode(crypter.encryptToString(json));
+        accountElem.appendChild(textNode);
+
+        // set. 
+        auto old = syncElem.firstChildElement("account");
+        if (!old.isNull())
+        {
+            syncElem.removeChild(old);
+        }
+        syncElem.appendChild(accountElem);
+    }
 
     // save
     settingFile.seek(0);
@@ -147,43 +175,6 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
     loadConfig();
 
     onConfigUpdated(config, reason);
-}
-
-void ConfigManager::updateAccountConfig(const QVariantMap& accountConfig)
-{
-    QFile settingFile("settings.xml");
-    settingFile.open(QIODevice::ReadWrite);
-    QDomDocument doc;
-    if (!doc.setContent(&settingFile))
-    {
-        throw std::runtime_error("Parsing failed. (settings.xml)");
-    }
-    auto root = doc.documentElement();
-
-    // update
-    // account information is stored with encryption for security.
-    auto accountElem = doc.createElement("account");
-    QString json = QJsonDocument::fromVariant(accountConfig).toJson();
-    SimpleCrypt crypter;
-    crypter.setKey(kAccountCryptKey);
-    auto textNode = doc.createTextNode(crypter.encryptToString(json));
-    accountElem.appendChild(textNode);
-
-    auto old = root.firstChildElement("account");
-    if (!old.isNull())
-    {
-        root.removeChild(old);
-    }
-    root.appendChild(accountElem);
-
-    // save
-    settingFile.seek(0);
-    QTextStream ts(&settingFile);
-    doc.save(ts, 2);
-    settingFile.resize(settingFile.pos());
-    settingFile.close();
-
-    loadConfig();
 }
 
 const ConfigManager::AccountInfo& ConfigManager::getAccountInfo() const

@@ -116,6 +116,7 @@ void SyncManager::sendPostRequest(const QString& path, const QVariantMap& formDa
 {
     QUrl serverUrl = global::GetConfigManager().getSyncServerUrl();
     serverUrl.setPath(path);
+    qDebug() << serverUrl.toString();
 
     QNetworkRequest req(serverUrl);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -124,7 +125,8 @@ void SyncManager::sendPostRequest(const QString& path, const QVariantMap& formDa
     json.insert("pwHash", passwordHash_);
     QNetworkReply* reply = networkManager_->post(req, QJsonDocument(json).toJson());
     connect(reply, &QNetworkReply::finished, [this, reply, thenFunc, catchFunc]() {
-        if (reply->error() != QNetworkReply::NoError)
+        auto err = reply->error();
+        if (err != QNetworkReply::NoError)
         {
             if (catchFunc)
             {

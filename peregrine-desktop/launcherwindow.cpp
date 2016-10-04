@@ -426,6 +426,9 @@ void LauncherWindow::setupTrayIcon()
                 configDlg_.reset(new ConfigurationWindow());
             }
             configDlg_->show();
+            QObject::connect(configDlg_.get(), &ConfigurationWindow::finished, [this](int) {
+                QTimer::singleShot(1, [this]() { configDlg_.reset(); });
+            });
         };
         menu->addAction("Configuration", configAction);
         menu->addSeparator();
@@ -712,7 +715,7 @@ void LauncherWindow::initHistory()
         global::suggestionListController->clearList();
         for (auto it = inputHistory_.crbegin(); it != inputHistory_.crend(); it++)
         {
-            auto handler = [this](SuggestionListController::SuggestionRunType type, boost::any data) {
+            auto handler = [this](SuggestionListController::SuggestionRunType, boost::any data) {
                 QString pastInputText = boost::any_cast<QString>(data);
 
                 auto* textInput = ui->inputContainer->rootObject();
@@ -792,7 +795,7 @@ void LauncherWindow::recallInputHistory()
     }
 }
 
-void LauncherWindow::moveEvent(QMoveEvent *event)
+void LauncherWindow::moveEvent(QMoveEvent*)
 {
     updateSuggestionListPosition();
 }
@@ -842,6 +845,9 @@ bool LauncherWindow::nativeEvent(const QByteArray &eventType, void *message, lon
                 configDlg_.reset(new ConfigurationWindow());
             }
             configDlg_->show();
+            QObject::connect(configDlg_.get(), &ConfigurationWindow::finished, [this](int) {
+                QTimer::singleShot(1, [this]() { configDlg_.reset(); });
+            });
         }
 #   endif // NDEBUG
     }
