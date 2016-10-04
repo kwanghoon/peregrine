@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<!-- google -->
 	<action name="google" id="website-google" image="images/google.png"
@@ -132,6 +132,99 @@
 				condition="'input_text' == ''"
 				id="website" 
 				input="http://www.facebook.com/"/>
+		</do>
+	</action>
+
+	<!-- NAVER -->
+	<action name="NAVER" id="website-naver" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://search.naver.com/search.naver?where=nexearch&amp;ie=utf8&amp;query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://www.naver.com/"/>
+		</do>
+		<links>
+			<link actionid="website-naver-kin" keyword="kin"/>
+			<link actionid="website-naver-webtoons" keyword="comic,webtoon"/>
+			<link actionid="website-naver-stock" keyword="stock,finance"/>
+			<link actionid="website-naver-map" keyword="map"/>
+			<link actionid="website-naver-shopping" keyword="shopping"/>
+			<link actionid="website-naver-endic" keyword="endic"/>
+			<link actionid="website-naver-krdic" keyword="krdic"/>
+		</links>
+	</action>
+	
+	<!-- NAVER 지식인 -->
+	<action name="NAVER 지식인" id="website-naver-kin" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://kin.naver.com/search/list.nhn?cs=utf8&amp;query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://kin.naver.com/"/>
+		</do>
+	</action>
+	
+	<!-- NAVER 웹툰 -->
+	<action name="NAVER 웹툰" id="website-webtoons" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://comic.naver.com/search.nhn?m=webtoon&amp;keyword={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://comic.naver.com/"/>
+		</do>
+	</action>
+
+	<!-- NAVER 증권 -->
+	<action name="NAVER 증권" id="website-naver-stock" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://finance.naver.com/search/search.nhn?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://finance.naver.com/"/>
+		</do>
+	</action>
+	
+	<!-- NAVER 지도 -->
+	<action name="NAVER 지도" id="website-naver-map" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://map.naver.com/index.nhn?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://map.naver.com/"/>
+		</do>
+	</action>
+	
+	<!-- NAVER 쇼핑 -->
+	<action name="NAVER 쇼핑" id="website-naver-shopping" image="images/naver.gif">
+		<do>
+			<runaction 
+				condition="'input_text' != ''"
+				id="website" 
+				input="http://shopping.naver.com/search/all_search.nhn?query={{input_text}}"/>
+			<runaction 
+				condition="'input_text' == ''"
+				id="website" 
+				input="http://shopping.naver.com/"/>
 		</do>
 	</action>
 </actions>
