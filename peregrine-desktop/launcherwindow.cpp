@@ -468,6 +468,7 @@ void LauncherWindow::popUp()
         if (!s.isEmpty())
         {
             textInput->setProperty("text", s);
+            QMetaObject::invokeMethod(textInput, "selectAll");
         }
 
         inputHistoryIterator_ = inputHistory_.cend();
