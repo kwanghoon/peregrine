@@ -96,11 +96,11 @@
 			<runaction 
 				condition="'input_text' != ''"
 				id="website" 
-				input="http://jquery.com/?s={{input_text}}"/>
+				input="http://api.jquery.com/?s={{input_text}}"/>
 			<runaction 
 				condition="'input_text' == ''"
 				id="website" 
-				input="http://jquery.com/"/>
+				input="http://api.jquery.com/"/>
 		</do>
 	</action>
 
