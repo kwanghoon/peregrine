@@ -1,4 +1,4 @@
-![](docs/logo.svg)
+![](docs/logo.png)
 
 # **The Ultimate Desktop Launcher**
 * Cross-platform
@@ -8,7 +8,19 @@
 * FOSS based
 
 # How to build
-TODO
+## Windows
+### Prerequisites
+* Visual Studio 2015 or later
+* Qt 5.7 or later
+### Building
+* make sure that `qmake` and `nmake` commands are available.
+* run `script/build-windows.bat release`. To compile in debug mode, specify `debug` instead of `release`.
+* if it succeeds, `output` directory will be created under the root of repository. 
+
+## Linux
+* Qt 5.7 or later
+* make sure that `qmake` command is available.
+* run `script/build-linux.sh`
 
 # License
-TODO
+[Mozilla Public License Version 2.0](https://www.mozilla.org/en-US/MPL/2.0/) 
