@@ -22,3 +22,7 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+# boost
+INCLUDEPATH	+= $$(BOOST_ROOT)
+LIBS += -L$$(BOOST_ROOT)/stage/lib

@@ -29,8 +29,9 @@ int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONF
     return 0;
 }
 
-int RunAction(const char* actionId, const char* data)
+int RunAction(const char* actionId, const PG_ACTION_ARGUMENT_SET* argumentSet)
 {
+    const char* data = argumentSet->arguments[0].value;
     qDebug() << "action id: " << actionId << ", data: " << data;
     if (strcmp(actionId, "file") == 0)
     {

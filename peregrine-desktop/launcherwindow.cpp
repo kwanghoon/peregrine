@@ -549,7 +549,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
                 {
                     if (type == SuggestionListController::SuggestionRunType::Enter)
                     {
-                        return action->run(completeText);
+                        return action->run({{"input_text", completeText}});
                     }
                     else
                     {
@@ -594,7 +594,7 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 }
                 else if (type == SuggestionListController::SuggestionRunType::Enter)
                 {
-                    linkedAction->run("");
+                    linkedAction->run({{"input_text", ""}});
                 }
                 return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
             };
@@ -640,7 +640,7 @@ bool LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
                 return true;
             }
             auto action = ActionManager::getInstance().getActionById(currentAction_);
-            int ret = action->run(inputText);
+            int ret = action->run({ { "input_text", inputText} });
 
             saveInputHistory(inputText);
 

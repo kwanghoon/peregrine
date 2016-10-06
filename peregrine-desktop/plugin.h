@@ -1,5 +1,6 @@
 #pragma once
 
+#include <peregrine-plugin-sdk.h>
 #include <QDir>
 #include <QString>
 #include <QLibrary>
@@ -13,7 +14,7 @@ class PluginModule
 public:
     PluginModule(QDir dir, const QString& name);
 
-    int runAction(const QString& actionId, const QString& input);
+    int runAction(const QString& actionId, const QMap<QString, QString>& arguments);
     struct SuggestionItem
     {
         QString text;
@@ -31,7 +32,7 @@ private:
     std::unique_ptr<QLibrary> lib_;
 
     // resolved functions
-    typedef int(*fpRunAction)(const char* actionId, const char* data);
+    typedef int(*fpRunAction)(const char* actionId, const PG_ACTION_ARGUMENT_SET* argumentSet);
     typedef int(*fpGetSuggestionItems)(const char* currentActionId, const char* input, int* n, struct PG_SUGGESTION_ITEM** items);
     typedef int(*fpRunSuggestion)(size_t token);
     

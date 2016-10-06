@@ -3,6 +3,7 @@
 #include <QDomDocument>
 #include <QString>
 #include <QDir>
+#include <QMap>
 #include <memory>
 #include <list>
 #include <vector>
@@ -12,7 +13,7 @@ class PluginModule;
 class Action
 {
 public:
-    int run(const QString& input);
+    int run(const QMap<QString, QString>& argumentMap);
 
     QString id;
     QString name;
@@ -28,7 +29,7 @@ public:
     {
         QString actionId;
         QString condition;
-        QString inputTemplate;
+        QMap<QString, QString> actionArguments;
     };
     std::vector<DoEntry> doList;
 

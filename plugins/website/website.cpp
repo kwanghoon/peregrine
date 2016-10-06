@@ -1,5 +1,6 @@
 #include "website.h"
 #include <QDebug>
+#include <boost/locale.hpp>
 
 #ifdef Q_OS_WIN
 #   include <windows.h>
@@ -50,23 +51,35 @@ int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONF
     return 0;
 }
 
-int RunAction(const char* actionId, const char* data)
+int RunAction(const char* actionId, const PG_ACTION_ARGUMENT_SET* argumentSet)
 {
-    qDebug() << "action id: " << actionId << ", data: " << data;
+    const char* urlInUTF8 = PgGetArgumentValue(argumentSet, "input_text");
+    assert(urlInUTF8);
+    qDebug() << "action id: " << actionId << ", data: " << urlInUTF8;
     if (strcmp(actionId, "website") == 0)
     {
         char headerText[120];
-        sprintf(headerText, "visit '%s'", data);
+        sprintf(headerText, "visit '%s'", urlInUTF8);
         ::funcTable->fpSetHeaderText(headerText);
 
-        const char* p = strstr(data, "://");
-        string url(data, p + 3);
-        string urlEncoded = url_encode(reinterpret_cast<const unsigned char*>(p + 3));
-        url += urlEncoded;
+        const char* encoding = PgGetArgumentValue(argumentSet, "encoding");
+        string url;
+        if (encoding && strcmp(encoding, "EUC-KR") == 0)
+        {
+            url = boost::locale::conv::from_utf(urlInUTF8, "EUC-KR");
+        }
+        else
+        {
+            url = urlInUTF8;
+        }
+
+        const char* p = strstr(url.c_str(), "://");
+        string percentEncoded = string(url.c_str(), p + 3) +
+            url_encode(reinterpret_cast<const unsigned char*>(p + 3));
 #       ifdef Q_OS_WIN
-        int ret = (int)::ShellExecuteA(0, NULL, url.c_str(), NULL, NULL, SW_NORMAL);
+        int ret = (int)::ShellExecuteA(0, NULL, percentEncoded.c_str(), NULL, NULL, SW_NORMAL);
 #       else
-        system(QString("firefox \"%1\" &").arg(url.c_str()).toStdString().c_str());
+        system(QString("firefox \"%1\" &").arg(percentEncoded.c_str()).toStdString().c_str());
 #       endif
 
         return 0;

@@ -1,6 +1,5 @@
 #include "plugin.h"
 #include "action.h"
-#include <peregrine-plugin-sdk.h>
 #include <QDomDocument>
 #include <QLibrary>
 #include <QDebug>
@@ -72,9 +71,22 @@ PluginModule::PluginModule(QDir dir, const QString& name)
     lib_ = std::move(lib);
 }
 
-int PluginModule::runAction(const QString& actionId, const QString& input)
+int PluginModule::runAction(const QString& actionId, const QMap<QString, QString>& arguments)
 {
-    return runActionFunc_(actionId.toStdString().c_str(), input.toStdString().c_str());
+    PG_ACTION_ARGUMENT_SET argsSet;
+    vector<PG_ARGUMENT> args;
+    vector<pair<QByteArray, QByteArray>> baArray;
+    args.reserve(arguments.size());
+    baArray.reserve(arguments.size());
+    for (auto argIt = arguments.cbegin(); argIt != arguments.cend(); argIt++)
+    {
+        baArray.emplace_back(argIt.key().toUtf8(), argIt.value().toUtf8());
+        args.emplace_back(PG_ARGUMENT{baArray.back().first.constData(),
+            baArray.back().second.constData()});
+    }
+    argsSet.n = args.size();
+    argsSet.arguments = argsSet.n != 0 ? &args.at(0) : nullptr;
+    return runActionFunc_(actionId.toStdString().c_str(), &argsSet);
 }
 
 std::vector<PluginModule::SuggestionItem> PluginModule::getSuggestionItems(const QString& actionId, const QString& input)

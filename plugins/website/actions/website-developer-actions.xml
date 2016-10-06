@@ -23,218 +23,252 @@
 			<link actionid="website-cocos2dx" keyword="cocos2dx"/>
 			<link actionid="website-spring" keyword="SpringFramework"/>
 		</links>
-	</action>	
+	</action>
 	
 	<!-- QT -->
 	<action name="QT" id="website-qt">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://doc.qt.io/qt-5/search-results.html?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://doc.qt.io/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://doc.qt.io/qt-5/search-results.html?q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://doc.qt.io/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- boost -->
 	<action name="boost" id="website-boost">
 		<do>
-			<runaction
-				id="website" 
-				input="http://www.boost.org/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.boost.org/"/>
+				</arguments>
+			</runaction> 
 		</do>
 	</action>
 
 	<!-- cppreference -->
 	<action name="cppreference" id="website-cppreference">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://en.cppreference.com/mwiki/index.php?search={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://en.cppreference.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://en.cppreference.com/mwiki/index.php?search={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://en.cppreference.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- MDN -->
 	<action name="MDN" id="website-mdn">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://developer.mozilla.org/en-US/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://developer.mozilla.org/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://developer.mozilla.org/en-US/search?q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://developer.mozilla.org/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- w3schools -->
 	<action name="w3schools" id="website-w3schools">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://www.google.co.kr/search?q={{input_text}}%20site%3Aw3schools.com"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://www.w3schools.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.google.co.kr/search?q={{input_text}}%20site%3Aw3schools.com"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.w3schools.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- jQuery -->
 	<action name="jQuery" id="website-jquery">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://api.jquery.com/?s={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://api.jquery.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://api.jquery.com/?s={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://api.jquery.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- Bootstrap -->
 	<action name="Bootstrap" id="website-bootstrap">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://www.google.co.kr/search?q={{input_text}}%20site%3Agetbootstrap.com"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://getbootstrap.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.google.co.kr/search?q={{input_text}}%20site%3Agetbootstrap.com"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://getbootstrap.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- AngularJS -->
 	<action name="AngularJS" id="website-angularjs">
 		<do>
-			<runaction 
-				id="website" 
-				input="https://angular.io/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://angular.io/"/>
+				</arguments>
+			</runaction> 
 		</do>
 	</action>
 
 	<!-- React -->
 	<action name="React" id="website-react">
 		<do>
-			<runaction 
-				id="website" 
-				input="https://facebook.github.io/react/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://facebook.github.io/react/"/>
+				</arguments>
+			</runaction> 
 		</do>
 	</action>
 	
 	<!-- MSDN -->
 	<action name="MSDN" id="website-msdn">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://social.msdn.microsoft.com/Search/en-US?query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://msdn.microsoft.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://social.msdn.microsoft.com/Search/en-US?query={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://msdn.microsoft.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- StackOverflow -->
 	<action name="StackOverflow" id="website-stackoverflow">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://stackoverflow.com/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://stackoverflow.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://stackoverflow.com/search?q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://stackoverflow.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- GitHub-->
 	<action name="GitHub" id="website-github">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://github.com/search?utf8=%E2%9C%93&amp;q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://github.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://github.com/search?utf8=%E2%9C%93&amp;q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://github.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- Bitbucket-->
 	<action name="Bitbucket" id="website-bitbucket">
 		<do>
-			<runaction 
-				id="website" 
-				input="https://bitbucket.org/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://bitbucket.org/"/>
+				</arguments>
+			</runaction> 
 		</do>
 	</action>
 
 	<!-- Unity -->
 	<action name="unity" id="website-unity">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://unity3d.com/search?gq={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://unity3d.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://unity3d.com/search?gq={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://unity3d.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- Unreal Engine -->
 	<action name="unreal" id="website-unrealengine">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://www.unrealengine.com/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://www.unrealengine.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.unrealengine.com/search?q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.unrealengine.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- Cocos2d-x -->
 	<action name="cocos2d-x" id="website-cocos2dx">
 		<do>
-			<runaction 
-				id="website" 
-				input="http://www.cocos2d-x.org/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.cocos2d-x.org/"/>
+				</arguments>
+			</runaction> 
 		</do>
 	</action>
 	
 	<!-- Spring -->
 	<action name="Spring Framework" id="website-spring">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://spring.io/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="https://projects.spring.io/spring-framework/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://spring.io/search?q={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://projects.spring.io/spring-framework/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 

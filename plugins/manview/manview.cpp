@@ -11,11 +11,12 @@ int InitializePlugin(const struct PG_FUNC_TABLE* funcTable, const PG_PLUGIN_CONF
     return 0;
 }
 
-int RunAction(const char* actionId, const char* data)
+int RunAction(const char* actionId, const PG_ACTION_ARGUMENT_SET* argumentSet)
 {
     QProcess proc;
     char command[512];
 
+    const char* data = argumentSet->arguments[0].value;
 #   ifdef Q_OS_WIN
     sprintf(command, "where %s", data);
     proc.start(command);

@@ -4,14 +4,16 @@
 	<action name="google" id="website-google" image="images/google.png"
 		header="Search on 'Google'">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://www.google.com/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://www.google.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.google.com/search?q={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.google.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 		<links>
 			<link actionid="website-google-youtube" keyword="youtube"/>
@@ -24,16 +26,20 @@
 	<action name="google image search" id="website-google-image"
 		header="Search on 'Google Images'">
 		<do>
-			<runaction 
-				id="website" 
-				input="https://www.google.com/search?q={{input_text}}&amp;tbm=isch&amp;safe=off"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.google.com/search?q={{input_text}}&amp;tbm=isch&amp;safe=off"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="google video search" id="website-google-video">
 		<do>
-			<runaction
-				id="website" 
-				input="https://www.google.com/search?q={{input_text}}&amp;tbm=vid&amp;safe=off"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.google.com/search?q={{input_text}}&amp;tbm=vid&amp;safe=off"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="gmail" id="website-google-gmail"/>
@@ -41,7 +47,11 @@
 	<!-- reddit -->
 	<action name="reddit" id="website-reddit" image="images/reddit.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 		<links>
 			<link actionid="website-reddit-food" keyword="food"/>
@@ -58,94 +68,140 @@
 	</action>
 	<action name="reddit/food" id="website-reddit-food"  image="images/reddit-food.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/food"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/food"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/funny" id="website-reddit-funny"  image="images/reddit-funny.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/funny"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/funny"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/gaming" id="website-reddit-gaming"  image="images/reddit-gaming.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/gaming"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/gaming"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/videos" id="website-reddit-videos"  image="images/reddit-videos.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/videos"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/videos"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/movies" id="website-reddit-movies"  image="images/reddit-movies.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/movies"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/movies"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/music" id="website-reddit-music"  image="images/reddit-music.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/music"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/music"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/news" id="website-reddit-news"  image="images/reddit-news.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/news"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/news"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/science" id="website-reddit-science" image="images/reddit-science.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/science"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/science"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/space" id="website-reddit-space" image="images/reddit-space.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/space"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/space"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	<action name="reddit/sports" id="website-reddit-sports" image="images/reddit-sports.png">
 		<do>
-			<runaction id="website" input="https://www.reddit.com/r/sports"/>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.reddit.com/r/sports"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- bing -->
 	<action name="bing" id="website-bing" image="images/bing.png">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://www.bing.com/search?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://www.bing.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.bing.com/search?q={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.bing.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- facebook -->
 	<action name="facebook" id="website-facebook" image="images/facebook.png">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="https://www.facebook.com/search/top/?q={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://www.facebook.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.facebook.com/search/top/?q={{input_text}}"/>
+				</arguments>			
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.facebook.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- NAVER -->
 	<action name="NAVER" id="website-naver" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://search.naver.com/search.naver?where=nexearch&amp;ie=utf8&amp;query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://www.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://search.naver.com/search.naver?where=nexearch&amp;ie=utf8&amp;query={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.naver.com/"/>
+				</arguments>			
+			</runaction>			
 		</do>
 		<links>
 			<link actionid="website-naver-kin" keyword="kin"/>
@@ -161,70 +217,81 @@
 	<!-- NAVER 지식인 -->
 	<action name="NAVER 지식인" id="website-naver-kin" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://kin.naver.com/search/list.nhn?cs=utf8&amp;query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://kin.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://kin.naver.com/search/list.nhn?cs=utf8&amp;query={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://kin.naver.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- NAVER 웹툰 -->
 	<action name="NAVER 웹툰" id="website-webtoons" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://comic.naver.com/search.nhn?m=webtoon&amp;keyword={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://comic.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://comic.naver.com/search.nhn?m=webtoon&amp;keyword={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://comic.naver.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 
 	<!-- NAVER 증권 -->
 	<action name="NAVER 증권" id="website-naver-stock" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://finance.naver.com/search/search.nhn?query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://finance.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://finance.naver.com/search/search.nhn?query={{input_text}}"/>
+					<arg name="encoding" value="EUC-KR"/>
+				</arguments>
+			</runaction>
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://finance.naver.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- NAVER 지도 -->
 	<action name="NAVER 지도" id="website-naver-map" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://map.naver.com/index.nhn?query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://map.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://map.naver.com/index.nhn?query={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://map.naver.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 	
 	<!-- NAVER 쇼핑 -->
 	<action name="NAVER 쇼핑" id="website-naver-shopping" image="images/naver.gif">
 		<do>
-			<runaction 
-				condition="'input_text' != ''"
-				id="website" 
-				input="http://shopping.naver.com/search/all_search.nhn?query={{input_text}}"/>
-			<runaction 
-				condition="'input_text' == ''"
-				id="website" 
-				input="http://shopping.naver.com/"/>
+			<runaction condition="'input_text' != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://shopping.naver.com/search/all_search.nhn?query={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="'input_text' == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://shopping.naver.com/"/>
+				</arguments>
+			</runaction>
 		</do>
 	</action>
 </actions>

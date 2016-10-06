@@ -27,8 +27,9 @@ double evaluate(const char* exprStr)
     return result;
 }
 
-int RunAction(const char* actionId, const char* data)
+int RunAction(const char* actionId, const PG_ACTION_ARGUMENT_SET* argumentSet)
 {
+    const char* data = argumentSet->arguments[0].value;
     std::string stringifiedResult;
     {
         double result = evaluate(data);

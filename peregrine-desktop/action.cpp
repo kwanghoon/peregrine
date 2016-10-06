@@ -3,16 +3,36 @@
 #include <stringhelper.h>
 #include <Jinja2CppLight.h>
 #include <exprtk/exprtk.hpp>
+#include <QMap>
 #include <cassert>
 
 using namespace std;
 
-int Action::run(const QString& input)
+namespace
+{
+    QMap<QString, QString> evaluate(const QMap<QString, QString>& exprMap,
+        const QMap<QString, QString>& argMap)
+    {
+        QMap<QString, QString> result;
+        for (auto exprIt = exprMap.cbegin(); exprIt != exprMap.cend(); exprIt++)
+        {
+            Jinja2CppLight::Template t(exprIt.value().toStdString());
+            for (auto it = argMap.cbegin(); it != argMap.cend(); it++)
+            { 
+                t.setValue(it.key().toStdString(), it.value().toStdString());
+            }
+            result.insert(exprIt.key(), QString::fromStdString(t.render()));
+        }
+        return result;
+    }
+}
+
+int Action::run(const QMap<QString, QString>& argumentMap)
 {
     int actionReturnValue = 0;
     if (controller)
     {
-        actionReturnValue = controller->runAction(id, input);
+        actionReturnValue = controller->runAction(id, argumentMap);
         if (actionReturnValue < 0)
         {
             return actionReturnValue;
@@ -27,7 +47,7 @@ int Action::run(const QString& input)
         {
             exprtk::symbol_table<double> st;
             {
-                std::string input_s = input.toStdString();
+                std::string input_s = argumentMap["input_text"].toStdString();
                 st.add_stringvar("input_text", input_s, true);
             }
             exprtk::expression<double> expr;
@@ -41,9 +61,8 @@ int Action::run(const QString& input)
             }
         }
 
-        Jinja2CppLight::Template inputTemplate(todo.inputTemplate.toStdString());
-        inputTemplate.setValue("input_text", input.toStdString());
-        actionReturnValue = action->run(QString::fromStdString(inputTemplate.render()));
+        auto argMap = evaluate(todo.actionArguments, argumentMap);
+        actionReturnValue = action->run(argMap);
         if (actionReturnValue < 0)
         {
             break;
@@ -131,10 +150,19 @@ void LoadAction(QDomElement actionElem, QDir dir)
         {
             e.actionId = child.attribute("id");
             assert(!e.actionId.isEmpty());
-            e.inputTemplate = child.attribute("input");
             if (child.hasAttribute("condition"))
             {
                 e.condition = child.attribute("condition");
+            }
+            auto argsElem = child.firstChildElement("arguments");
+            if (!argsElem.isNull())
+            {
+                for (auto argElem = argsElem.firstChildElement("arg");
+                    !argElem.isNull(); argElem = argElem.nextSiblingElement("arg"))
+                {
+                    e.actionArguments.insert(
+                        argElem.attribute("name"), argElem.attribute("value"));
+                }
             }
         }
         action->doList.push_back(e);

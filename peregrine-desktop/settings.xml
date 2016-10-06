@@ -22,14 +22,16 @@
 	<customactions>
 		<action name="python" id="website-python">
 			<do>
-				<runaction 
-					condition="'input_text' != ''"
-					id="website" 
-					input="https://www.python.org/search/?q={{input_text}}"/>
-				<runaction 
-					condition="'input_text' == ''"
-					id="website" 
-					input="https://www.python.org/"/>
+				<runaction condition="'input_text' != ''" id="website" >
+					<arguments>
+						<arg name="input_text" value="https://www.python.org/search/?q={{input_text}}"/>
+					</arguments>
+				</runaction>
+				<runaction condition="'input_text' == ''" id="website">
+					<arguments>
+						<arg name="input_text" value="https://www.python.org/"/>
+					</arguments>
+				</runaction> 
 			</do>
 		</action>
 		
