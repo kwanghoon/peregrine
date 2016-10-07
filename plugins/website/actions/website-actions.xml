@@ -190,7 +190,7 @@
 	</action>
 
 	<!-- NAVER -->
-	<action name="NAVER" id="website-naver" image="images/naver.gif">
+	<action name="NAVER" id="website-naver" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>
@@ -215,7 +215,7 @@
 	</action>
 	
 	<!-- NAVER 지식인 -->
-	<action name="NAVER 지식인" id="website-naver-kin" image="images/naver.gif">
+	<action name="NAVER 지식인" id="website-naver-kin" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>
@@ -231,7 +231,7 @@
 	</action>
 	
 	<!-- NAVER 웹툰 -->
-	<action name="NAVER 웹툰" id="website-webtoons" image="images/naver.gif">
+	<action name="NAVER 웹툰" id="website-webtoons" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>
@@ -247,7 +247,7 @@
 	</action>
 
 	<!-- NAVER 증권 -->
-	<action name="NAVER 증권" id="website-naver-stock" image="images/naver.gif">
+	<action name="NAVER 증권" id="website-naver-stock" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>
@@ -264,7 +264,7 @@
 	</action>
 	
 	<!-- NAVER 지도 -->
-	<action name="NAVER 지도" id="website-naver-map" image="images/naver.gif">
+	<action name="NAVER 지도" id="website-naver-map" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>
@@ -280,7 +280,7 @@
 	</action>
 	
 	<!-- NAVER 쇼핑 -->
-	<action name="NAVER 쇼핑" id="website-naver-shopping" image="images/naver.gif">
+	<action name="NAVER 쇼핑" id="website-naver-shopping" image="images/naver.png">
 		<do>
 			<runaction condition="'input_text' != ''" id="website">
 				<arguments>

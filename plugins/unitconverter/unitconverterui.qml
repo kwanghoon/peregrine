@@ -248,7 +248,8 @@ Rectangle {
 			toText.text = 'NaN'
 		} else {
 			fromText.text = input + " <font color='red'><b>" + root.fromUnit + "</b></font>";
-			toText.text = input * root.fromFactor * root.toFactor  + " <font color='red'><b>" + root.toUnit + "</b></font>";
+			var num = Math.round(input * root.fromFactor * root.toFactor * 1000) / 1000;
+			toText.text = num  + " <font color='red'><b>" + root.toUnit + "</b></font>";
 		}
 		root.inputTextSaved = input;
 	}
