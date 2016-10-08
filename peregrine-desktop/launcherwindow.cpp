@@ -4,6 +4,7 @@
 #include "configurationwindow.h"
 #include "inputhandlerdelegate.h"
 #include "suggestionlistcontroller.h"
+#include "suggestionalgorithm.h"
 #include "syncmanager.h"
 #include "actionuihelper.h"
 #include "action.h"
@@ -570,12 +571,15 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
 void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAction, const QString& input)
 {
+    QStringList inputWords = input.split(' ', QString::SkipEmptyParts);
+
     auto emptyRange = decltype(currAction->links){};
     auto joinedLinks = boost::join(currAction->links,
         adoptedAction ? adoptedAction->links : emptyRange);
     for (auto& l : joinedLinks)
     {
-        if (l.keyword.startsWith(input, Qt::CaseInsensitive))
+        auto ret = SuggestionAlgorithm::matchKeyword(inputWords, l.keyword);
+        if (ret.first)
         {
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
@@ -583,8 +587,8 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 continue;
             }
 
-            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '<b>%2</b>%3'</font>")
-                .arg(linkedAction->name).arg(input).arg(l.keyword.mid(input.length()));
+            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '%2'</font>")
+                .arg(linkedAction->name).arg(ret.second);
             auto handler = [this, l, linkedAction](SuggestionListController::SuggestionRunType type, boost::any) -> int {
                 if (type == SuggestionListController::SuggestionRunType::Tab)
                 {

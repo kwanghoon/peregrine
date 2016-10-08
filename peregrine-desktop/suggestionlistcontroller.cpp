@@ -5,8 +5,12 @@
 #include <QTimer>
 #include <QWidget>
 #include <QObject>
-#include <cassert>
+#include <QQuickItem>
 #include <QQuickWidget>
+#include <cassert>
+#include <array>
+
+using namespace std;
 
 SuggestionListController::SuggestionListController(QQuickWidget* suggestionBox, 
     QQuickItem* suggestionListView, QObject* suggestionModel, 

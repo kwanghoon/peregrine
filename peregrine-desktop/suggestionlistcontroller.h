@@ -1,13 +1,14 @@
 #ifndef SUGGESTIONLISTCONTROLLER_H
 #define SUGGESTIONLISTCONTROLLER_H
 
-#include <QQuickItem>
+#include <QObject>
 #include <boost/any.hpp>
 #include <functional>
 #include <vector>
 
 class InputHandlerDelegate;
 class QQuickWidget;
+class QQuickItem;
 
 class SuggestionListController : public QObject
 {
@@ -32,7 +33,7 @@ public:
     bool isVisible() const;
     void setVisible(bool visible);
     int getCount() const { return suggestingItems_.size(); }
-    
+
 private:
     struct SuggestingItem
     {

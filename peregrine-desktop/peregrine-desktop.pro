@@ -50,6 +50,7 @@ HEADERS += action.h \
     inputhandlerdelegate.h \
     ../plugin-sdk/peregrine-plugin-sdk.h \
     suggestionlistcontroller.h \
+    suggestionalgorithm.h \
     actionuihelper.h \
     configurationwindow.h \
     syncmanager.h \
