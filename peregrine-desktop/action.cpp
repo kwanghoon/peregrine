@@ -58,7 +58,7 @@ int Action::run(const QMap<QString, QString>& argumentMap)
             expr.register_symbol_table(st);
             exprtk::parser<double> p;
             p.compile(todo.condition.toStdString(), expr);
-            bool result = expr.value();
+            bool result = static_cast<bool>(expr.value());
             if (!result)
             {
                 continue;

@@ -28,12 +28,12 @@
 	<!-- QT -->
 	<action name="QT" id="website-qt">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://doc.qt.io/qt-5/search-results.html?q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://doc.qt.io/"/>
 				</arguments>
@@ -55,12 +55,12 @@
 	<!-- cppreference -->
 	<action name="cppreference" id="website-cppreference">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://en.cppreference.com/mwiki/index.php?search={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://en.cppreference.com/"/>
 				</arguments>
@@ -71,12 +71,12 @@
 	<!-- MDN -->
 	<action name="MDN" id="website-mdn">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://developer.mozilla.org/en-US/search?q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://developer.mozilla.org/"/>
 				</arguments>
@@ -87,12 +87,12 @@
 	<!-- w3schools -->
 	<action name="w3schools" id="website-w3schools">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://www.google.co.kr/search?q={{input_text}}%20site%3Aw3schools.com"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.w3schools.com/"/>
 				</arguments>
@@ -103,12 +103,12 @@
 	<!-- jQuery -->
 	<action name="jQuery" id="website-jquery">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://api.jquery.com/?s={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://api.jquery.com/"/>
 				</arguments>
@@ -119,12 +119,12 @@
 	<!-- Bootstrap -->
 	<action name="Bootstrap" id="website-bootstrap">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://www.google.co.kr/search?q={{input_text}}%20site%3Agetbootstrap.com"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://getbootstrap.com/"/>
 				</arguments>
@@ -157,12 +157,12 @@
 	<!-- MSDN -->
 	<action name="MSDN" id="website-msdn">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://social.msdn.microsoft.com/Search/en-US?query={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://msdn.microsoft.com/"/>
 				</arguments>
@@ -173,12 +173,12 @@
 	<!-- StackOverflow -->
 	<action name="StackOverflow" id="website-stackoverflow">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://stackoverflow.com/search?q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://stackoverflow.com/"/>
 				</arguments>
@@ -189,12 +189,12 @@
 	<!-- GitHub-->
 	<action name="GitHub" id="website-github">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://github.com/search?utf8=%E2%9C%93&amp;q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://github.com/"/>
 				</arguments>
@@ -216,12 +216,12 @@
 	<!-- Unity -->
 	<action name="unity" id="website-unity">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://unity3d.com/search?gq={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://unity3d.com/"/>
 				</arguments>
@@ -232,12 +232,12 @@
 	<!-- Unreal Engine -->
 	<action name="unreal" id="website-unrealengine">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://www.unrealengine.com/search?q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://www.unrealengine.com/"/>
 				</arguments>
@@ -259,12 +259,12 @@
 	<!-- Spring -->
 	<action name="Spring Framework" id="website-spring">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://spring.io/search?q={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://projects.spring.io/spring-framework/"/>
 				</arguments>

@@ -9,5 +9,6 @@ public:
     PeregrineTest();
 
 private Q_SLOTS:
-    void testCase1();
+    void suggestionKeywordMatchTest();
+    void expressionTest();
 };

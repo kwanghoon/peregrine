@@ -15,12 +15,12 @@
 	<!-- Naver Dictionary English to Korean -->
 	<action name="Naver English Dictionary" id="website-naver-endic">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://endic.naver.com/search.nhn?query={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://endic.naver.com/"/>
 				</arguments>
@@ -31,12 +31,12 @@
 	<!-- Naver Korean -->
 	<action name="Naver Korean Dictionary" id="website-naver-krdic">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://krdic.naver.com/search.nhn?query={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://krdic.naver.com/"/>
 				</arguments>
@@ -47,12 +47,12 @@
 	<!-- Urban Dictionary -->
 	<action name="Urban Dictionary" id="website-urbandic">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.urbandictionary.com/define.php?term={{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.urbandictionary.com/"/>
 				</arguments>
@@ -63,12 +63,12 @@
 	<!-- thesaurus -->
 	<action name="Thesaurus" id="website-thesaurus">
 		<do>
-			<runaction condition="'input_text' != ''" id="website">
+			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.thesaurus.com/browse/{{input_text}}"/>
 				</arguments>
 			</runaction> 
-			<runaction condition="'input_text' == ''" id="website">
+			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.thesaurus.com/"/>
 				</arguments>
