@@ -50,12 +50,13 @@ int Action::run(const QMap<QString, QString>& argumentMap)
         if (!todo.condition.isEmpty())
         {
             exprtk::symbol_table<double> st;
-            {
-                std::string input_s = argumentMap["input_text"].toStdString();
-                st.add_stringvar("input_text", input_s, true);
-            }
+            std::list<std::string> stringStore;
+            stringStore.push_back(argumentMap["input_text"].toStdString());
+            st.add_stringvar("input_text", stringStore.back(), true);
+
             exprtk::expression<double> expr;
             expr.register_symbol_table(st);
+
             exprtk::parser<double> p;
             p.compile(todo.condition.toStdString(), expr);
             bool result = static_cast<bool>(expr.value());

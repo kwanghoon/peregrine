@@ -42,10 +42,16 @@ void PeregrineTest::expressionTest()
     exprtk::expression<double> expr;
     expr.register_symbol_table(st);
     exprtk::parser<double> p;
+    
     p.compile("input_text == ''", expr);
-    double res = expr.value();
-    QVERIFY(res == 0);
+    bool res = (bool)expr.value();
+    QVERIFY(res == false);
+    
+    p.compile("input_text != ''", expr);
+    res = (bool)expr.value();
+    QVERIFY(res == true);
+    
     p.compile("input_text == 'foo'", expr);
-    res = expr.value();
+    res = (bool)expr.value();
     QVERIFY(res == 1);
 }
