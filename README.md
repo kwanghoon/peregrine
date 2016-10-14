@@ -27,6 +27,9 @@
 * make sure that `qmake` command is available.
 * run `script/build-linux.sh`
 
+# Translations
+* [한글](docs/README.kor.md) 
+
 # Screenshots
 ![](docs/screenshot-google-search.png)
 
