@@ -123,7 +123,7 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
         return 0;
     }
 
-    // 3. valid 하면 parent 디렉토리를 구함 = p
+    // get the parent directory of |input|.
     filesystem::path path = boost::locale::conv::utf_to_utf<wchar_t>(input);
     filesystem::path parentDir;
     if (path.root_path() == path)
@@ -139,7 +139,10 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
         return 0;
     }
     
-    // p 아래 'filename*' 조건으로 모든 파일을 검색
+    // get directory separator used in |input|
+    char directorySeparator = strchr(input, '/') ? '/' : '\\';
+
+    // search all files starting with a part of name
     string filenameFrontPart = boost::locale::conv::utf_to_utf<char>(path.filename().wstring());
     if (filenameFrontPart == "." || filenameFrontPart == "/")
     {
@@ -159,7 +162,19 @@ int GetSuggestionItems(const char* currentActionId, const char* input, int* n, s
             % childFilename.substr(filenameFrontPart.length()));
         (*items)[*n].displayText = strdup(s.c_str());
         (*items)[*n].imagePath = GetFileIconPath(it->path());
-        (*items)[*n].completeText = strdup(filesystem::system_complete(it->path()).string().c_str());
+
+        // ensure directory separators in suggested paths are equal to the input.
+        char* sd = strdup(filesystem::system_complete(it->path()).string().c_str());
+        char* sp = sd;
+        while (*sp) 
+        {
+            if (*sp == '/' || *sp == '\\')
+            {
+                *sp = directorySeparator;
+            }
+            *sp++;
+        }
+        (*items)[*n].completeText = sd;
         (*n)++;
         if (*n >= maxSuggestions)
         {
