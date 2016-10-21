@@ -22,7 +22,17 @@
 			<link actionid="website-google-gmail" keyword="gmail"/>
 		</links>
 	</action>	
-	<action name="youtube" id="website-google-youtube"/>
+
+	<action name="youtube" id="website-google-youtube"  image="images/google-youtube.svg">
+		<do>
+			<runaction id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.youtube.com/results?search_query={{input_text}}"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+	
 	<action name="google image search" id="website-google-image"
 		header="Search on 'Google Images'">
 		<do>
@@ -42,7 +52,7 @@
 			</runaction>
 		</do>
 	</action>
-	<action name="gmail" id="website-google-gmail"/>
+	<action name="gmail" id="website-google-gmail"  image="images/google-gmail.svg"/>
 	
 	<!-- reddit -->
 	<action name="reddit" id="website-reddit" image="images/reddit.png">
