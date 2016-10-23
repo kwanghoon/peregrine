@@ -38,10 +38,13 @@ void SyncManager::login(const QString& email, const QString& passwordHash,
                 thenFunc(json["config"].toObject());
             }
         },
-        [this, &catchFunc]() {
+        [this, catchFunc]() {
             email_.clear();
             passwordHash_.clear();
-            catchFunc();
+            if (catchFunc)
+            {
+                catchFunc();
+            }
         });
 }
 
@@ -69,7 +72,8 @@ void SyncManager::getConfigs(function<void(const QJsonObject& json)> thenFunc, f
             {
                 thenFunc(json);
             }
-        });
+        }, 
+        catchFunc);
 }
 
 void SyncManager::sendGetRequest(const QString& path,
@@ -91,6 +95,7 @@ void SyncManager::sendGetRequest(const QString& path,
             {
                 catchFunc();
             };
+            reply->deleteLater();
             return;
         }
         auto content = reply->readAll();
@@ -112,6 +117,7 @@ void SyncManager::sendGetRequest(const QString& path,
                 catchFunc();
             };
         }
+        reply->deleteLater();
     });
 }
 
@@ -136,6 +142,7 @@ void SyncManager::sendPostRequest(const QString& path, const QVariantMap& formDa
             {
                 catchFunc();
             };
+            reply->deleteLater();
             return;
         }
         auto content = reply->readAll();
@@ -157,5 +164,6 @@ void SyncManager::sendPostRequest(const QString& path, const QVariantMap& formDa
                 catchFunc();
             };
         }
+        reply->deleteLater();
     });
 }
