@@ -31,8 +31,15 @@ Item {
             TextField {
                 id: passwordTextField
                 placeholderText: "Enter password"
+                echoMode: TextInput.Password
             }
         }
+    }
+    Text {
+        id: message
+        y: 160
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: 'red'
     }
     Row {
         y: 200
@@ -40,8 +47,10 @@ Item {
         Button {
             text: "login"
             onClicked: {
+                message.visible = false;
                 if (emailTextField.text.length < 6 || passwordTextField.text.length < 8) {
-                    console.log("Illegal account information");
+                    message.text = 'Illegal account information';
+                    message.visible = true;
                     return;
                 }
                 controller.login(emailTextField.text, passwordTextField.text);

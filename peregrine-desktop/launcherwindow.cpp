@@ -435,7 +435,7 @@ void LauncherWindow::setupTrayIcon()
                 QTimer::singleShot(1, [this]() { configDlg_.reset(); });
             });
         };
-        menu->addAction("Configuration", configAction);
+        menu->addAction("Peregrine Configuration..", configAction);
         menu->addSeparator();
         menu->addAction("Exit", [this] {
             appExit_ = true;
