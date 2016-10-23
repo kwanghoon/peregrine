@@ -41,6 +41,7 @@ Item {
                 id: dragArea
                 anchors.fill: parent
                 drag.target: parent
+                hoverEnabled: true
                 property int xSaved
                 property int ySaved
                 onPressed: {
@@ -55,6 +56,9 @@ Item {
                     }
                     slotPanel.allocActionOnSlot(actionTab.dropSlot.index, actionid, 
                         (imagePath != "" ? imagePath : null));
+                }
+                onEntered: {
+                    currentActionId.text = actionid;
                 }
             }
         }
