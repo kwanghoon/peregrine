@@ -1,5 +1,5 @@
 import QtQuick 2.4
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
 
 Item {
     id: actionTab
@@ -33,7 +33,7 @@ Item {
                     }
                 }
             }
-
+            
             Drag.active: dragArea.drag.active
             Drag.hotSpot.x: width / 2
             Drag.hotSpot.y: height / 2
@@ -77,10 +77,16 @@ Item {
         property int vertiGap: 6
 
         Button {
+            width: 30; height: 40
+            Image {
+                anchors.fill: parent
+                source: "close-button.png"
+                mipmap: true
+            }
             id: emptySlotButton
             z: 2
             visible: false
-            iconSource: "close-button.png"
+            flat: true
             property int index: -1
             onClicked: {
                 slotPanel.removeActionOnSlot(index);
@@ -119,6 +125,7 @@ Item {
                             emptySlotButton.x = slot.x + slot.width - emptySlotButton.width / 2;
                             emptySlotButton.y = slot.y - emptySlotButton.height / 2;
                             emptySlotButton.index = index;
+                            currentActionId.text = slot.actionId;
                         }
                         onExited: {
                             emptySlotButton.visible = false;
@@ -207,6 +214,14 @@ Item {
                 settings.actionslots.push(slotSetting);
             }
             controller.saveActionSlotSettings(settings);
+        }
+        
+        Text {
+            id: currentActionId
+            y: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "cornflowerblue"
+            font.pixelSize: 24
         }
     }
 }
