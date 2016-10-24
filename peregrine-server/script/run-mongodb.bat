@@ -8,11 +8,12 @@ if "%errorlevel%" neq "0" (
 	goto failed
 )
 
-if not exist ..\db (
-	mkdir ..\db
+set dbdir=..\db
+if not exist  %dbdir% (
+	mkdir %dbdir%
 )
 
-call mongod --dbpath=..\db --port=27017
+call mongod --dbpath=%dbdir% --port=27017
 
 exit /b 0
 

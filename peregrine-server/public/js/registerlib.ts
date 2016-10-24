@@ -17,12 +17,8 @@
 function sendRegisterRequest() {
     let emailField = <HTMLInputElement>document.getElementById('emailField');
     let passwordField = <HTMLInputElement>document.getElementById('passwordField');
-    console.log('email: ', emailField.value);
-    console.log('password: ', passwordField.value);
     twistPassword(emailField.value, passwordField.value)
         .then(function (twistedPassword: string) {
-            console.log('email: ', emailField.value);
-            console.log('pw: ', twistedPassword);
             $.ajax({
                 url: 'register?email=' + emailField.value + '&pwHash=' + twistedPassword,
                 type: 'PUT',

@@ -1,8 +1,17 @@
+# general
+*.log
+
+# pug
 public/stylesheets/*.css
 
-node_modules
+# vs
 obj
+
+# mongodb
 db
+
+# npm
+node_modules
 
 # typescript 
 typings
