@@ -1,0 +1,46 @@
+﻿doctype html
+html
+	head
+		title= title
+
+		script(src='https://code.jquery.com/jquery-3.1.0.min.js')
+
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+
+		link(rel='stylesheet', href='common.css')
+
+		block head
+	
+	body
+		.container
+			.row
+				img(src='images/header-logo.svg' width='16%' height='16%')
+				div(style={'display': 'inline-block'})
+					span(style={'font-weight': 'bold', 'font-size': '40px'}) PEREGRINE
+					span(style={color: '#BBB'}) The Ultimate Desktop Launcher
+					br
+					a(href='/about' class=['menu'])
+						if location == 'about'
+							b 소개
+						else
+							| 소개
+					|&nbsp;&nbsp;&nbsp;
+					a(href='/download' class=['menu'])
+						if location == 'download'
+							b 다운로드
+						else
+							| 다운로드
+					|&nbsp;&nbsp;&nbsp;
+					a(href='/plugins' class=['menu'])
+						if location == 'plugins'
+							b 플러그인
+						else
+							| 플러그인
+					|&nbsp;&nbsp;&nbsp;
+					a(href='/register' class=['menu'])
+						if location == 'register'
+							b 계정등록
+						else
+							| 계정등록
+			block content

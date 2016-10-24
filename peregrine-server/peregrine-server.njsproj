@@ -35,16 +35,17 @@
   <ItemGroup>
     <Compile Include="bin\www" />
     <Content Include="package.json" />
+    <Content Include="public\common.css" />
     <Content Include="tsconfig.json" />
     <Content Include="README.md" />
     <Content Include="typings.json" />
-    <Content Include="views\about.jade" />
-    <Content Include="views\download.jade" />
-    <Content Include="views\index.jade" />
-    <Content Include="views\layout.jade" />
-    <Content Include="views\error.jade" />
-    <Content Include="views\plugins.jade" />
-    <Content Include="views\register.jade" />
+    <Content Include="views\about.pug" />
+    <Content Include="views\download.pug" />
+    <Content Include="views\index.pug" />
+    <Content Include="views\layout.pug" />
+    <Content Include="views\error.pug" />
+    <Content Include="views\plugins.pug" />
+    <Content Include="views\register.pug" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\db\" />
