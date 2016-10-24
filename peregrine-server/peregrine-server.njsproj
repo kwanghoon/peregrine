@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\db\" />
+    <Folder Include="app\repository\" />
     <Folder Include="app\repository\interfaces\" />
     <Folder Include="bin\" />
     <Folder Include="app\" />
@@ -62,6 +63,7 @@
     <Folder Include="typings\globals\express-serve-static-core\" />
     <Folder Include="typings\globals\express\" />
     <Folder Include="typings\globals\jade\" />
+    <Folder Include="typings\globals\jquery\" />
     <Folder Include="typings\globals\mime\" />
     <Folder Include="typings\globals\mongodb\" />
     <Folder Include="typings\globals\mongoose\" />
@@ -89,6 +91,7 @@
     <TypeScriptCompile Include="typings\globals\express-serve-static-core\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\express\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\jade\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\jquery\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mime\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mongodb\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\mongoose\index.d.ts" />
