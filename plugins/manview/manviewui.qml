@@ -32,6 +32,7 @@ Rectangle {
              height: flick.height - 10
              focus: true
              wrapMode: TextEdit.Wrap
+             selectByMouse: true
              onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
          }
      }
