@@ -530,7 +530,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
     
     suggestLinkedActions(currAction, adoptedAction, trimmedInputText);
 
-    if (!currAction->customUiPath.isEmpty())
+    if (currAction->hasCustomUI())
     {
         auto* customUiItem = this->ui->customUi->rootObject();
         auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
@@ -639,34 +639,7 @@ bool LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
     }
     else if (key == Qt::Key::Key_Return || key == Qt::Key::Key_Enter)
     {
-        int currentIndex = global::suggestionListController->getCurrentIndex();
-        if (currentIndex == -1)
-        {
-            qDebug() << inputText;
-            if (currentAction_.isEmpty())
-            {
-                return true;
-            }
-            auto action = ActionManager::getInstance().getActionById(currentAction_);
-            int ret = action->run({ { "input_text", inputText} });
-
-            saveInputHistory(inputText);
-
-            if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
-            {
-                pushDown();
-            }
-        }
-        else
-        {
-            int ret = global::suggestionListController->runSelected(
-                SuggestionListController::SuggestionRunType::Enter);
-            if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
-            {
-                pushDown();
-            }
-            global::suggestionListController->setVisible(false);
-        }
+        return onInputAccepted(inputText);
     }
     else if (key == Qt::Key::Key_Tab)
     {
@@ -700,6 +673,46 @@ bool LauncherWindow::onKeyPressed(int key, int modifiers, const QString& inputTe
         {
             switchToNextAction();
         }
+    }
+    return true;
+}
+
+bool LauncherWindow::onInputAccepted(const QString& inputText)
+{
+    int currentIndex = global::suggestionListController->getCurrentIndex();
+    if (currentIndex == -1)
+    {
+        qDebug() << inputText;
+        if (currentAction_.isEmpty())
+        {
+            return true;
+        }
+        auto action = ActionManager::getInstance().getActionById(currentAction_);
+
+        if (action->hasCustomUI())
+        {
+            auto* customUiItem = this->ui->customUi->rootObject();
+            auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
+            QMetaObject::invokeMethod(userUi, "onInputAccepted", Q_ARG(QVariant, inputText));
+        }
+        int ret = action->run({ {"input_text", inputText} });
+
+        saveInputHistory(inputText);
+
+        if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
+        {
+            pushDown();
+        }
+    }
+    else
+    {
+        int ret = global::suggestionListController->runSelected(
+            SuggestionListController::SuggestionRunType::Enter);
+        if (ret == PG_BEHAVIOR_ON_RETURN::PG_DISAPPEAR)
+        {
+            pushDown();
+        }
+        global::suggestionListController->setVisible(false);
     }
     return true;
 }

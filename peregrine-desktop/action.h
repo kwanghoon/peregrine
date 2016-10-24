@@ -18,6 +18,7 @@ class Action
 {
 public:
     int run(const QMap<QString, QString>& argumentMap);
+    bool hasCustomUI() const { return !customUiPath.isEmpty(); }
 
     QString id;
     QString name;

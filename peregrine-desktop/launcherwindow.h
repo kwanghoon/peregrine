@@ -49,6 +49,7 @@ private:
     void popUp();
     void pushDown();
     void suggestLinkedActions(Action* currAction, Action* adoptedAction, const QString& input);
+    bool onInputAccepted(const QString& inputText);
 
     void setHeaderText(const QString& text);
 

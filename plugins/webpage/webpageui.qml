@@ -11,4 +11,8 @@ Rectangle {
 	function onActivated(args) {
 		webView.url = args;
 	}
+	
+	function onInputAccepted(input) {
+		webView.url = input;
+	}
 }
