@@ -1,8 +1,43 @@
 ﻿extends layout
 
 block content
-	h1 Download
-	a('/peregrine.zip') Windows
-	br
-	a('/peregrine.tar.gz') Ubuntu
+	.row
+		h1 다운로드
+	.row
+		p(style={'font-size': '18px'})
+			|Peregrine은 크로스플랫폼으로 개발되었습니다.
+			br
+			|현재 Windows 버전과 Ubuntu 버전이 제공되고 있으며 그 중 주 개발환경은 Windows 입니다.
+			br
+			|때문에 Windows에서는 기능이 원활히 작동하나 Ubuntu 버전에서는 일부 기능이 올바르게 동작하지 않습니다. (개발자 분들의 도움이 필요합니다!)
+			br
+			|조만간 OS X 버전 또한 배포할 예정입니다.
+	.row
+		h2 다운로드 목록
+	.row
+		table(class=['table'])
+			thread
+				tr
+					th Platform
+					th Installer
+					th Portable
+			tbody
+				tr
+					td Windows x86
+					td TODO
+					td 
+						a('download/latest/peregrine.zip') Windows
+				tr
+					td Windows x64
+					td TODO
+					td TODO
+				tr
+					td Ubuntu
+					td TODO
+					td
+						a('download/latest/peregrine.tar.gz') Ubuntu
+				tr
+					td OS X
+					td TODO
+					td TODO
 	br

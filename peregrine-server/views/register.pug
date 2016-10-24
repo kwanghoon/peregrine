@@ -4,16 +4,32 @@ block head
 	script(src='js/registerlib.js')
 
 block content
-	h1 Create an account
-	| E-mail:
-	br
-	input#emailField(type='text')
-	br
-	| Password:
-	br
-	input#passwordField(type='password')
-	br
-	br
-	button.btn(onclick='sendRegisterRequest()') Create a new account
-	br
-	p(style='font-weight: bold')#messagePanel
+	.row
+		h1 계정 등록
+	.row
+		p(style={'font-size': '18px'})
+			|설정 동기화를 하려면 계정 등록이 필요합니다.
+			br
+			|수집된 정보는 다른 목적으로 이용하지 않으며, 비밀번호는 Cryptographic Hash 연산을 가한 값만 저장됩니다.
+		br
+	form
+		.row
+			.form-group.col-md-4.col-md-offset-4
+				label 메일 주소
+				input#emailField(type='email' class=['form-control'] placeholder='youremail@mail.com')
+		.row
+			.form-group.col-md-4.col-md-offset-4
+				label 비밀 번호
+				input#passwordField(type='password' class=['form-control'] placeholder='8자 이상')
+		.row
+			.form-group.col-md-4.col-md-offset-4
+				label 비밀 번호(확인용)
+				input#passwordField(type='passwordConfirm' class=['form-control'] placeholder='다시 한 번 입력해주세요')
+		
+		.row
+			#messagePanel(class=['alert', 'alert-danger'] hidden=true)
+		
+		.row(style={'text-align': 'center'})
+			button.btn(onclick='sendRegisterRequest()') 등록
+			span &nbsp;
+			button.btn 비밀번호 찾기
