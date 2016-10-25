@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="kma">
+	<actions>
+		<action name="기상청" id="webpage-kma" 
+			ui_width="1070" ui_height="880" image="kma-logo.gif">
+			<adopt id="webpage">
+				<arguments>
+					<arg name="url">http://m.kma.go.kr/m/nation/tomorrow.jsp</arg>
+				</arguments>
+			</adopt>
+		</action>
+	</actions>
+</plugin>
