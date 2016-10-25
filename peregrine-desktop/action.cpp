@@ -14,8 +14,8 @@ using namespace std;
 
 namespace
 {
-    QMap<QString, QString> evaluate(const QMap<QString, QString>& exprMap,
-        const QMap<QString, QString>& argMap)
+    QMap<QString, QString> evaluate(const QMap<QString, QString>& exprMap, const QMap<QString, QString>& argMap,
+        QList<QPair<QString, QString>> vars)
     {
         QMap<QString, QString> result;
         for (auto exprIt = exprMap.cbegin(); exprIt != exprMap.cend(); exprIt++)
@@ -25,13 +25,18 @@ namespace
             { 
                 t.setValue(it.key().toStdString(), it.value().toStdString());
             }
+            Q_FOREACH(auto& e, vars)
+            {
+                t.setValue(e.first.toStdString(), e.second.toStdString());
+            }
             result.insert(exprIt.key(), QString::fromStdString(t.render()));
         }
+
         return result;
     }
 }
 
-int Action::run(const QMap<QString, QString>& argumentMap)
+int Action::run(const QMap<QString, QString>& argumentMap, IActionContext* context)
 {
     int actionReturnValue = 0;
     if (controller)
@@ -66,8 +71,14 @@ int Action::run(const QMap<QString, QString>& argumentMap)
             }
         }
 
-        auto argMap = evaluate(todo.actionArguments, argumentMap);
-        actionReturnValue = action->run(argMap);
+        QList<QPair<QString, QString>> vars;
+        for (auto it = todo.varFuncMap.cbegin(); it != todo.varFuncMap.cend(); it++)
+        {
+            vars.push_back({ it.key(), context->invokeFunc(it.value()) });
+        }
+        auto argMap = evaluate(todo.actionArguments, argumentMap, vars);
+
+        actionReturnValue = action->run(argMap, context);
         if (actionReturnValue < 0)
         {
             break;
@@ -101,6 +112,70 @@ const std::list<std::unique_ptr<Action>>& ActionManager::getActionList() const
 }
 
 ActionManager ActionManager::instance_;
+
+
+
+namespace
+{
+    void parseDoElement(QDomElement &actionElem, Action* action)
+    {
+        for (auto child = actionElem.firstChildElement("do").firstChildElement();
+            !child.isNull(); child = child.nextSiblingElement())
+        {
+            assert(child.tagName() == "runaction");
+            Action::DoEntry e;
+            {
+                e.actionId = child.attribute("id");
+                assert(!e.actionId.isEmpty());
+                if (child.hasAttribute("condition"))
+                {
+                    e.condition = child.attribute("condition");
+                }
+
+                // <variables />
+                auto variablesElem = child.firstChildElement("variables");
+                if (variablesElem.isNull()) { continue; }
+                for (auto varElem = variablesElem.firstChildElement();
+                    !varElem.isNull(); varElem = varElem.nextSiblingElement())
+                {
+                    if (varElem.tagName() == "varbycall")
+                    {
+                        e.varFuncMap.insert(
+                            varElem.attribute("name"), varElem.attribute("func"));
+                    }
+                }
+
+                // <arguments />
+                auto argsElem = child.firstChildElement("arguments");
+                if (argsElem.isNull()) { continue; }
+                for (auto argElem = argsElem.firstChildElement("arg");
+                    !argElem.isNull(); argElem = argElem.nextSiblingElement("arg"))
+                {
+                    e.actionArguments.insert(
+                        argElem.attribute("name"), argElem.attribute("value"));
+                }
+            }
+            action->doList.push_back(e);
+        }
+    }
+
+    void parseLinksElement(QDomElement &actionElem, Action* action)
+    {
+        for (auto child = actionElem.firstChildElement("links").firstChildElement();
+            !child.isNull(); child = child.nextSiblingElement())
+        {
+            assert(child.tagName() == "link");
+            Action::ActionLinkEntry e;
+            {
+                e.linkedActionId = child.attribute("actionid");
+                assert(!e.linkedActionId.isEmpty());
+                e.keyword = child.attribute("keyword");
+                e.inputText = child.attribute("input_text");
+            }
+            action->links.push_back(e);
+        }
+    }
+}
 
 void LoadAction(QDomElement actionElem, QDir dir)
 {
@@ -146,47 +221,8 @@ void LoadAction(QDomElement actionElem, QDir dir)
         }
     }
 
-    // do
-    for (auto child = actionElem.firstChildElement("do").firstChildElement();
-        !child.isNull(); child = child.nextSiblingElement())
-    {
-        assert(child.tagName() == "runaction");
-        Action::DoEntry e;
-        {
-            e.actionId = child.attribute("id");
-            assert(!e.actionId.isEmpty());
-            if (child.hasAttribute("condition"))
-            {
-                e.condition = child.attribute("condition");
-            }
-            auto argsElem = child.firstChildElement("arguments");
-            if (!argsElem.isNull())
-            {
-                for (auto argElem = argsElem.firstChildElement("arg");
-                    !argElem.isNull(); argElem = argElem.nextSiblingElement("arg"))
-                {
-                    e.actionArguments.insert(
-                        argElem.attribute("name"), argElem.attribute("value"));
-                }
-            }
-        }
-        action->doList.push_back(e);
-    }
-
-    // links
-    for (auto child = actionElem.firstChildElement("links").firstChildElement();
-        !child.isNull(); child = child.nextSiblingElement())
-    {
-        assert(child.tagName() == "link");
-        Action::ActionLinkEntry e;
-        {
-            e.linkedActionId = child.attribute("actionid");
-            assert(!e.linkedActionId.isEmpty());
-            e.keyword = child.attribute("keyword");
-            e.inputText = child.attribute("input_text");
-        }
-        action->links.push_back(e);
-    }
+    parseDoElement(actionElem, action.get());
+    parseLinksElement(actionElem, action.get());
 
     ActionManager::getInstance().addAction(move(action));
 }

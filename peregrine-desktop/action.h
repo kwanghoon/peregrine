@@ -14,10 +14,16 @@
 
 class PluginModule;
 
+class IActionContext
+{
+public:
+    virtual QString invokeFunc(const QString& funcName) = 0;
+};
+
 class Action
 {
 public:
-    int run(const QMap<QString, QString>& argumentMap);
+    int run(const QMap<QString, QString>& argumentMap, IActionContext* context);
     bool hasCustomUI() const { return !customUiPath.isEmpty(); }
 
     QString id;
@@ -35,6 +41,9 @@ public:
         QString actionId;
         QString condition;
         QMap<QString, QString> actionArguments;
+
+        // #HACK
+        QMap<QString, QString> varFuncMap;
     };
     std::vector<DoEntry> doList;
 

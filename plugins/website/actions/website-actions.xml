@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<!-- google -->
-	<action name="google" id="website-google" image="images/google.png"
-		header="Search on 'Google'">
+	<action name="google" id="website-google" image="images/google.png" header="Search on 'Google'" 
+		ui="search-option-ui.qml" ui_width="800" ui_height="300" >
 		<do>
 			<runaction condition="input_text != ''" id="website">
+				<variables>
+					<varbycall  name="serach_option_query" func="getQueryInGoogleFormat"/>
+				</variables>
 				<arguments>
-					<arg name="input_text" value="http://www.google.com/search?q={{input_text}}"/>
+					<arg name="input_text" value="http://www.google.com/search?q={{input_text}}{{serach_option_query}}"/>
 				</arguments>
 			</runaction>
 			<runaction condition="input_text == ''" id="website">

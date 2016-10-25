@@ -368,9 +368,10 @@ void LauncherWindow::changeAction(QString actionId, QString inputText)
             }
             qmlString = QTextStream(&f).readAll();
         }
-        QMetaObject::invokeMethod(customUiItem, "loadCustomUi", Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
         ui->customUi->resize(uiWidth, uiHeight);
         resize(uiWidth + 20, ui->inputContainer->height() + uiHeight);
+        QMetaObject::invokeMethod(customUiItem, "loadCustomUi", 
+            Q_ARG(QVariant, qmlString), Q_ARG(QVariant, argsForActivatedEvent));
         ui->customUi->show();
     }
     else
@@ -554,7 +555,7 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
                 {
                     if (type == SuggestionListController::SuggestionRunType::Enter)
                     {
-                        return action->run({{"input_text", completeText}});
+                        return action->run({{"input_text", completeText}}, nullptr);
                     }
                     else
                     {
@@ -602,7 +603,7 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 }
                 else if (type == SuggestionListController::SuggestionRunType::Enter)
                 {
-                    linkedAction->run({{"input_text", ""}});
+                    linkedAction->run({{"input_text", ""}}, nullptr);
                 }
                 return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
             };
@@ -689,13 +690,38 @@ bool LauncherWindow::onInputAccepted(const QString& inputText)
         }
         auto action = ActionManager::getInstance().getActionById(currentAction_);
 
+
+        std::unique_ptr<IActionContext> context;
+        
         if (action->hasCustomUI())
         {
             auto* customUiItem = this->ui->customUi->rootObject();
             auto* userUi = dynamic_cast<QQuickItem*>(customUiItem->children()[0]);
             QMetaObject::invokeMethod(userUi, "onInputAccepted", Q_ARG(QVariant, inputText));
+
+            // script execution 
+            class ActionContext : public IActionContext
+            {
+            public:
+                ActionContext(QQuickItem* quickItem)
+                    : quickItem(quickItem)
+                {}
+
+                virtual QString invokeFunc(const QString& funcName) override
+                {
+                    QVariant ret;
+                    QMetaObject::invokeMethod(quickItem, funcName.toStdString().c_str(), 
+                        Q_RETURN_ARG(QVariant, ret));
+                    return ret.toString();
+                }
+
+            private:
+                QQuickItem* quickItem;
+            };
+            context.reset(new ActionContext(userUi));
         }
-        int ret = action->run({ {"input_text", inputText} });
+
+        int ret = action->run({ {"input_text", inputText} }, context.get());
 
         saveInputHistory(inputText);
 
