@@ -17,6 +17,11 @@
 function sendRegisterRequest() {
     let emailField = <HTMLInputElement>document.getElementById('emailField');
     let passwordField = <HTMLInputElement>document.getElementById('passwordField');
+    if ((<HTMLInputElement>document.getElementById('passwordConfirmField')).value != passwordField.value) {
+        $('#messagePanel').text('The password and confirmation are not the same!');
+        $('#messagePanel').show();
+        return;
+    }
     twistPassword(emailField.value, passwordField.value)
         .then(function (twistedPassword: string) {
             $.ajax({
@@ -24,11 +29,15 @@ function sendRegisterRequest() {
                 type: 'PUT',
                 success: (ret) => {
                     if (ret.success == true) {
-                        $('#messagePanel').text('registration success!');
-                        window.location.assign('/about');
+                        $('#messagePanel').show();
+                        $('#messagePanel').text('Registration Success!');
                     } else {
+                        $('#messagePanel').show();
                         $('#messagePanel').text(ret.message);
                     }
+                    $('emailField').val('');
+                    $('passwordField').val('');
+                    $('passwordConfirmField').val('');
                 }
             });
             return null;

@@ -24,12 +24,12 @@ block content
 		.row
 			.form-group.col-md-4.col-md-offset-4
 				label 비밀 번호(확인용)
-				input#passwordField(type='passwordConfirm' class=['form-control'] placeholder='다시 한 번 입력해주세요')
+				input#passwordConfirmField(type='password' class=['form-control'] placeholder='다시 한 번 입력해주세요')
 		
 		.row
-			#messagePanel(class=['alert', 'alert-danger'] hidden=true)
+			#messagePanel.col-md-4.col-md-offset-4(class=['alert', 'alert-danger'] hidden=true)
 		
 		.row(style={'text-align': 'center'})
-			button.btn(onclick='sendRegisterRequest()') 등록
+			button.btn(onclick='sendRegisterRequest()' type='button') 등록
 			span &nbsp;
-			button.btn 비밀번호 찾기
+			button.btn(type='button') 비밀번호 찾기

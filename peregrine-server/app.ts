@@ -27,8 +27,6 @@ app.all('/*', function (req, res, next) {
     next();
 });
 
-import routes = require('./routes/index');
-app.use('/', routes);
 import register = require('./routes/register');
 app.use('/register', register);
 import config = require('./routes/config');
@@ -38,6 +36,11 @@ app.use('/config', config);
 let aboutRouter = express.Router();
 aboutRouter.get('/about', function (req, res) { res.render('about', { location: 'about' }); });
 app.use('/', aboutRouter);
+
+// #TODO: redirect
+let indexRouter = express.Router();
+indexRouter .get('/', function (req, res) { res.render('about', { location: 'about' }); });
+app.use('/', indexRouter);
 
 // download
 let downloadRouter = express.Router();
