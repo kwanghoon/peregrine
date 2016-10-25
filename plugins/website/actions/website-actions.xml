@@ -203,11 +203,15 @@
 	</action>
 
 	<!-- NAVER -->
-	<action name="NAVER" id="website-naver" image="images/naver.png">
+	<action name="NAVER" id="website-naver" image="images/naver.png"
+		ui="search-option-ui.qml" ui_width="800" ui_height="300" >
 		<do>
 			<runaction condition="input_text != ''" id="website">
+				<variables>
+					<varbycall  name="serach_option_query" func="getQueryInNaverFormat"/>
+				</variables>
 				<arguments>
-					<arg name="input_text" value="http://search.naver.com/search.naver?where=nexearch&amp;ie=utf8&amp;query={{input_text}}"/>
+					<arg name="input_text" value="http://search.naver.com/search.naver?where=nexearch&amp;ie=utf8&amp;query={{input_text}}{{serach_option_query}}"/>
 				</arguments>
 			</runaction>
 			<runaction condition="input_text == ''" id="website">

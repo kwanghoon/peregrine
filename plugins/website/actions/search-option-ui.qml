@@ -28,13 +28,9 @@ Item {
 		}
 	}
 	
-	function getQueryInGoogleFormat() {
-		if (dateNum.currentIndex == 0) {
-			return '';
-		}
-		
-		var num = dateNum.currentIndex;
+	function getFromDate() {
 		var t = new Date();
+		var num = dateNum.currentIndex;
 		switch (dateUnit.currentIndex) {
 			case 0:
 				t.setFullYear(t.getFullYear() - num);
@@ -49,8 +45,24 @@ Item {
 				t.setDate(t.getDate() - num);
 				break;
 		}
-		var s = t.toISOString().substr(0, 10);
-		s = s.replace(/-/g, '.');
-		return '&tbs=cdr:1,cd_min:' + s + ',cd_max:';
+		return t;
+	}
+	
+	function getQueryInGoogleFormat() {
+		if (dateNum.currentIndex == 0) {
+			return '';
+		}		
+		var from = getFromDate().toISOString().substr(0, 10).replace(/-/g, '.');
+		return '&tbs=cdr:1,cd_min:' + from + ',cd_max:';
+	}
+
+	// example: https://search.naver.com/search.naver?where=nexearch&ie=utf8&query=페레그린&nso=p:from20160907to20161025	
+	function getQueryInNaverFormat() {
+		if (dateNum.currentIndex == 0) {
+			return '';
+		}		
+		var from = getFromDate().toISOString().substr(0, 10).replace(/-/g, '');
+		var to = (new Date()).toISOString().substr(0, 10).replace(/-/g, '');
+		return '&nso=p:from' + from + 'to' + to;
 	}
 }
