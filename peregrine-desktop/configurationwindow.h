@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void saveActionSlotSettings(const QVariantMap& slotSettings);
     Q_INVOKABLE bool installPlugin(QUrl fileUrl);
     Q_INVOKABLE bool login(const QString& email, const QString& password);
+    Q_INVOKABLE bool logout();
 
     qreal initialTabIndex = 0;
 };

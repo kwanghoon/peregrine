@@ -45,15 +45,22 @@ Item {
         y: 200
         anchors.horizontalCenter: parent.horizontalCenter
         Button {
+            id: loginout
             text: "login"
             onClicked: {
                 message.visible = false;
-                if (emailTextField.text.length < 6 || passwordTextField.text.length < 8) {
-                    message.text = 'Illegal account information';
-                    message.visible = true;
-                    return;
+                if (text == "login") {
+                    if (emailTextField.text.length < 6 || passwordTextField.text.length < 8) {
+                        message.text = 'Illegal account information';
+                        message.visible = true;
+                        return;
+                    }
+                    controller.login(emailTextField.text, passwordTextField.text);
+                } else {
+                    emailTextField.text = '';
+                    passwordTextField.text = '';
+                    controller.logout();
                 }
-                controller.login(emailTextField.text, passwordTextField.text);
             }
         }
         Button {
@@ -69,6 +76,9 @@ Item {
                 s += '*';
             }
             passwordTextField.text = s;
+            loginout.text = 'logout';
+        } else {
+            loginout.text = 'login';
         }
     }
 }

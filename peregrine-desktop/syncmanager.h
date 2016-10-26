@@ -20,8 +20,10 @@ public:
 
     void login(const QString& id, const QString& passwordHash, 
         std::function<void(const QJsonObject& json)> thenFunc = {}, std::function<void()> catchFunc = {});
+    void logout();
     void putConfigs(const QVariantMap& configs);
     void getConfigs(std::function<void(const QJsonObject& configs)> thenFunc = {}, std::function<void()> catchFunc = {});
+    bool isLogined() const { return !email_.isEmpty(); }
 
 private:
     void sendGetRequest(const QString& path, std::function<void(const QJsonObject& json)> thenFunc, std::function<void()> catchFunc = {});

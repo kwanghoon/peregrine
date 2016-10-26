@@ -3,7 +3,7 @@
 	<plugin plugindir="plugins"/>
 	<maxSuggestions>7</maxSuggestions>
 	<sync>
-		<serverUrl ip='112.170.4.98' port='1337'/>
+		<serverUrl ip='119.194.212.191' port='1337'/>
 	</sync> 
 	<actionslots>
 		<actionslot x='1' y='0' actionid='website-google'/>

@@ -48,6 +48,12 @@ void SyncManager::login(const QString& email, const QString& passwordHash,
         });
 }
 
+void SyncManager::logout()
+{
+    email_.clear();
+    passwordHash_.clear();
+}
+
 void SyncManager::putConfigs(const QVariantMap& configs)
 {
     if (email_.isEmpty())
@@ -101,7 +107,7 @@ void SyncManager::sendGetRequest(const QString& path,
         auto content = reply->readAll();
         auto json = QJsonDocument::fromJson(content);
         assert(!json.isNull());
-        //qDebug() << json.toJson(QJsonDocument::Indented);
+        qDebug() << json.toJson(QJsonDocument::Indented);
         auto obj = json.object();
         if (obj["success"].toBool() == true)
         {

@@ -15,6 +15,7 @@
 #include <QQuickItem>
 #include <QQmlContext>
 #include <QCryptographicHash>
+#include <QMessageBox>
 
 using namespace std;
 
@@ -202,11 +203,32 @@ bool ConfigurationController::login(const QString& email, const QString& passwor
         accountInfo["salt"] = "peregrine-the-crossplatform-launcher";
         accountInfo["passwordLength"] = password.length();
     }
+    auto thenFunc = [accountInfo](const QJsonObject& json) {
+        QVariantMap config;
+        {
+            config.insert("sync", QVariantMap { { "account", accountInfo } });
+        }
+        global::GetConfigManager().updateConfig(config, "modify");
+    };
+    auto catchFunc = []() {
+        QMessageBox* box = new QMessageBox();
+        box->setText("Failed.");
+        box->show();
+        QObject::connect(box, &QMessageBox::finished, [box]() {
+            box->deleteLater();
+        });
+    };
+    global::GetSyncManager().login(email, passwordHash, thenFunc, catchFunc);
+    return true;
+}
+
+bool ConfigurationController::logout()
+{
     QVariantMap config;
     {
-        config.insert("sync", QVariantMap { { "account", accountInfo } });
+        config.insert("sync", QVariantMap{ { "account", {} } });
     }
-    global::GetSyncManager().login(email, passwordHash);
     global::GetConfigManager().updateConfig(config, "modify");
+    global::GetSyncManager().logout();
     return true;
 }

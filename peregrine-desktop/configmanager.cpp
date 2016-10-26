@@ -100,6 +100,13 @@ void ConfigManager::readSyncSettings(QDomElement& syncElem)
         account_.passwordLength = json.object()["passwordLength"].toInt();
         onAccountInfoUpdated();
     }
+    else
+    {
+        account_.filled = false;
+        account_.email.clear();
+        account_.passwordHash.clear();
+        onAccountInfoUpdated();
+    }
 }
 
 void ConfigManager::updateConfig(const QVariantMap& config, const QString& reason)
@@ -151,22 +158,37 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
             syncElem = doc.createElement("sync");
             root.appendChild(syncElem);
         }
-        
-        // create a new account element using config
-        auto accountElem = doc.createElement("account");
-        QString json = QJsonDocument::fromVariant(config["sync"].toMap()["account"]).toJson();
-        SimpleCrypt crypter;
-        crypter.setKey(kAccountCryptKey);
-        auto textNode = doc.createTextNode(crypter.encryptToString(json));
-        accountElem.appendChild(textNode);
 
-        // set. 
-        auto old = syncElem.firstChildElement("account");
-        if (!old.isNull())
+        // logout
+        if (config["sync"].toMap()["account"].isNull())
         {
-            syncElem.removeChild(old);
+            auto elem = syncElem.firstChildElement("account");
+            Q_ASSERT(!elem.isNull());
+            syncElem.removeChild(elem);
+
+            account_.email.clear();
+            account_.passwordHash.clear();
+            account_.filled = false;
         }
-        syncElem.appendChild(accountElem);
+        // login
+        else 
+        {
+            // create a new account element using config
+            auto accountElem = doc.createElement("account");
+            QString json = QJsonDocument::fromVariant(config["sync"].toMap()["account"]).toJson();
+            SimpleCrypt crypter;
+            crypter.setKey(kAccountCryptKey);
+            auto textNode = doc.createTextNode(crypter.encryptToString(json));
+            accountElem.appendChild(textNode);
+
+            // set. 
+            auto old = syncElem.firstChildElement("account");
+            if (!old.isNull())
+            {
+                syncElem.removeChild(old);
+            }
+            syncElem.appendChild(accountElem);
+        }
     }
 
     // save

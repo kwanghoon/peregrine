@@ -423,6 +423,10 @@ void LauncherWindow::setupTrayIcon()
                 QString text = "Synced with " + global::GetConfigManager().getAccountInfo().email;
                 syncSettingActionMenu->setText(text);
             }
+            else
+            {
+                syncSettingActionMenu->setText("Not Synced");
+            }
         });
 
         // Configuration Action
