@@ -583,9 +583,14 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
         adoptedAction ? adoptedAction->links : emptyRange);
     for (auto& l : joinedLinks)
     {
-        auto ret = SuggestionAlgorithm::matchKeyword(inputWords, l.keyword);
-        if (ret.first)
+        QStringList keywords = l.keyword.split(';', QString::SkipEmptyParts);
+        for (auto& keyword : keywords)
         {
+            auto ret = SuggestionAlgorithm::matchKeyword(inputWords, keyword);
+            if (!ret.first)
+            {
+                continue;
+            }
             Action* linkedAction = ActionManager::getInstance().getActionById(l.linkedActionId);
             if (!linkedAction)
             {
@@ -594,7 +599,7 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
 
             QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '%2'</font>")
                 .arg(linkedAction->name).arg(ret.second);
-            auto handler = [this, l, linkedAction](SuggestionListController::SuggestionRunType type, boost::any) -> int {
+            auto handler = [this, l, linkedAction, keyword](SuggestionListController::SuggestionRunType type, boost::any) -> int {
                 if (type == SuggestionListController::SuggestionRunType::Tab)
                 {
                     auto* textInput = ui->inputContainer->rootObject();
@@ -603,7 +608,10 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 }
                 else if (type == SuggestionListController::SuggestionRunType::Enter)
                 {
-                    linkedAction->run({{"input_text", ""}}, nullptr);
+                    // #HACK
+                    QString input = l.inputText;
+                    input.replace("{{keyword}}", keyword);
+                    linkedAction->run({{"input_text", input}}, nullptr);
                 }
                 return PG_BEHAVIOR_ON_RETURN::PG_REMAIN;
             };
