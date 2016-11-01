@@ -38,24 +38,34 @@ router.get('/', function (req, res) {
 
 router.post('/', function (req, res) {
     UserModel.find({ email: req.body.email }, function (err, docs) {
-        if (docs.length != 0) {
-            let user = docs[0];
-            if (user.get('pwHash') == req.body.pwHash) {
-                user.set('config', req.body.config);
-                user.save().then(function () {
-                        res.send({ success: true });
-                    });
-            } else {
-                res.send({
-                    success: false,
-                    reason: 'wrong password'
-                });
-            }
+        if (docs.length == 0) {
+            res.send({
+                success: false,
+                reason: 'non-existing e-mail'
+            });
             return;
         }
-        res.send({
-            success: false,
-            reason: 'non-existing e-mail'
+
+        let user = docs[0];
+        if (user.get('pwHash') != req.body.pwHash) {
+            res.send({
+                success: false,
+                reason: 'wrong password'
+            });
+            return;
+        }
+
+        let val = user.get('config') || {};
+        for (let att in req.body.config) {
+            val[att] = req.body.config[att];
+        }
+
+        user.set('config', val);
+        user.markModified('config'); // ???
+        user.save().then((err) => {
+            res.send({ success: true });
+        }).catch(() => {
+            res.send({ success: false});
         });
     });
 });
