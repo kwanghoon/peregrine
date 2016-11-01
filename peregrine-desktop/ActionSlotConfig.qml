@@ -203,9 +203,7 @@ Item {
         }
 
         Component.onDestruction: {
-            var settings = {
-                actionslots: []
-            };
+            var actionslots = [];
             for (var i = 0; i < slots.count; i++) {
                 if (slots.itemAt(i).actionId == '') {
                     continue;
@@ -215,9 +213,9 @@ Item {
                     y: slots.model[i].y,
                     actionId: slots.itemAt(i).actionId
                 };
-                settings.actionslots.push(slotSetting);
+                actionslots.push(slotSetting);
             }
-            controller.saveActionSlotSettings(settings);
+            configTabView.configs['actionslots'] = actionslots;
         }
         
         Text {

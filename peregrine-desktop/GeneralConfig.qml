@@ -51,10 +51,8 @@ Item {
         }
         maxSuggestions.text = configs.maxSuggestions;
     }
+
     Component.onDestruction: {
-        var settings = {
-            maxSuggestions: parseInt(maxSuggestions.text)
-        };
-        controller.saveActionSlotSettings(settings);
+        configTabView.configs['maxSuggestions'] = +maxSuggestions.text;
     }
 }

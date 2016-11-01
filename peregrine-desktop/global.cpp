@@ -27,7 +27,7 @@ namespace global
 
     const char* getAppVersion()
     {
-        return "2016.10.25.02";
+        return "2016.11.02.01";
     }
 }
 

@@ -25,7 +25,7 @@ public:
     Q_INVOKABLE bool deregisterAsStartupApp();
     Q_INVOKABLE QVariantMap getConfigs();
     Q_INVOKABLE void setFieldByLocalPath(QObject* target, QString field, QString localPath);
-    Q_INVOKABLE void saveActionSlotSettings(const QVariantMap& slotSettings);
+    Q_INVOKABLE void saveConfigs(const QVariantMap& configs);
     Q_INVOKABLE bool installPlugin(QUrl fileUrl);
     Q_INVOKABLE bool login(const QString& email, const QString& password);
     Q_INVOKABLE bool logout();

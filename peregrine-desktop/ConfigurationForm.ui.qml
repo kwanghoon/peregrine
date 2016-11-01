@@ -3,9 +3,12 @@ import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 
 TabView {
+    id: configTabView
     width: 400
     height: 400
     currentIndex: controller.initialTabIndex
+    property var configs: ({})
+
     Tab {
         title: "General"
 
@@ -82,5 +85,9 @@ TabView {
     Tab {
         title: "Account"
         AccountConfig {}
+    }
+
+    Component.onDestruction: {
+        controller.saveConfigs(configs);
     }
 }

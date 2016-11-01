@@ -141,7 +141,7 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
         }
         root.replaceChild(actionSlotsElem, root.firstChildElement("actionslots"));
     }
-    else if (config.contains("maxSuggestions"))
+    if (config.contains("maxSuggestions"))
     {
         auto elem = root.firstChildElement("maxSuggestions");
         Q_ASSERT(!elem.isNull());
@@ -149,7 +149,7 @@ void ConfigManager::updateConfig(const QVariantMap& config, const QString& reaso
         text.setNodeValue(config["maxSuggestions"].toString());
     }
     // account information is stored with encryption for security.
-    else if (config.contains("sync"))
+    if (config.contains("sync"))
     {
         // ensure 'sync' element exists
         auto syncElem = root.firstChildElement("sync");

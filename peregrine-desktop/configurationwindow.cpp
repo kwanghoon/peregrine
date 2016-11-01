@@ -117,9 +117,9 @@ void ConfigurationController::setFieldByLocalPath(QObject* target, QString field
     target->setProperty(field.toStdString().c_str(), QUrl::fromLocalFile(localPath));
 }
 
-void ConfigurationController::saveActionSlotSettings(const QVariantMap& slotSettings)
+void ConfigurationController::saveConfigs(const QVariantMap& configs)
 {
-    global::GetConfigManager().updateConfig(slotSettings, "modify");
+    global::GetConfigManager().updateConfig(configs, "modify");
 }
 
 bool ConfigurationController::installPlugin(QUrl fileUrl)
