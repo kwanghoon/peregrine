@@ -202,6 +202,13 @@ Item {
             textLabel.text = '';
         }
 
+        function clearAllSlots() {
+            // #HACK: magic number used
+            for (var i = 0; i < 24; i++) {
+                removeActionOnSlot(i);
+            }
+        }
+
         Component.onDestruction: {
             var actionslots = [];
             for (var i = 0; i < slots.count; i++) {

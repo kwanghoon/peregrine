@@ -16,6 +16,7 @@
 #include <QQmlContext>
 #include <QCryptographicHash>
 #include <QMessageBox>
+#include <QJsonObject>
 
 using namespace std;
 
@@ -204,11 +205,28 @@ bool ConfigurationController::login(const QString& email, const QString& passwor
         accountInfo["passwordLength"] = password.length();
     }
     auto thenFunc = [accountInfo](const QJsonObject& json) {
+        
+        // first, save the account information
         QVariantMap config;
         {
             config.insert("sync", QVariantMap { { "account", accountInfo } });
         }
         global::GetConfigManager().updateConfig(config, "modify");
+
+        // ask user whether to up-sync or down-sync
+        QMessageBox box;
+        box.setText("Would you like to down-sync configurations? or up-sync the current configurations?");
+        box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        int answer = box.exec();
+        if (answer == QMessageBox::Yes)
+        {
+            auto thenFunc = [](const QJsonObject& configs) {
+                global::GetConfigManager().updateConfig(configs.toVariantMap()["config"].toMap(), "sync");
+            };
+            global::GetSyncManager().getConfigs(thenFunc);
+        }
+        else
+        {}
     };
     auto catchFunc = []() {
         QMessageBox* box = new QMessageBox();

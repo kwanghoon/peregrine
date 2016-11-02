@@ -16,18 +16,21 @@ TabView {
             x: 10; y: 10
         }
 
-        onLoaded: {
-            var configs = controller.getConfigs();
-            item.load(configs);
+        onVisibleChanged: {
+            if (visible) {
+                var configs = controller.getConfigs();
+                item.load(configs);
+            }
         }
     }
     Tab {
         title: "Action"
         ActionSlotConfig {}
 
-        onLoaded: {
+        function loadConfigs() {
             var configs = controller.getConfigs();
             var actionListView = item.children[0];
+            actionListView.model.clear();
             for (var i = 0; i < configs.actionList.length; i++) {
                 var action = configs.actionList[i];
                 actionListView.model.append({
@@ -45,12 +48,19 @@ TabView {
                 return null;
             }
 
+            var slotPanel = item.children[1];
+            slotPanel.clearAllSlots();
             for (var i = 0; i < configs.actionslots.length; i++) {
-                var slotPanel = item.children[1];
                 slotPanel.allocActionOnSlot(
                     {x: configs.actionslots[i].x, y: configs.actionslots[i].y},
                     configs.actionslots[i].actionid,
                     findAction(configs.actionslots[i].actionid).imagePath);
+            }
+        }
+
+        onVisibleChanged: {
+            if (visible) {
+                loadConfigs();
             }
         }
     }
