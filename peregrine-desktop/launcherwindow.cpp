@@ -144,6 +144,12 @@ void LauncherWindow::initializeUI()
     ui->customUi->hide();
     ui->inputHistoryShowButton->setEnabled(false);
     resize(width(), ui->inputContainer->height());
+
+    // context menu
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, &QWidget::customContextMenuRequested, [this](const QPoint& pos) {
+        tray_->contextMenu()->exec(mapToGlobal(pos));
+    });
 }
 
 void LauncherWindow::onConfigUpdated()
