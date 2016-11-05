@@ -134,25 +134,29 @@ namespace
 
                 // <variables />
                 auto variablesElem = child.firstChildElement("variables");
-                if (variablesElem.isNull()) { continue; }
-                for (auto varElem = variablesElem.firstChildElement();
-                    !varElem.isNull(); varElem = varElem.nextSiblingElement())
+                if (!variablesElem.isNull()) 
                 {
-                    if (varElem.tagName() == "varbycall")
+                    for (auto varElem = variablesElem.firstChildElement();
+                        !varElem.isNull(); varElem = varElem.nextSiblingElement())
                     {
-                        e.varFuncMap.insert(
-                            varElem.attribute("name"), varElem.attribute("func"));
+                        if (varElem.tagName() == "varbycall")
+                        {
+                            e.varFuncMap.insert(
+                                varElem.attribute("name"), varElem.attribute("func"));
+                        }
                     }
                 }
 
                 // <arguments />
                 auto argsElem = child.firstChildElement("arguments");
-                if (argsElem.isNull()) { continue; }
-                for (auto argElem = argsElem.firstChildElement("arg");
-                    !argElem.isNull(); argElem = argElem.nextSiblingElement("arg"))
-                {
-                    e.actionArguments.insert(
-                        argElem.attribute("name"), argElem.attribute("value"));
+                if (!argsElem.isNull()) 
+                { 
+                    for (auto argElem = argsElem.firstChildElement("arg");
+                        !argElem.isNull(); argElem = argElem.nextSiblingElement("arg"))
+                    {
+                        e.actionArguments.insert(
+                            argElem.attribute("name"), argElem.attribute("value"));
+                    }
                 }
             }
             action->doList.push_back(e);
