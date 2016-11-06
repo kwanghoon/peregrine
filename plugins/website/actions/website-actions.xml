@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <actions>
 	<!-- google -->
-	<action name="google" id="website-google" image="images/google.png" header="Search on 'Google'" 
+	<action name="google" id="website-google" image="images/google.png" header="Search on 'Google'"
 		ui="search-option-ui.qml" ui_width="800" ui_height="300" >
 		<do>
 			<runaction condition="input_text != ''" id="website">
@@ -24,7 +24,7 @@
 			<link actionid="website-google-video" keyword="video"/>
 			<link actionid="website-google-gmail" keyword="gmail"/>
 		</links>
-	</action>	
+	</action>
 
 	<action name="youtube" id="website-google-youtube"  image="images/google-youtube.svg">
 		<do>
@@ -35,7 +35,7 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<action name="google image search" id="website-google-image"
 		header="Search on 'Google Images'">
 		<do>
@@ -56,7 +56,7 @@
 		</do>
 	</action>
 	<action name="gmail" id="website-google-gmail"  image="images/google-gmail.svg"/>
-	
+
 	<!-- reddit -->
 	<action name="reddit" id="website-reddit" image="images/reddit.png">
 		<do>
@@ -169,7 +169,7 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<!-- bing -->
 	<action name="bing" id="website-bing" image="images/bing.png">
 		<do>
@@ -185,15 +185,15 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<!-- facebook -->
 	<action name="facebook" id="website-facebook" image="images/facebook.png">
 		<do>
 			<runaction condition="input_text != ''" id="website">
 				<arguments>
 					<arg name="input_text" value="https://www.facebook.com/search/top/?q={{input_text}}"/>
-				</arguments>			
-			</runaction> 
+				</arguments>
+			</runaction>
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.facebook.com/"/>
@@ -217,8 +217,8 @@
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.naver.com/"/>
-				</arguments>			
-			</runaction>			
+				</arguments>
+			</runaction>
 		</do>
 		<links>
 			<link actionid="website-naver-kin" keyword="kin"/>
@@ -228,9 +228,10 @@
 			<link actionid="website-naver-shopping" keyword="shopping"/>
 			<link actionid="website-naver-endic" keyword="endic"/>
 			<link actionid="website-naver-krdic" keyword="krdic"/>
+			<link actionid="website-naver-translator" keyword="translator"/>
 		</links>
 	</action>
-	
+
 	<!-- NAVER 지식인 -->
 	<action name="NAVER 지식인" id="website-naver-kin" image="images/naver.png">
 		<do>
@@ -238,7 +239,7 @@
 				<arguments>
 					<arg name="input_text" value="http://kin.naver.com/search/list.nhn?cs=utf8&amp;query={{input_text}}"/>
 				</arguments>
-			</runaction> 
+			</runaction>
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://kin.naver.com/"/>
@@ -246,7 +247,7 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<!-- NAVER 웹툰 -->
 	<action name="NAVER 웹툰" id="website-naver-webtoons" image="images/naver.png">
 		<do>
@@ -254,7 +255,7 @@
 				<arguments>
 					<arg name="input_text" value="http://comic.naver.com/search.nhn?m=webtoon&amp;keyword={{input_text}}"/>
 				</arguments>
-			</runaction> 
+			</runaction>
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://comic.naver.com/"/>
@@ -279,7 +280,7 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<!-- NAVER 지도 -->
 	<action name="NAVER 지도" id="website-naver-map" image="images/naver.png">
 		<do>
@@ -287,7 +288,7 @@
 				<arguments>
 					<arg name="input_text" value="http://map.naver.com/index.nhn?query={{input_text}}"/>
 				</arguments>
-			</runaction> 
+			</runaction>
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://map.naver.com/"/>
@@ -295,7 +296,7 @@
 			</runaction>
 		</do>
 	</action>
-	
+
 	<!-- NAVER 쇼핑 -->
 	<action name="NAVER 쇼핑" id="website-naver-shopping" image="images/naver.png">
 		<do>
@@ -303,7 +304,7 @@
 				<arguments>
 					<arg name="input_text" value="http://shopping.naver.com/search/all_search.nhn?query={{input_text}}"/>
 				</arguments>
-			</runaction> 
+			</runaction>
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://shopping.naver.com/"/>
