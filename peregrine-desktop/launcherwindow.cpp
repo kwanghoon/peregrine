@@ -142,7 +142,9 @@ void LauncherWindow::initializeUI()
     ui->inputContainer->setSource(QUrl::fromLocalFile("inputcontainer.qml"));
     ui->customUi->setSource(QUrl::fromLocalFile("CustomUi.qml"));
     ui->customUi->hide();
+    ui->customUi->setFocusPolicy(Qt::NoFocus);
     ui->inputHistoryShowButton->setEnabled(false);
+    ui->inputHistoryShowButton->setFocusPolicy(Qt::NoFocus);
     resize(width(), ui->inputContainer->height());
 
     // context menu
