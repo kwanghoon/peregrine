@@ -63,7 +63,7 @@ private:
 
     // history control
     void initHistory();
-    void saveHistory();
+    void saveActionHistory();
     void switchToPreviousAction();
     void switchToNextAction();
     void saveInputHistory(const QString& inputText);

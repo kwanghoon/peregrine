@@ -99,6 +99,7 @@ LauncherWindow::LauncherWindow(QWidget *parent) :
     if (!global::GetConfigManager().getStartAction().isEmpty())
     {
         changeAction(global::GetConfigManager().getStartAction());
+        saveActionHistory();
     }
 
 #   ifdef Q_OS_WIN
@@ -287,7 +288,7 @@ void LauncherWindow::showActionSelectDialog()
     if (currentAction_ != actionId)
     {
         changeAction(actionId);
-        saveHistory();
+        saveActionHistory();
     }
 
     // focus on 'inputText' element.
@@ -624,6 +625,7 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                     auto* textInput = ui->inputContainer->rootObject();
                     textInput->setProperty("text", "");
                     changeAction(l.linkedActionId, l.inputText);
+                    saveActionHistory();
                 }
                 else if (type == SuggestionListController::SuggestionRunType::Enter)
                 {
@@ -806,7 +808,7 @@ void LauncherWindow::initHistory()
     });
 }
 
-void LauncherWindow::saveHistory()
+void LauncherWindow::saveActionHistory()
 {
     if (actionHistory_.empty())
     {
