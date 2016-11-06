@@ -96,6 +96,25 @@ TabView {
         title: "Account"
         AccountConfig {}
     }
+    Tab {
+        title: "About"
+        Column {
+            Image {
+                source: "peregrine-about-logo.svg"
+                width: 400; height: 200
+                //scale: 0.4
+                fillMode: Image.PreserveAspectFit
+            }
+            Text {
+                id: versionText
+                font.pixelSize: 20
+            }
+            Component.onCompleted: {
+                var configs = controller.getConfigs();
+                versionText.text = "AppVersion: " + configs.version;
+            }
+        }
+    }
 
     Component.onDestruction: {
         controller.saveConfigs(configs);

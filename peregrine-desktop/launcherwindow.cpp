@@ -449,6 +449,13 @@ void LauncherWindow::setupTrayIcon()
             });
         };
         menu->addAction("Peregrine Configuration..", configAction);
+        menu->addAction("About Peregrine", []() {
+            auto config = new ConfigurationWindow(nullptr, ConfigurationWindow::TabKind::About);
+            config->show();
+            QObject::connect(config, &ConfigurationWindow::finished, [config]() {
+                config->deleteLater();
+            });
+        });
         menu->addSeparator();
         menu->addAction("Exit", [this] {
             appExit_ = true;

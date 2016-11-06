@@ -42,6 +42,7 @@ public:
     {
         Default,
         Account,
+        About,
     };
 
     explicit ConfigurationWindow(QWidget *parent = 0, TabKind tab = TabKind::Default);

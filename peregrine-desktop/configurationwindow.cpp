@@ -39,6 +39,10 @@ ConfigurationWindow::ConfigurationWindow(QWidget *parent, TabKind tab) :
     {
         controller->initialTabIndex = 3;
     }
+    else if (tab == TabKind::About)
+    {
+        controller->initialTabIndex = 4;
+    }
 
     ui->configurationQuickWidget->setSource(QUrl::fromLocalFile("ConfigurationForm.ui.qml"));
 }
@@ -109,6 +113,9 @@ QVariantMap ConfigurationController::getConfigs()
             v.insert("passwordLength", accountInfo.passwordLength);
             configs.insert("account", v);
         }
+
+        // About
+        configs.insert("version", global::getAppVersion());
     }
     return configs;
 }
