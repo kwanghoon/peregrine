@@ -596,6 +596,8 @@ void LauncherWindow::onInputTextChanged(const QString& inputText)
 
 void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAction, const QString& input)
 {
+    const int kMaxSuggestions = 10;
+    int suggestedCount = 0;
     QStringList inputWords = input.split(' ', QString::SkipEmptyParts);
 
     auto emptyRange = decltype(currAction->links){};
@@ -644,6 +646,11 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
             else
             {
                 global::suggestionListController->addItem(s, "heart.png", handler, nullptr);
+            }
+            suggestedCount++;
+            if (suggestedCount >= kMaxSuggestions)
+            {
+                return;
             }
         }
     }
