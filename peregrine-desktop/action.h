@@ -51,6 +51,7 @@ public:
     {
         QString linkedActionId;
         QString keyword;
+        QString displayText;
         QString inputText;
     };
     std::vector<ActionLinkEntry> links;

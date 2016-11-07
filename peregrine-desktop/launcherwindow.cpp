@@ -619,8 +619,9 @@ void LauncherWindow::suggestLinkedActions(Action* currAction, Action* adoptedAct
                 continue;
             }
 
-            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4><font color='gray'>matched by '%2'</font>")
-                .arg(linkedAction->name).arg(ret.second);
+            QString s = QString("<h4>Move to <font color='chocolate'><strong>%1</strong></font> Action</h4>"
+                "%2 <font color='gray'>matched by '%3'</font>")
+                .arg(linkedAction->name).arg(l.displayText).arg(ret.second);
             auto handler = [this, l, linkedAction, keyword](SuggestionListController::SuggestionRunType type, boost::any) -> int {
                 if (type == SuggestionListController::SuggestionRunType::Tab)
                 {

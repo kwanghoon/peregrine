@@ -174,6 +174,7 @@ namespace
                 e.linkedActionId = child.attribute("actionid");
                 assert(!e.linkedActionId.isEmpty());
                 e.keyword = child.attribute("keyword");
+                e.displayText = child.attribute("displayText");
                 e.inputText = child.attribute("input_text");
             }
             action->links.push_back(e);
