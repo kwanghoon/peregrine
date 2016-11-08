@@ -295,6 +295,7 @@ void LauncherWindow::showActionSelectDialog()
     ui->inputContainer->setFocus();
 
     auto* textInput = ui->inputContainer->rootObject();
+    QMetaObject::invokeMethod(textInput, "selectAll");
     textInput->forceActiveFocus();
 }
 
