@@ -139,6 +139,34 @@
 				</arguments>
 			</runaction>
 		</do>
+		<links>
+			<link actionid="website" 
+				keyword="jQuery;data;each;get;index;removeData;size;toArray;addClass;css;hasClass;height;innerHeight;innerWidth;offset;outerHeight;outerWidth;position;removeClass;scrollLeft;scrollTop;toggleClass;width;bind;blur;change;click;contextmenu;dblclick;delegate;die;error;focus;focusin;focusout;hover;keydown;keypress;keyup;live;load;mousedown;mouseenter;mouseleave;mousemove;mouseout;mouseover;mouseup;off;on;one;ready;resize;scroll;select;submit;toggle;trigger;triggerHandler;unbind;undelegate;unload"
+				input_text="http://api.jquery.com/{{keyword}}"
+				displayText="jQuery API"/>
+				
+			<!-- jQuery API > Ajax > Global Ajax Event Handlers -->
+			<link actionid="website" 
+				keyword="ajaxComplete;ajaxError;ajaxSend;ajaxStart;ajaxStop;ajaxSuccess"
+				input_text="http://api.jquery.com/{{keyword}}"
+				displayText="jQuery API > Ajax > Global Ajax Event Handlers"/>
+			
+			<!-- jQuery API > Ajax > Low-Level Interface -->
+			<link actionid="website" 
+				keyword="ajax;ajaxPrefilter;ajaxSetup;ajaxTransport"
+				input_text="http://api.jquery.com/jQuery.{{keyword}}"
+				displayText="jQuery API > Ajax > Low-Level Interface"/>
+				
+			<!-- jQuery API > Ajax > Shorthand Methods -->
+			<link actionid="website" 
+				keyword="get;getJSON;getScript;post;load"
+				input_text="http://api.jquery.com/jQuery.{{keyword}}"
+				displayText="jQuery API > Ajax > Shorthand Methods"/>
+			<link actionid="website" 
+				keyword="load"
+				input_text="http://api.jquery.com/{{keyword}}"
+				displayText="jQuery API > Ajax > Shorthand Methods"/>
+		</links>
 	</action>
 
 	<!-- Bootstrap -->

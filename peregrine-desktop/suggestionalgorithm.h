@@ -23,16 +23,13 @@ namespace SuggestionAlgorithm
         std::array<int, 10> indices;
         int cnt = 0;
 
-        for (int i = 0; i < keyword.length(); i++)
+        indices[cnt++] = 0;
+        for (int i = 1; i < keyword.length(); i++)
         {
             if (keyword[i].isUpper())
             {
                 indices[cnt++] = i;
             }
-        }
-        if (cnt == 0)
-        {
-            indices[cnt++] = 0;
         }
 
         // extract all ranges that is matched one of |words|
@@ -41,6 +38,23 @@ namespace SuggestionAlgorithm
         int numOfMatchedRanges = 0;
         Q_FOREACH(const QString& aWord, words)
         {
+            if (*aWord.crbegin() == '.')
+            {
+                if (!keyword.endsWith(QStringRef(&aWord, 0, aWord.length() - 1), Qt::CaseInsensitive))
+                {
+                    return{ false, {} };
+                }
+                continue;
+            }
+            if (*aWord.cbegin() == '.')
+            {
+                if (!keyword.startsWith(QStringRef(&aWord, 1, aWord.length() - 1), Qt::CaseInsensitive))
+                {
+                    return{ false,{} };
+                }
+                continue;
+            }
+
             bool matchFound = false;
             for (int i = 0; i < cnt; i++)
             {

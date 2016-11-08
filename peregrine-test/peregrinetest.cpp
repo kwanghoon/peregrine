@@ -32,6 +32,28 @@ void PeregrineTest::suggestionKeywordMatchTest()
 
     ret = SuggestionAlgorithm::matchKeyword({ }, "FooBar");
     QVERIFY(ret.first == false);
+
+    ret = SuggestionAlgorithm::matchKeyword({ "a" }, "ajaxComplete");
+    QVERIFY(ret.first == true);
+
+    ret = SuggestionAlgorithm::matchKeyword({ "c" }, "ajaxComplete");
+    QVERIFY(ret.first == true);
+
+    // .
+    ret = SuggestionAlgorithm::matchKeyword({ "foo." }, "FooBar");
+    QVERIFY(ret.first == false);
+
+    ret = SuggestionAlgorithm::matchKeyword({ "bar." }, "FooBar");
+    QVERIFY(ret.first == true);
+
+    ret = SuggestionAlgorithm::matchKeyword({ "ar." }, "FooBar");
+    QVERIFY(ret.first == true);
+
+    ret = SuggestionAlgorithm::matchKeyword({ ".foo" }, "FooBar");
+    QVERIFY(ret.first == true);
+
+    ret = SuggestionAlgorithm::matchKeyword({ ".bar" }, "FooBar");
+    QVERIFY(ret.first == false);
 }
 
 void PeregrineTest::expressionTest()
