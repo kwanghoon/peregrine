@@ -115,7 +115,13 @@ QVariantMap ConfigurationController::getConfigs()
         }
 
         // About
-        configs.insert("version", global::getAppVersion());
+        QString versionInfo = QString("%1 %2").arg(global::getAppVersion())
+#       ifdef NDEBUG
+            .arg("Release");
+#       else
+            .arg("Debug");
+#       endif
+        configs.insert("version", versionInfo);
     }
     return configs;
 }

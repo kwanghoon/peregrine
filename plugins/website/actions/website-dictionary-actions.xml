@@ -9,6 +9,8 @@
 			<link actionid="website-naver-krdic" keyword="NaverKrdic"/>
 			<link actionid="website-urbandic" keyword="UrbanDic"/>
 			<link actionid="website-thesaurus" keyword="thesaurus"/>
+			<link actionid="website-namuwiki" keyword="namuwiki"/>
+			<link actionid="website-wikipedia" keyword="wikipedia"/>
 		</links>
 	</action>	
 
@@ -86,6 +88,38 @@
 			<runaction condition="input_text == ''" id="website">
 				<arguments>
 					<arg name="input_text" value="http://www.thesaurus.com/"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+
+	<!-- wikipedia -->
+	<action name="Wikipedia" id="website-wikipedia" image="images/wikipedia.svg">
+		<do>
+			<runaction condition="input_text != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://en.wikipedia.org/w/index.php?search={{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="input_text == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://en.wikipedia.org/"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+
+	<!-- namu wiki -->
+	<action name="나무위키" id="website-namuwiki" image="images/namuwiki.png">
+		<do>
+			<runaction condition="input_text != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://namu.wiki/w/{{input_text}}"/>
+				</arguments>
+			</runaction> 
+			<runaction condition="input_text == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://namu.wiki"/>
 				</arguments>
 			</runaction>
 		</do>
