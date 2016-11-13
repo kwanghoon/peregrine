@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<!-- Dictionaries -->
+	<action name="Shopping sites" id="website-shopping-sites">
+		<do>
+		</do>
+		<links>
+			<link actionid="website-danawa-shopping" keyword="danawa"/>
+			<link actionid="website-naver-shopping" keyword="naver"/>
+			<link actionid="website-amazon-shopping" keyword="amazon"/>
+			<link actionid="website-ebay-shopping" keyword="ebay"/>
+		</links>
+	</action>
+	
+	<!-- Danawa -->
+	<action name="다나와" id="website-danawa-shopping">
+		<do>
+			<runaction condition="input_text != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://search.danawa.com/dsearch.php?query={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="input_text == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.danawa.com/"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+	
+	<!-- Amazon -->
+	<action name="Amazon" id="website-amazon-shopping">
+		<do>
+			<runaction condition="input_text != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.amazon.com/s?field-keywords={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="input_text == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="https://www.amazon.com/"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+	
+	<!-- Ebay -->
+	<action name="Ebay" id="website-ebay-shopping">
+		<do>
+			<runaction condition="input_text != ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.ebay.com/sch/i.html?_nkw={{input_text}}"/>
+				</arguments>
+			</runaction>
+			<runaction condition="input_text == ''" id="website">
+				<arguments>
+					<arg name="input_text" value="http://www.ebay.com/"/>
+				</arguments>
+			</runaction>
+		</do>
+	</action>
+
+</actions>
